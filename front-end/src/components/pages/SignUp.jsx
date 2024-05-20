@@ -1,139 +1,142 @@
 import React, { useState } from "react";
-import { Button } from "../common/Button"
-import "./styles/SignUp.css"
 import useSignup from "../../hooks/useSignup";
+import backgroundImage from "../../assets/images/auth-background.jpg"
 
 function SignUp() {
-  // const [click, setClick] = useState(false);
-  // const [button, setButton] = useState(true);
   const [tosChecked, setTosChecked] = useState(false);
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [username, setUsername] = useState("");
-  // const [displayname, setDisplayname] = useState("");
-
   const [inputs, setInputs] = useState({
     email: "",
     displayName: "",
     username: "",
     password: "",
     confirmPassword: "",
-
-  })
+  });
 
   const { loading, signup } = useSignup();
 
-  // const handleClick = () => setClick(!click);
-
-  const handleTosChange = () => { 
+  const handleTosChange = () => {
     setTosChecked(!tosChecked); // Toggle checkbox state
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signup(inputs)
+    await signup(inputs);
   };
 
   return (
-    <div className="signup-page">
-      <div className="signup-container">
-        <h2>Create your WSL account</h2>
-        <p className="signup-msg">Sign up to start scheduling your meetings</p>
+    <div className="text-[#333] bg-[#333]  flex items justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div className="bg-gradient-to-r from-white to-gray-200 p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl mb-2 text-center">Create your WSL account</h2>
+        <p className="text-center mb-4 text-xl">Sign up to start scheduling your meetings</p>
 
         {/* Sign up Form */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className="block font-bold mb-2">Email</label>
             <input
               type="email"
+              className="input input-bordered w-full bg-gray-300"
               value={inputs.email}
-              onChange={(e) => setInputs({...inputs, email: e.target.value})}
+              onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
+
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="displayName">Display Name</label>
-            <input
-              type="text"
-              value={inputs.displayName}
-              onChange={(e) => setInputs({...inputs, displayName: e.target.value})}
-              required
-              autoComplete="on"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              value={inputs.username}
-              onChange={(e) => setInputs({...inputs, username: e.target.value})}
-              required
-              autoComplete="on"
-            />
+          <div className="form-group flex space-x-4">
+            <div className="w-1/2">
+              <label htmlFor="displayName" className="block font-bold mb-2">Display Name</label>
+              <input
+                type="text"
+                className="input input-bordered w-full bg-gray-300"
+                value={inputs.displayName}
+                onChange={(e) => setInputs({ ...inputs, displayName: e.target.value })}
+  
+                autoComplete="on"
+              />
+            </div>
+            <div className="w-1/2">
+              <label htmlFor="username" className="block font-bold mb-2">Username</label>
+              <input
+                type="text"
+                id="username"
+                className="input input-bordered w-full bg-gray-300"
+                value={inputs.username}
+                onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
+  
+                autoComplete="on"
+              />
+            </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="block font-bold mb-2">Password</label>
             <input
               type="password"
               id="password"
+              className="input input-bordered w-full bg-gray-300"
               value={inputs.password}
-              onChange={(e) => setInputs({...inputs, password: e.target.value})}
-              required
+              onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
+
             />
           </div>
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword" className="block font-bold mb-2">Confirm Password</label>
             <input
               type="password"
               id="confirmPassword"
+              className="input input-bordered w-full bg-gray-300"
               value={inputs.confirmPassword}
-              onChange={(e) => setInputs({...inputs, confirmPassword: e.target.value})}
-              required
+              onChange={(e) => setInputs({ ...inputs, confirmPassword: e.target.value })}
+
             />
           </div>
+          {/* Password Requirements */}
+          <ul className="list-disc list-inside mt-4 mb-4 text-gray-600">
+            <li>Must be at least 8 characters long</li>
+            <li>Must contain at least one uppercase letter</li>
+            <li>Must contain at least one number</li>
+          </ul>
+
+          {/* TOS and Cookie Consent */}
+          <div className="mt-4 flex items-center">
+            <input
+              type="checkbox"
+              id="tos"
+              name="tos"
+              className="checkbox"
+              checked={tosChecked}
+              onChange={handleTosChange}
+            />
+            <label htmlFor="tos" className="ml-2">
+              I agree to the <a href="/tos" className="underline">Terms of Service</a> and{" "}
+              <a href="/cookies" className="underline">Cookie Policy</a>
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="btn w-full mb-4 btn-outline bg-[#222]"
+            disabled={!tosChecked || loading}
+          >
+            SIGN UP
+          </button>
         </form>
 
-        {/* Sign up button */}
-        <ul className="signup-requirements">
-          <li>Must be at least 8 characters long</li>
-          <li>Must contain at least one uppercase letter</li>
-          <li>Must contain at least one number</li>
-        </ul>
 
-        {/* Ask for TOS and cookie consent */}
-        <div className="tos-cookie-consent">
-          <input type="checkbox" id="tos" name="tos" value="tos" checked={tosChecked} onChange={handleTosChange} />
-          <label htmlFor="tos">
-            I agree to the <a href="/tos">Terms of Service</a> and{" "}
-            <a href="/cookies">Cookie Policy</a>
-          </label>
-        </div>
-
-        <Button
-          className="m-top-16" 
-          buttonStyle="btn--auth"
-          buttonSize="btn--auth-large"
-          disabled={!tosChecked}
-        >
-          SIGN UP
-        </Button>
-        <p className="m-top-20">Or continue with</p>
-        <div className="social-media-btn-box">
-          <Button buttonStyle="btn--auth" buttonSize="btn--auth-medium">
-            <span className="fab fa-google"></span>
+        <div className="flex justify-center items-center space-x-4 mt-4">
+          <button className="btn btn-outline bg-[#222] w-[48%]">
+            <span className="fab fa-google mr-2"></span>
             Google
-          </Button>
-          <Button buttonStyle="btn--auth" buttonSize="btn--auth-medium">
-            <span className="fab fa-facebook"></span>
+          </button>
+          <button className="btn btn-outline bg-[#222] w-[48%]">
+            <span className="fab fa-facebook mr-2"></span>
             Facebook
-          </Button>
+          </button>
         </div>
+
+
 
         {/* Sign up link */}
-        <p className="signup-link">
-          Already have an account? <a href="/login">Login</a>
+        <p className="text-center mt-4 text-[#333]">
+          Already have an account? <a href="/login" className="underline">Login</a>
         </p>
       </div>
     </div>

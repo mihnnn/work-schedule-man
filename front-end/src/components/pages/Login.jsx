@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./styles/Login.css";
-import { Button } from "../common/Button";
 import { Link } from "react-router-dom";
+import backgroundImage from "../../assets/images/auth-background.jpg"
+// import "./styles/Login.css";
 
 function Login() {
   const [emailOrUsername, setEmailOrUsername] = useState("");
@@ -9,78 +9,60 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Process form submission, e.g., send data to server
     console.log("Logged in with:", { emailOrUsername, password });
-    // Reset form fields after submission
     setEmailOrUsername("");
     setPassword("");
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <h2>Welcome back</h2>
+    <div className="text-[#333] bg-[#333] h-screen flex items-center justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div className="bg-gradient-to-r from-white to-gray-200 p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl mb-2 text-center">Welcome back</h2>
         <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label htmlFor="email">Email or Username</label>
-            {/* TO DO: Integrate both email and username search */}
+          <div className="form-group mb-4">
+            <label htmlFor="email" className="block font-bold mb-2">Email or Username</label>
             <input
               type="text"
               id="emailOrUsername"
+              className="input input-bordered w-full bg-gray-300"
               value={emailOrUsername}
-              onChange={(e) =>
-                setEmailOrUsername(e.target.value)
-              }
+              onChange={(e) => setEmailOrUsername(e.target.value)}
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          <div className="form-group mb-6">
+            <label htmlFor="password" className="block font-bold mb-2">Password</label>
             <input
               type="password"
               id="password"
+              className="input input-bordered w-full bg-gray-300"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
+          <button 
+            type="submit"
+            onClick={handleLogin}
+            className="btn w-full btn-outline bg-[#222]"
+          >
+            Login
+          </button>
         </form>
-        <Button 
-          type="submit"
-          onClick={handleLogin}
-          buttonStyle="btn--auth"
-          buttonSize="btn--auth-large"
-        >
-          {"Login"}
-        </Button>
-
-        <p className="m-top-20">Or login with</p>
-        <div className="social-media-btn-box">
-          {/* <button className="social-media-btn">
-            <span className="fab fa-google"></span>
+        <p className="mt-5 text-center">Or login with</p>
+        <div className="flex justify-center items-center space-x-4 mt-4">
+          <button className="btn btn-outline bg-[#222] w-[48%]">
+            <span className="fab fa-google mr-2"></span>
             Google
-          </button> */}
-          <Button 
-            to="/"
-            buttonStyle="btn--auth"
-            buttonSize="btn--auth-medium"
-          >
-            <span className="fab fa-google"></span>
-            Google
-          </Button>
-
-          <Button 
-            to="/"
-            buttonStyle="btn--auth"
-            buttonSize="btn--auth-medium"
-          >
-            <span className="fab fa-facebook"></span>
+          </button>
+          <button className="btn btn-outline bg-[#222] w-[48%]">
+            <span className="fab fa-facebook mr-2"></span>
             Facebook
-          </Button>
+          </button>
         </div>
-          <Link to="/signup" className="signup-link">
-            Don't have an account?
-          </Link>
+        <Link to="/signup" className="flex justify-center text-center mt-4 text-[#333]">
+          Don't have an account?
+        </Link>
       </div>
     </div>
   );

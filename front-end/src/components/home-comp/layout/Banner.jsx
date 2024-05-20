@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "../../common/Button";
 import { Link } from "react-router-dom";
 import homeVideo from '../../../assets/videos/home-video.mp4'
 import "../../styles/Banner.css"
@@ -14,14 +13,12 @@ function Banner() {
       <h1 className="text-center text-white text-9xl mt-[-100px] md:text-5xl sm:text-4xl ">WSM for everyone</h1>
       <p className="mb-5 text-white text-2xl mt-4">Scheduler for everyone, focus on meetings, not making them</p>
       <div className="banner-btns-container">
-        <Button
-          className="btns"
-          buttonStyle="btn--outline"
-          buttonSize="btn--large"
-          to="/signup"
+        <Link
+          to={"/signup"}
+          className= "btn btn-outline bg-[#333]"
         >
-          GET STARTED
-        </Button>
+          <span className="text-[#ddd]">GET STARTED</span>
+        </Link>
 
         <p className="prompt-login-msg">
           Already have an account? {" "}

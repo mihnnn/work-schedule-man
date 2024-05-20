@@ -5,7 +5,7 @@ import "../../styles/Cards.css";
 function Cards() {
   return (
     <div className="p-16 bg-gray-800">
-      <h1 className="text-center">Our services!</h1>
+      <h1 className="flex justify-center text-3xl text-gray-100">Our services!</h1>
       {/* card wrapping container */}
       <div className="cards__container flex items-center max-w-[1120px] w-[90%] mx-auto my-0">
         <div className="relative mt-[50px] mb-[45px] mx-0">

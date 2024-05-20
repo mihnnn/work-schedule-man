@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "./Button";
 import "../styles/Navbar.css";
 
 function Navbar() {
@@ -87,7 +86,7 @@ function Navbar() {
               </Link>
             </li> 
           </ul>
-          {button && <Button to='/signup' buttonStyle="btn--outline"> SIGN UP </Button>}
+          {button && <Link to='/signup' className="btn btn-outline " > SIGN UP </Link>}
         </div>
       </nav>
     </>
