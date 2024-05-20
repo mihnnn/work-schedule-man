@@ -1,34 +1,7 @@
-:root {
-    --primary-color: #fff;
-}
 
-.btn {
-    padding: 8px 20px;
-    border-radius: 2px;
-    outline: none;
-    border: none;
-    cursor: pointer;
-}
 
-.font-8 {
-    font-size: 8px!important;
-}
 
-.btn--primary {
-    background-color: var(--primary-color);
-    color: #242424;
-    border: 1px solid var(--primary-color);
-    font-weight: 500;
-}
 
-.btn--outline {
-    background-color: transparent;
-    color: #fff;
-    padding: 8px 20px ;
-    border: 1px solid var(--primary-color);
-    transition: all 0.3 ease-out;
-    font-size: 4px;
-}
 
 .btn--medium {
     padding: 8px 20px;
@@ -40,17 +13,6 @@
     font-size: 20px;
 }
 
-.btn--sign-up {
-    font-size: 12px;
-}
-
-.btn--auth {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
 
 .btn--auth-large {
     width: 100%;
@@ -65,23 +27,19 @@
     width: 220px;
 }
 
-.btn--auth-medium span {
-    margin-right: 8px;
-    
-}
 
-.btn--auth-large:hover,
+/* .btn--auth-large:hover,
 .btn--auth-medium:hover {
     background-color: #0056b3;
-}
+} */
 
 .btn--medium:hover, 
 .btn--large:hover {
-    background-color: #fff;
-    color: #242424;
+    background-color: #ccc;
+    color: #ccc;
     transition: 250ms;
 }
-
+/* 
 .disabled {
     background-color: #ccc;
     color: #fff;
@@ -90,4 +48,4 @@
 .disabled:hover {
     background-color: #ccc;
     color: #fff;
-}
+} */

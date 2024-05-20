@@ -3,6 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Button.css"
 
+
+//diffrent styles and sizes for the button
 const STYLES = ["btn--primary", "btn--outline", "btn--auth"];
 const SIZES = ["btn--medium", "btn--large", "btn--auth-large", "btn--auth-medium"];
 
@@ -25,7 +27,8 @@ export const Button = ({
       className="btn-mobile"
     >
       <button
-        className={`btn ${className} ${checkButtonStyle} ${checkButtonSize} ${disabled ? "disabled" : "enabled"}`}
+      // tailwind css styling
+        className={`btn ${checkButtonStyle === 'auth' ? 'bg-blue-500 text-white' : 'border border-blue-500 text-blue-500'} ${checkButtonSize} ${disabled ? "opacity-90 cursor-not-allowed" : ""} ${className}`}
         onClick={onClick}
         type={type}
         disabled={disabled}

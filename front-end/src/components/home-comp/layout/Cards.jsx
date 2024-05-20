@@ -4,11 +4,11 @@ import "../../styles/Cards.css";
 
 function Cards() {
   return (
-    <div className="cards">
-      <h1>Our services!</h1>
+    <div className="p-16 bg-gray-800">
+      <h1 className="text-center">Our services!</h1>
       {/* card wrapping container */}
-      <div className="cards__container">
-        <div className="cards__wrapper">
+      <div className="cards__container flex items-center max-w-[1120px] w-[90%] mx-auto my-0">
+        <div className="relative mt-[50px] mb-[45px] mx-0">
           <ul className="cards__items">
             <CardItem
               src="/src/assets/images/img-1.jpeg"
@@ -23,7 +23,7 @@ function Cards() {
               path="/kita"
             />
           </ul>
-          <ul className="cards__items">
+          <ul className="cards__items ">
             <CardItem
               src="/src/assets/images/img-3.jpeg"
               text="Kwaii"

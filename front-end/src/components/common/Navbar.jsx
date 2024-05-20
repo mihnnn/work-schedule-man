@@ -40,10 +40,10 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar">
-        <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-            WSM <i className="fas fa-user-clock pad-left-8"></i>
+      <nav className="bg-gradient-to-r from-black to-gray-800 h-20 flex justify-center items-center text-lg sticky top-0 z-[999]">
+        <div className="flex justify-between items-center w-full max-w-screen-xl px-4">
+          <Link to="/" className="text-white text-2xl font-bold flex items-center" onClick={closeMobileMenu}>
+            WSM <i className="fas fa-user-clock ml-2"></i>
           </Link>
           <div className="menu-icon" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
