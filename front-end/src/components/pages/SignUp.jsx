@@ -35,7 +35,7 @@ function SignUp() {
             <label htmlFor="email" className="block font-bold mb-2">Email</label>
             <input
               type="email"
-              className="input input-bordered w-full bg-gray-300"
+              className="input input-bordered w-full bg-gray-300 text-[#222]"
               value={inputs.email}
               onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
 
@@ -46,7 +46,7 @@ function SignUp() {
               <label htmlFor="displayName" className="block font-bold mb-2">Display Name</label>
               <input
                 type="text"
-                className="input input-bordered w-full bg-gray-300"
+                className="input input-bordered w-full bg-gray-300 text-[#222]"
                 value={inputs.displayName}
                 onChange={(e) => setInputs({ ...inputs, displayName: e.target.value })}
   
@@ -58,7 +58,7 @@ function SignUp() {
               <input
                 type="text"
                 id="username"
-                className="input input-bordered w-full bg-gray-300"
+                className="input input-bordered w-full bg-gray-300 text-[#222]"
                 value={inputs.username}
                 onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
   
@@ -72,7 +72,7 @@ function SignUp() {
             <input
               type="password"
               id="password"
-              className="input input-bordered w-full bg-gray-300"
+              className="input input-bordered w-full bg-gray-300 text-[#222]"
               value={inputs.password}
               onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
 
@@ -83,7 +83,7 @@ function SignUp() {
             <input
               type="password"
               id="confirmPassword"
-              className="input input-bordered w-full bg-gray-300"
+              className="input input-bordered w-full bg-gray-300 text-[#222]"
               value={inputs.confirmPassword}
               onChange={(e) => setInputs({ ...inputs, confirmPassword: e.target.value })}
 
