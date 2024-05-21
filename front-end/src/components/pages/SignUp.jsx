@@ -24,8 +24,8 @@ function SignUp() {
   };
 
   return (
-    <div className="text-[#333] bg-[#333]  flex items justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-      <div className="bg-gradient-to-r from-white to-gray-200 p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="text-[#eee] flex items justify-center " style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div className="p-4 mg h-full w-full bg-purple-500 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-10 border border-gray-100 max-w-max">
         <h2 className="text-2xl mb-2 text-center">Create your WSL account</h2>
         <p className="text-center mb-4 text-xl">Sign up to start scheduling your meetings</p>
 
@@ -90,19 +90,19 @@ function SignUp() {
             />
           </div>
           {/* Password Requirements */}
-          <ul className="list-disc list-inside mt-4 mb-4 text-gray-600">
+          <ul className="list-disc list-inside mt-4 mb-4 text-[#eee]">
             <li>Must be at least 8 characters long</li>
             <li>Must contain at least one uppercase letter</li>
             <li>Must contain at least one number</li>
           </ul>
 
           {/* TOS and Cookie Consent */}
-          <div className="mt-4 flex items-center">
+          <div className="mt-4 flex items-center ">
             <input
               type="checkbox"
               id="tos"
               name="tos"
-              className="checkbox"
+              className="checkbox bg-[#ccc]" 
               checked={tosChecked}
               onChange={handleTosChange}
             />
@@ -135,7 +135,7 @@ function SignUp() {
 
 
         {/* Sign up link */}
-        <p className="text-center mt-4 text-[#333]">
+        <p className="text-center mt-4 text-[#ccc]">
           Already have an account? <a href="/login" className="underline">Login</a>
         </p>
       </div>

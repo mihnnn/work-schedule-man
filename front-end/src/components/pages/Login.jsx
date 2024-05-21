@@ -15,8 +15,8 @@ function Login() {
   };
 
   return (
-    <div className="text-[#333] bg-[#333] h-screen flex items-center justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-      <div className="bg-gradient-to-r from-white to-gray-200 p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="text-[#eee] h-screen flex items-center justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div className="p-4 mg h-full w-full bg-purple-500 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-10 border border-gray-100 max-w-md">
         <h2 className="text-2xl mb-2 text-center">Welcome back</h2>
         <form onSubmit={handleLogin}>
           <div className="form-group mb-4">
@@ -60,7 +60,7 @@ function Login() {
             Facebook
           </button>
         </div>
-        <Link to="/signup" className="flex justify-center text-center mt-4 text-[#333]">
+        <Link to="/signup" className="flex justify-center text-center mt-4 text-[#eee]">
           Don't have an account?
         </Link>
       </div>
