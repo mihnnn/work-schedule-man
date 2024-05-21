@@ -115,6 +115,7 @@ function SignUp() {
             type="submit"
             className="btn w-full mb-4 btn-outline bg-[#222]"
             disabled={!tosChecked || loading}
+            cursor={!tosChecked || loading ? "not-allowed" : "pointer"}
           >
             SIGN UP
           </button>

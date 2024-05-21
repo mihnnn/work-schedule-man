@@ -15,7 +15,7 @@ function Footer() {
       <div className="w-full max-w-[1000px] flex justify-center">
         <div className="flex">
           <div className="flex flex-col items-start text-left w-40 box-border m-4">
-            <h2 class>About Us</h2>
+            <h2 >About Us</h2>
             <Link to="/sign-up">How it works</Link>
             <Link to="/">Testimonials</Link>
             <Link to="/">Careers</Link>
@@ -23,7 +23,7 @@ function Footer() {
             <Link to="/">Terms of Service</Link>
           </div>
           <div className="flex flex-col items-start text-left w-40 box-border m-4">
-            <h2 class>Contact Us</h2>
+            <h2 >Contact Us</h2>
             <a href="/">Contact</a>
             <a href="/">Support</a>
             <a href="/">Destinations</a>
@@ -31,15 +31,15 @@ function Footer() {
           </div>
         </div>
         <div className="flex">
-          <div class='flex flex-col items-start text-left w-40 box-border m-4'>
-            <h2 class>Videos</h2>
+          <div className='flex flex-col items-start text-left w-40 box-border m-4'>
+            <h2 >Videos</h2>
             <Link to='/'>Submit Video</Link>
             <Link to='/'>Ambassadors</Link>
             <Link to='/'>Agency</Link>
             <Link to='/'>Influencer</Link>
           </div>
-          <div class='flex flex-col items-start text-left w-40 box-border m-4'>
-            <h2 class>Social Media</h2>
+          <div className='flex flex-col items-start text-left w-40 box-border m-4'>
+            <h2 >Social Media</h2>
             <Link to='/'>Instagram</Link>
             <Link to='/'>Facebook</Link>
             <Link to='/'>Youtube</Link>
@@ -48,55 +48,55 @@ function Footer() {
         </div>
       </div>
 
-      <section class='max-w-[1000px] w-full'>
-        <div class='flex justify-between items-center w-[90%] max-w-[1000px] mt-10 mb-0 mx-auto'>
-          <div class='text-[white] text-2xl'>
+      <section className='max-w-[1000px] w-full'>
+        <div className='flex justify-between items-center w-[90%] max-w-[1000px] mt-10 mb-0 mx-auto'>
+          <div className='text-[white] text-2xl'>
             <Link to='/' className='social-logo'>
               WSM
-              <i class='fas fa-user-clock pl-2' />
+              <i className='fas fa-user-clock pl-2' />
             </Link>
           </div>
-          <small class='text-white mb-4 text-base'>WSM © 2024</small>
-          <div class='flex justify-between items-center w-60'>
+          <small className='text-white mb-4 text-base'>WSM © 2024</small>
+          <div className='flex justify-between items-center w-60'>
             <Link
-              class='text-white text-2xl facebook'
+              className='text-white text-2xl facebook'
               to='/'
               target='_blank'
               aria-label='Facebook'
             >
-              <i class='fab fa-facebook-f' />
+              <i className='fab fa-facebook-f' />
             </Link>
             <Link
-              class='text-white text-2xl instagram'
+              className='text-white text-2xl instagram'
               to='/'
               target='_blank'
               aria-label='Instagram'
             >
-              <i class='fab fa-instagram' />
+              <i className='fab fa-instagram' />
             </Link>
             <Link
-              class='text-white text-2xl youtube'
+              className='text-white text-2xl youtube'
               to='/'
               target='_blank'
               aria-label='Youtube'
             >
-              <i class='fab fa-youtube' />
+              <i className='fab fa-youtube' />
             </Link>
             <Link
-              class='text-white text-2xl twitter'
+              className='text-white text-2xl twitter'
               to='/'
               target='_blank'
               aria-label='Twitter'
             >
-              <i class='fab fa-twitter' />
+              <i className='fab fa-twitter' />
             </Link>
             <Link
-              class='text-white text-2xl twitter'
+              className='text-white text-2xl twitter'
               to='/'
               target='_blank'
               aria-label='LinkedIn'
             >
-              <i class='fab fa-linkedin' />
+              <i className='fab fa-linkedin' />
             </Link>
           </div>
         </div>
