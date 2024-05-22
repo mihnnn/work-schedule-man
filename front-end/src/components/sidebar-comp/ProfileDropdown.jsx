@@ -9,15 +9,15 @@ function ProfileDropdown() {
     return (
     <div className=''>
         {/* profile pic, with drop down menu when clicked */}
-        <div className="relative dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="flex items-center justify-between mt-auto cursor-pointer hover:bg-gray-400 hover:bg-opacity-30 rounded-xl p-2" onClick={handleClick}>
+        <div className="relative dropdown dropdown-end w-[100%]">
+            <div tabIndex={0} role="button" className="flex items-center mt-auto cursor-pointer hover:bg-gray-400 hover:bg-opacity-30 rounded-xl p-2" onClick={handleClick}>
                 <div className='btn btn-ghost btn-circle avatar ring flex-shrink-0'>
                     <div className="w-10 h-10 rounded-full">
                         <img alt="Kita Avatar" src={avatar} />
                     </div>
                 </div>
-                <span className="ml-3 text-lg font-bold flex items-center h-10">Kita</span>
-                <FaChevronDown className="ml-2" />
+                <span className="ml-3 text-lg font-bold flex justify-start items-center h-10">Kita</span>
+                <FaChevronDown className="ml-auto" />
             </div>
             {click && (
                 <ul
