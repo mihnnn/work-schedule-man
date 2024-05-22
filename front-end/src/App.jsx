@@ -15,10 +15,10 @@ function App() {
       {/* <Navbar /> */}
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path="/app/event-types" element={<AppPage />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
         <Route path='/tos' element={<Tos />} />
+        <Route path="/app/*" element={<AppPage />} />
       </Routes>
       <Toaster />
 
