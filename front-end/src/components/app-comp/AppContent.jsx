@@ -11,7 +11,7 @@ function AppContent() {
   // return different content for different routes
   //this is example of /app/event-types
   return (
-    <div className="flex-grow p-4">
+    <div className="flex-grow bg-[#222]">
       <Routes>
         <Route path="event-types" element={<EventTypes />} />
         <Route path="bookings" element={<Bookings />} />
