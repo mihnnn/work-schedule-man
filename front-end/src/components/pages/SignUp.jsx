@@ -117,7 +117,7 @@ function SignUp() {
             disabled={!tosChecked || loading}
             cursor={!tosChecked || loading ? "not-allowed" : "pointer"}
           >
-            SIGN UP
+            {loading ? <span className="loading loading-spinner"></span> : "Sign Up"}
           </button>
         </form>
 
