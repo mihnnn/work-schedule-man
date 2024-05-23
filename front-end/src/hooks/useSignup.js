@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast';
+import { checkUsername } from '../../../back-end/utils/checkUsername.js'
+import { User } from '../../../back-end/db/schemas/user.js'
 
 
 const useSignup = () => {
@@ -32,6 +34,7 @@ const useSignup = () => {
     return { loading, signup }
 
 }
+
 
 function handleInputErrors({email, displayName, username, password, confirmPassword}) {
     if (!email || !displayName || !username || !password || !confirmPassword) {
