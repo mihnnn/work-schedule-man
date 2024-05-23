@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast';
-import { checkUsername } from '../../../back-end/utils/checkUsername.js'
-import { User } from '../../../back-end/db/schemas/user.js'
+
 
 
 const useSignup = () => {
     const [loading, setLoading] = useState(false);
+    const { authUser, setAuthUser } = useAuthContext();
 
     const signup = async ({email, displayName, username, password, confirmPassword}) => {
         const success = handleInputErrors({email, displayName, username, password, confirmPassword});
@@ -22,7 +22,17 @@ const useSignup = () => {
             })
 
             const data = await res.json();
-            console.log(data);
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            //localstorage: save to localstoreage to know if logged in or not
+            localStorage.setItem("wsm-user", JSON.stringify(data));
+
+            //context
+            setAuthUser(data);
+
         } catch (error) {
             console.error(error);
             toast.error('An error occurred');
