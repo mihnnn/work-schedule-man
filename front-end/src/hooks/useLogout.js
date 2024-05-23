@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useAuthContext } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 function useLogout() {
     const [ loading, setLoading ] = useState(false);
@@ -20,6 +21,7 @@ function useLogout() {
             }
 
             localStorage.removeItem("wsm-user");
+            toast.success("Logged out successfully");
             setAuthUser(null);
         } catch (error) {
             toast.error(error.message);
