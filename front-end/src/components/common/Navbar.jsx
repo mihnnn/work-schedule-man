@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
+import { useAuthContext } from "../../context/AuthContext";
 
 function Navbar() {
-  //useState hooks
+  // useState hooks
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const location = useLocation();
 
+  const { authUser } = useAuthContext();
+
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
-  
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -19,15 +21,13 @@ function Navbar() {
       setButton(true);
     }
   };
+
   useEffect(() => {
     showButton();
-    return () => {
-      window.removeEventListener("resize", showButton);
-    }
+    window.addEventListener("resize", showButton);
+    return () => window.removeEventListener("resize", showButton);
   }, []);
 
-  window.addEventListener("resize", showButton);
-  
   return (
     <>
       <nav className="bg-gradient-to-r from-black to-gray-800 h-20 flex justify-center items-center text-lg sticky top-0 z-[999]">
@@ -68,16 +68,23 @@ function Navbar() {
 
             <li className="nav-item">
               <Link
-                to="/signup"
+                to={authUser ? '/app/event-types' : '/signup'}
                 className="nav-links-mobile"
                 onClick={closeMobileMenu}
               >
-                {" "}
-                Sign Up{" "}
+                {authUser ? 'GO TO APP' : 'SIGN UP'}
               </Link>
-            </li> 
+            </li>
           </ul>
-          {button && <Link to='/signup' className="btn btn-outline " > SIGN UP </Link>}
+          {button && (
+            <Link
+              to={authUser ? '/app/event-types' : '/signup'}
+              className="btn btn-outline"
+              onClick={closeMobileMenu}
+            >
+              {authUser ? 'GO TO APP' : 'SIGN UP'}
+            </Link>
+          )}
         </div>
       </nav>
     </>

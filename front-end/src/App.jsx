@@ -15,11 +15,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={authUser ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/" element={<Home /> } />
         <Route path="/signup" element={authUser ? <Navigate to="/" /> : <SignUp />} />
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/tos" element={<Tos />} />
-        <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/login" />} />
+        <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
       </Routes>
       <Toaster />
     </>

@@ -48,14 +48,6 @@ video {
 
 }
 
-.prompt-login-msg {
-    color: #fff;
-    font-size: 20px;
-    margin-top: 20px;
-    text-decoration: none;
-}
-
-
 @media screen and (max-width: 960px) {
     .banner-container {
         text-align: center;
