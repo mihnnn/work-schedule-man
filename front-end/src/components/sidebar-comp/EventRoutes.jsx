@@ -1,22 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import WsmItem from './WsmItem.jsx';
-import { FaLink } from "react-icons/fa6";
-import { FaRegCalendar } from "react-icons/fa6";
-import { FaRegClock } from "react-icons/fa6";
+import { FaLink, FaRegCalendar, FaRegClock } from "react-icons/fa6";
 
 function EventRoutes() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   return (
     <div className='py-2 flex flex-col text-lg h-10'>
-      <Link to="/app/event-types">
-        <WsmItem routeName="Event Types" icon={FaLink} />
-      </Link>
-      <Link to="/app/bookings">
-        <WsmItem routeName="Bookings" icon={FaRegCalendar} />
-      </Link>
-      <Link to="/app/availability">
-        <WsmItem routeName="Availability" icon={FaRegClock} />
-      </Link>
+      <WsmItem
+        route="/app/event-types"
+        routeName="Event Types"
+        icon={FaLink}
+        isActive={currentPath === "/app/event-types"}
+      />
+      <WsmItem
+        route="/app/bookings"
+        routeName="Bookings"
+        icon={FaRegCalendar}
+        isActive={currentPath === "/app/bookings"}
+      />
+      <WsmItem
+        route="/app/availability"
+        routeName="Availability"
+        icon={FaRegClock}
+        isActive={currentPath === "/app/availability"}
+      />
     </div>
   );
 }

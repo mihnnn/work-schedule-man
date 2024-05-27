@@ -1,11 +1,15 @@
 import React , { useState } from 'react'
 import avatar from "../../assets/images/avatar.jpg";
+import { useAuthContext } from "../../context/AuthContext";
 import { FaChevronDown } from "react-icons/fa";
 
 function ProfileDropdown() {
     const [click, setClick] = useState(false);
- 
+    const { authUser: {displayName} } = useAuthContext();
+
+    
     const handleClick = () => setClick(!click);
+
     return (
     <div className=''>
         {/* profile pic, with drop down menu when clicked */}
@@ -16,7 +20,7 @@ function ProfileDropdown() {
                         <img alt="Kita Avatar" src={avatar} />
                     </div>
                 </div>
-                <span className="ml-3 text-lg font-bold flex justify-start items-center h-10">Kita</span>
+                <span className=" pr-3 ml-3 text-lg font-bold flex justify-start items-center h-10">{`${displayName}`}</span>
                 <FaChevronDown className="ml-auto" />
             </div>
             {click && (
