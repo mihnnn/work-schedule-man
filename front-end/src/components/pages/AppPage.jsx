@@ -8,7 +8,7 @@ function AppPage() {
   const { authUser } = useAuthContext();
 
   if (!authUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return (

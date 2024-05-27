@@ -20,6 +20,8 @@ function App() {
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/tos" element={<Tos />} />
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
+        <Route path="/app/" element= {authUser? <Navigate to="/app/event-types/" /> : <Navigate to="/" /> }></Route>
+        <Route path="/app/bookings/*" element={<Navigate to="/app/bookings/upcoming" />} />
       </Routes>
       <Toaster />
     </>

@@ -14,7 +14,7 @@ function AppContent() {
     <div className="flex-grow bg-[#222]">
       <Routes>
         <Route path="event-types" element={<EventTypes />} />
-        <Route path="bookings" element={<Bookings />} />
+        <Route path="bookings/*" element={<Bookings />} />
         <Route path="availability" element={<Availability />} />
       </Routes>
     </div>

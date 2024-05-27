@@ -1,12 +1,7 @@
 import React from 'react'
-import { Routes, Route, NavLink, useLocation, Link } from 'react-router-dom'
-import UpcomingBookings from './booking-routes/UpcomingBookings'
-import PastBookings from './booking-routes/PastBookings'
+
 
 function Bookings() {
-  const location = useLocation()
-  const currentPath = location.pathname
-
   return (
     <div >
 			<div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
@@ -27,25 +22,6 @@ function Bookings() {
 					</div>
 				</header>
 			</div>
-{/* 
-      <nav>
-        <ul className="flex gap-4">
-          <li className="btn btn-ghost p-0">
-            <NavLink to="/bookings/upcoming" className="flex items-center justify-center w-full h-full px-4 py-2 text-sm font-medium transition rounded-md hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emphasis">
-              Upcoming
-            </NavLink>
-          </li>
-          <li className="btn btn-ghost p-0">
-            <NavLink to="/bookings/past" className="flex items-center justify-center w-full h-full px-4 py-2 text-sm font-medium transition rounded-md hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emphasis">
-              Past
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-      <Routes>
-        <Route path="/bookings/upcoming" element={<UpcomingBookings />} />
-        <Route path="/bookings/past" element={<PastBookings />} />
-      </Routes> */}
     </div>
   )
 }
