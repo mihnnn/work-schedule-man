@@ -27,6 +27,9 @@ function EventTypes() {
 					</div>
 				</header>
 			</div>
+			
+			<div className='divider'></div>
+
 
 			{/* Events container in a vertical list */}
 			<div className='flex w-full max-w-none items-center justify-between overflow-hidden'>
