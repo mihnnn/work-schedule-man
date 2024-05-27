@@ -4,6 +4,7 @@ function UpcomingBookings() {
   return (
     <div>
       <p>this is upcoming</p>
+      <h1>THIS IS UPCOMING</h1>
     </div>
   )
 }
