@@ -12,7 +12,7 @@ function EventTypes() {
 
 	const { authUser: { username } } = useAuthContext();
 	return (
-		<div className='max-w-full px-2 py-4 lg:px-6'>
+		<div className='max-w-full px-2 py-4 lg:px-6 '>
 			<div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
 				<header className='flex w-full max-w-full items-center truncate'>
 					<div className='w-full truncate ltr:mr-4 rtl:ml-4 md:block'>
@@ -41,9 +41,9 @@ function EventTypes() {
 			{/* Events container in a vertical list */}
 			<div className='flex w-full max-w-none items-center justify-between overflow-hidden'>
 				<div className='flex flex-col bg-default border-subtle mb-16 overflow-hidden rounded-md border w-full'>
-					<ul className='divide-subtle !static w-full divide-y'>
+					<ul className='divide-subtle !static w-full divide-y '>
 						<li>
-							<div className='flex w-full items-center justify-between transition'>
+							<div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
 								<div className='group flex w-full max-w-full items-center justify-between overflow-hidden px-4 py-4 sm:px-6'>
 									<a href="" title='chat' className='flex-1 overflow-hidden pr-4 text-sm'>
 										<span className='text-gray-200'> chat</span>
@@ -76,7 +76,7 @@ function EventTypes() {
 							</div>
 						</li>
 						<li>
-							<div className='flex w-full items-center justify-between transition'>
+							<div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
 								<div className='group flex w-full max-w-full items-center justify-between overflow-hidden px-4 py-4 sm:px-6'>
 									<a href="" title='chat' className='flex-1 overflow-hidden pr-4 text-sm'>
 										<span className='text-gray-200'> chat</span>
@@ -109,7 +109,7 @@ function EventTypes() {
 							</div>
 						</li>
 						<li>
-							<div className='flex w-full items-center justify-between transition'>
+							<div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
 								<div className='group flex w-full max-w-full items-center justify-between overflow-hidden px-4 py-4 sm:px-6'>
 									<a href="" title='chat' className='flex-1 overflow-hidden pr-4 text-sm'>
 										<span className='text-gray-200'> chat</span>
