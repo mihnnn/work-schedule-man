@@ -19,6 +19,9 @@ const eventSchema = new mongoose.Schema({
         ref: 'User', //reference to user model
         required: true,
     },
+    URL: {
+        type: String,
+    },
 
     //createdAt, updatedAt => event.createdAt
 }, {timestamps: true});

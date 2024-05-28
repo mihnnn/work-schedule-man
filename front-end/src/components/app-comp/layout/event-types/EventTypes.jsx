@@ -1,12 +1,16 @@
 import React from 'react'
+import EventCreationModal from './EventCreationModal';
 import { MdPreview } from 'react-icons/md';
 import { FaLink } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useAuthContext } from "../../../../context/AuthContext";
 
 function EventTypes() {
+	const openModal = () => {
+		document.getElementById('my_modal_3').showModal();
+	}
 
-	const { authUser: {username} } = useAuthContext();
+	const { authUser: { username } } = useAuthContext();
 	return (
 		<div className='max-w-full px-2 py-4 lg:px-6'>
 			<div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
@@ -21,13 +25,16 @@ function EventTypes() {
 					</div>
 
 					<div className='fixed bottom-20 z-40 ltr:right-4 rtl:left-4 md:z-auto md:ltr:right-0 md:rtl:left-0 flex-shrink-0 [-webkit-app-region:no-drag] md:relative md:bottom-auto md:right-auto'>
-						<button className='btn btn-outline bg-white text-black '>
+						<button 
+							className='btn btn-outline bg-white text-black'
+							onClick={openModal}>
 							+ {" "} New
 						</button>
+						<EventCreationModal />
 					</div>
 				</header>
 			</div>
-			
+
 			<div className='divider'></div>
 
 
@@ -54,15 +61,15 @@ function EventTypes() {
 											</div>
 											<div className='rounded-lg flex'>
 												<a className='first:rounded-l-md items-center relative transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<MdPreview className='w-5 h-5' />
+													<MdPreview className='w-5 h-5' />
 												</a>
 												<button className='items-center transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<FaLink className='w-5 h-5' />
+													<FaLink className='w-5 h-5' />
 												</button>
 												<button className='last:rounded-r-md items-center transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<HiDotsHorizontal className='w-5 h-5' />
+													<HiDotsHorizontal className='w-5 h-5' />
 												</button>
-										</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -87,15 +94,15 @@ function EventTypes() {
 											</div>
 											<div className='rounded-lg flex'>
 												<a className='first:rounded-l-md items-center relative transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<MdPreview className='w-5 h-5' />
+													<MdPreview className='w-5 h-5' />
 												</a>
 												<button className='items-center transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<FaLink className='w-5 h-5' />
+													<FaLink className='w-5 h-5' />
 												</button>
 												<button className='last:rounded-r-md items-center transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<HiDotsHorizontal className='w-5 h-5' />
+													<HiDotsHorizontal className='w-5 h-5' />
 												</button>
-										</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -120,15 +127,15 @@ function EventTypes() {
 											</div>
 											<div className='rounded-lg flex'>
 												<a className='first:rounded-l-md items-center relative transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<MdPreview className='w-5 h-5' />
+													<MdPreview className='w-5 h-5' />
 												</a>
 												<button className='items-center transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<FaLink className='w-5 h-5' />
+													<FaLink className='w-5 h-5' />
 												</button>
 												<button className='last:rounded-r-md items-center transition flex justify-center border  h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-														<HiDotsHorizontal className='w-5 h-5' />
+													<HiDotsHorizontal className='w-5 h-5' />
 												</button>
-										</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -137,7 +144,6 @@ function EventTypes() {
 					</ul>
 				</div>
 			</div>
-
 		</div>
 	)
 }

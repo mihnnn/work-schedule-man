@@ -6,10 +6,15 @@ const bookingSchema = new mongoose.Schema({
         ref: 'Event',
         default: [],
     },
-    user : {
+    host : {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    participant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: [],
     },
     confriemdAt: {
         type: Date,
