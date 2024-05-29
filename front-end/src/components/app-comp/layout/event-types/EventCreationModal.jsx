@@ -15,6 +15,7 @@ function EventCreationModal() {
   const handleContinueButtonClick = async () => {
     await createEvent({ title, suffix, description, duration });
     modalRef.current.close();
+    window.location.reload();
   };
 
   const handleCloseModal = (e) => {

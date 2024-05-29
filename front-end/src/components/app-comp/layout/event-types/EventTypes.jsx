@@ -44,10 +44,10 @@ function EventTypes() {
 
       {/* Events container in a vertical list */}
       <div className='flex w-full max-w-none items-center justify-between overflow-hidden'>
-        <div className='flex flex-col bg-default border-subtle mb-16 overflow-hidden rounded-md border w-full'>
+        <div className='flex flex-col bg-default border-gray-500 mb-16 overflow-hidden rounded-md border w-full'>
           <ul className='!static w-full divide-y'>
             {loading ? (
-              <li>Loading...</li>
+              <li className='p-5' >Loading...</li>
             ) : events.length === 0 ? (
               <li className='text-white'>
 								<h1 className=' text-5xl'> Create your first event type.</h1>
@@ -64,7 +64,7 @@ function EventTypes() {
                         <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.suffix}`}</small>
                         <p>{`${event.description}`}</p>
                         <div className='text-gray-200 mt-2 flex flex-wrap gap-x-2 gap-y-1'>
-                          <div className='bg-gray-700 font-medium inline-flex items-center justify-center rounded gap-x-1 bg-subtle py-1 px-1.5 text-xs leading-3'>
+                          <div className='bg-gray-700 font-medium inline-flex items-center justify-center rounded gap-x-1 py-1 px-1.5 text-xs leading-3'>
                             {event.duration}m
                           </div>
                         </div>

@@ -1,4 +1,4 @@
-import { Event } from '../db/schemas/events.js'; // Ensure correct import path
+import { Event } from '../db/schemas/events.js';
 
 export const getEvents = async (req, res) => {
     console.log('getEvents called');
@@ -46,3 +46,18 @@ export const createEvent = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 };
+
+export const deleteEvent = async (req, res) => {
+    console.log('deleteEvent called');
+    try {
+        const { eventId } = req.params.id;
+        console.log('Event ID:', eventId);
+
+        const deletedEvent = await Event.findByIdAndDelete(eventId);
+        console.log('Deleted event:', deletedEvent);
+        res.status(200).json(deletedEvent);
+    } catch (err) {
+        console.error('Error in deleteEvent:', err);
+        res.status(500).send("Internal server error");
+    }
+}
