@@ -19,7 +19,7 @@ const eventSchema = new mongoose.Schema({
         ref: 'User', //reference to user model
         required: true,
     },
-    subfix: {
+    suffix: {
         type: String,
         required: true,
     },

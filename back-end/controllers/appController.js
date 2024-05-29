@@ -17,23 +17,23 @@ export const getEvents = async (req, res) => {
 export const createEvent = async (req, res) => {
     console.log('createEvent called');
     try {
-        const { title, description, duration, subfix } = req.body;
+        const { title, description, duration, suffix } = req.body;
         console.log('Request body:', req.body);
 
-        if (!title || !duration || !subfix) {
+        if (!title || !duration || !suffix) {
             console.error('Missing required fields');
             return res.status(400).send("Bad request: Missing required fields");
         }
 
         const username = req.user.username;
-        const URL = `https://wsm.com/${username}/${subfix}`;
+        const URL = `https://wsm.com/${username}/${suffix}`;
         console.log('Generated URL:', URL);
 
         const newEvent = new Event({
             title,
+            suffix,
             description,
             duration,
-            subfix,
             URL,
             organizer: req.user._id
         });

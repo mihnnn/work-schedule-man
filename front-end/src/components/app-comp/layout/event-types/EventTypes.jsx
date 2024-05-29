@@ -45,19 +45,24 @@ function EventTypes() {
       {/* Events container in a vertical list */}
       <div className='flex w-full max-w-none items-center justify-between overflow-hidden'>
         <div className='flex flex-col bg-default border-subtle mb-16 overflow-hidden rounded-md border w-full'>
-          <ul className='divide-subtle !static w-full divide-y'>
+          <ul className='!static w-full divide-y'>
             {loading ? (
               <li>Loading...</li>
             ) : events.length === 0 ? (
-              <li>No events found.</li>
+              <li className='text-white'>
+								<h1 className=' text-5xl'> Create your first event type.</h1>
+								<p className='text-xl'>Click new "NEW" button in the corner to start creating an event.</p>
+								<p className='text-xl'>Event types enable you to share links that show available times on your caldendar and allow people to make bookings with you.</p>
+							</li>
             ) : (
               events.map(event => (
                 <li key={event._id}>
                   <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
                     <div className='group flex w-full max-w-full items-center justify-between overflow-hidden px-4 py-4 sm:px-6'>
-                      <a href={event.URL} title={event.title} className='flex-1 overflow-hidden pr-4 text-sm'>
+                      <a href={event.URL} title={event.title} className='flex-1 overflow-hidden pr-4 text-sm'> {/* add edit event URL: /app/event-types/eventId?tabName=setup */}
                         <span className='text-gray-200'>{event.title}</span>
-                        <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.subfix}`}</small>
+                        <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.suffix}`}</small>
+                        <p>{`${event.description}`}</p>
                         <div className='text-gray-200 mt-2 flex flex-wrap gap-x-2 gap-y-1'>
                           <div className='bg-gray-700 font-medium inline-flex items-center justify-center rounded gap-x-1 bg-subtle py-1 px-1.5 text-xs leading-3'>
                             {event.duration}m
