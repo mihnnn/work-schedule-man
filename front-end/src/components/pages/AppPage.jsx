@@ -12,7 +12,7 @@ function AppPage() {
   }
 
   return (
-    <div className='flex bg-[#333] bg-clip-padding bg-opacity-0 '>
+    <div className='flex bg-[#333] '>
       <SideBar />
       <AppContent />
     </div>

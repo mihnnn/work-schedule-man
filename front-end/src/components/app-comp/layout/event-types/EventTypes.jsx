@@ -5,6 +5,7 @@ import { FaLink } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useAuthContext } from "../../../../context/AuthContext";
 import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
+import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';
 
 function EventTypes() {
   const openModal = () => {
@@ -14,17 +15,21 @@ function EventTypes() {
   const [dropdown, setDropdown] = useState(false);
   
   const { loadingGet, events } = useGetEvent();
+  const { loadingDelete, deleteEvent } = useDeleteEvent();
   //use delete event hook
   // const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
-  console.log("Events:", events);  
   const { authUser: { username } } = useAuthContext();
   
   const onDropdownChange = () => setDropdown(!dropdown);
   const onDropdownBlur = () => setDropdown(false);
-  const handleDelete = (e) => {
-    event.preventDefault();
-    console.log("Delete event");
+  const handleDelete = async (eventId) => {
+    try {
+      await deleteEvent(eventId);
+    } catch (error) {
+      console.error("Error in deleting events",error);
+    }
   }
+
   return (
     <div className='max-w-full px-2 py-4 lg:px-6'>
       <div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
@@ -98,10 +103,9 @@ function EventTypes() {
                               {dropdown && (
                                 <ul tabIndex={0} className="dropdown-content right-0 top-full z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52 mt-3" onBlur={onDropdownBlur}>
                                   <li><a>Edit</a></li>
-                                  <li><button className='text-red-500' onClick={handleDelete}>Delete</button></li>
+                                  <li><button className='text-red-500' onClick={() => handleDelete(event._id)}>Delete</button></li>
                                 </ul>
                                 )}
-                              
                             </div>
                           </div>
                         </div>
