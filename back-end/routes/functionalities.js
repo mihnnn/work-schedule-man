@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getEvents, createEvent } from '../controllers/appController.js'
+import { getEvents, createEvent, deleteEvent } from '../controllers/eventController.js'
 import { protectRoute } from '../middleware/protectRoute.js'
 
 const router = Router();

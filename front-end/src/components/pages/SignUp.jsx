@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useSignup from "../../hooks/useSignup";
+import useSignup from "../../hooks/auth-hooks/useSignup";
 import backgroundImage from "../../assets/images/auth-background.jpg"
 
 function SignUp() {

@@ -4,7 +4,7 @@ import { MdPreview } from 'react-icons/md';
 import { FaLink } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useAuthContext } from "../../../../context/AuthContext";
-import useGetEvent from '../../../../hooks/useGetEvent';
+import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
 
 function EventTypes() {
   const openModal = () => {

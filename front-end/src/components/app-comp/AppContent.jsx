@@ -8,7 +8,7 @@ import Availability from './layout/availability/Availability.jsx'
 
 function AppContent() {
   return (
-    <div className="flex-grow bg-[#222]">
+    <div className="bg-[#222] ml-[16%] flex-1 overflow-auto h-full">
       <Routes>
         <Route path="event-types" element={<EventTypes />} />
         <Route path="bookings/*" element={<Bookings />} />

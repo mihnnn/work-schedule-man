@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useAuthContext } from '../../../../context/AuthContext';
-import useCreateEvent from '../../../../hooks/useCreateEvent';
+import useCreateEvent from '../../../../hooks/event-hooks/useCreateEvent';
 
 function EventCreationModal() {
   const { authUser: { username } } = useAuthContext();

@@ -50,14 +50,23 @@ export const createEvent = async (req, res) => {
 export const deleteEvent = async (req, res) => {
     console.log('deleteEvent called');
     try {
-        const { eventId } = req.params.id;
-        console.log('Event ID:', eventId);
+        const eventId = req.params.id;
+        const userId = req.user._id;
 
-        const deletedEvent = await Event.findByIdAndDelete(eventId);
-        console.log('Deleted event:', deletedEvent);
-        res.status(200).json(deletedEvent);
-    } catch (err) {
-        console.error('Error in deleteEvent:', err);
-        res.status(500).send("Internal server error");
+        // Find the event by ID and ensure the organizer is the one deleting it
+        const event = await Event.findOne({ _id: eventId, organizer: userId });
+
+        if (!event) {
+            console.error('Event not found or user not authorized');
+            return res.status(404).send("Event not found or user not authorized");
+        }
+
+        // Delete the event
+        await Event.deleteOne({ _id: eventId });
+        console.log('Event deleted:', eventId);
+        res.status(200).json({ message: "Event deleted successfully" });
+    } catch (error) {
+        console.error("Error in deleteEvent:", error.message);
+        res.status(500).json({ error: "Internal server error" });
     }
-}
+};

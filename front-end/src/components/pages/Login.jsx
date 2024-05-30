@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import backgroundImage from "../../assets/images/auth-background.jpg"
-import useLogin from "../../hooks/useLogin";
+import useLogin from "../../hooks/auth-hooks/useLogin";
 // import "./styles/Login.css";
 
 function Login() {
