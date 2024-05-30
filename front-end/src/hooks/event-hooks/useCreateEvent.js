@@ -25,9 +25,8 @@ function useCreateEvent() {
       }
 
       const data = await res.json();
-      return data;
-
       toast.success('Event created successfully');
+      return data;
     } catch (error) {
       console.error(error);
       toast.error('An error occurred: ' + error.message);
