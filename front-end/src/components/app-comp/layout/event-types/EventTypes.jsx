@@ -14,8 +14,8 @@ function EventTypes() {
 
   const [dropdown, setDropdown] = useState(false);
   
-  const { loadingGet, events } = useGetEvent();
-  const { loadingDelete, deleteEvent } = useDeleteEvent();
+  const { loading: loadingGet, events, refetchEvents } = useGetEvent();
+  const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
   //use delete event hook
   // const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
   const { authUser: { username } } = useAuthContext();
@@ -25,6 +25,8 @@ function EventTypes() {
   const handleDelete = async (eventId) => {
     try {
       await deleteEvent(eventId);
+
+      await refetchEvents();
     } catch (error) {
       console.error("Error in deleting events",error);
     }
