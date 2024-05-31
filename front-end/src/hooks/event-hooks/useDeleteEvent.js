@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 function useDeleteEvent() {
     const [loading, setLoading] = useState(false);
 
-    const deleteEvent = async (eventId) => {
+    const deleteEvent = async (eventId, title) => {
         setLoading(true);
         try {
             const res = await fetch(`/api/event-types/${eventId}`, {
@@ -18,7 +18,7 @@ function useDeleteEvent() {
                 throw new Error(errorText);
             }
 
-            toast.success('Event deleted successfully');
+            toast.success(`Event "${title}" deleted successfully`);
         } catch (error) {
             console.error(error);
             toast.error('An error occurred: ' + error.message);

@@ -1,9 +1,9 @@
 import React from 'react'
 
 
-function Bookings() {
-  return (
-    <div >
+function BookingsHeader() {
+	return (
+		<div >
 			<div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
 				<header className='flex w-full max-w-full items-center truncate'>
 					<div className='w-full truncate ltr:mr-4 rtl:ml-4 md:block'>
@@ -11,7 +11,7 @@ function Bookings() {
 							Bookings
 						</h3>
 						<p className='text-gray-100 hidden text-sm md:block'>
-              See upcoming and past events booked through your event type links.
+							See upcoming and past events booked through your event type links.
 						</p>
 					</div>
 
@@ -22,8 +22,8 @@ function Bookings() {
 					</div>
 				</header>
 			</div>
-    </div>
-  )
+		</div>
+	)
 }
 
-export default Bookings
+export default BookingsHeader

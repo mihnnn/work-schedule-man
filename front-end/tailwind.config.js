@@ -17,6 +17,15 @@ export default {
         'btn-y': '0.25rem', // custom vertical padding
         'btn-x': '0.75rem', // custom horizontal padding
       },
+      keyframes: {
+        grow: {
+          '0%': { opacity: 0, transform: 'scale(0.8)' },
+          '100%': { opacity: 1, transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        grow: 'grow 0.3s ease-in-out forwards',
+      },
     },
 
   },

@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import EventCreationModal from './EventCreationModal';
 import { MdPreview } from 'react-icons/md';
 import { FaLink } from "react-icons/fa6";
@@ -8,29 +9,39 @@ import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
 import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';
 
 function EventTypes() {
-  const openModal = () => {
-    document.getElementById('my_modal_3').showModal();
-  }
-
-  const [dropdown, setDropdown] = useState(false);
+  const navigate = useNavigate();
   
+  const [dropdown, setDropdown] = useState(false);
+  const [newEventId, setNewEventId] = useState(null);
+
   const { loading: loadingGet, events, refetchEvents } = useGetEvent();
   const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
-  //use delete event hook
-  // const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
   const { authUser: { username } } = useAuthContext();
+  
+  const handleOpenModal = () => {
+    if (document.querySelector('#my_modal_3')) {
+      navigate('/app/event-types?dialog=new&eventPage=' + username);
+    } else {
+      navigate('/app/event-types?dialog=new&eventPage=' + username, { state: { modal: true } });
+    }
+  };
   
   const onDropdownChange = () => setDropdown(!dropdown);
   const onDropdownBlur = () => setDropdown(false);
-  const handleDelete = async (eventId) => {
+  
+  const handleDelete = async (eventId,title) => {
     try {
-      await deleteEvent(eventId);
-
+      await deleteEvent(eventId,title);
       await refetchEvents();
     } catch (error) {
-      console.error("Error in deleting events",error);
+      console.error("Error in deleting events", error);
     }
-  }
+  };
+
+  const handleNewEventAdded = (eventId) => {
+    setNewEventId(eventId);
+    refetchEvents();
+  };
 
   return (
     <div className='max-w-full px-2 py-4 lg:px-6'>
@@ -48,34 +59,33 @@ function EventTypes() {
           <div className='fixed bottom-20 z-40 ltr:right-4 rtl:left-4 md:z-auto md:ltr:right-0 md:rtl:left-0 flex-shrink-0 [-webkit-app-region:no-drag] md:relative md:bottom-auto md:right-auto'>
             <button
               className='btn btn-outline bg-white text-black'
-              onClick={openModal}>
+              onClick={handleOpenModal}>
               + {" "} New
             </button>
-            <EventCreationModal />
+            <EventCreationModal onNewEventAdded={handleNewEventAdded} />
           </div>
         </header>
       </div>
 
       <div className='divider'></div>
 
-      {/* Events container in a vertical list */}
       <div className='flex w-full max-w-none items-center justify-between'>
         <div className='flex flex-col bg-default border-gray-500 mb-16 rounded-md border w-full'>
           <ul className='!static w-full divide-y'>
             {loadingGet ? (
-              <li className='p-5' >Loading...</li>
+              <li className='p-5'>Loading...</li>
             ) : events.length === 0 ? (
               <li className='text-white'>
-								<h1 className=' text-5xl'> Create your first event type.</h1>
-								<p className='text-xl'>Click new "NEW" button in the corner to start creating an event.</p>
-								<p className='text-xl'>Event types enable you to share links that show available times on your caldendar and allow people to make bookings with you.</p>
-							</li>
+                <h1 className='text-5xl'> Create your first event type.</h1>
+                <p className='text-xl'>Click new "NEW" button in the corner to start creating an event.</p>
+                <p className='text-xl'>Event types enable you to share links that show available times on your calendar and allow people to make bookings with you.</p>
+              </li>
             ) : (
               events.map(event => (
-                <li key={event._id}>
+                <li key={event._id} className={event._id === newEventId ? 'animate-grow' : ''}>
                   <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
                     <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
-                      <a href={event.URL} title={event.title} className='flex-1  pr-4 text-sm'> {/* add edit event URL: /app/event-types/eventId?tabName=setup */}
+                      <a href={event.URL} title={event.title} className='flex-1 pr-4 text-sm'>
                         <span className='text-gray-200'>{event.title}</span>
                         <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.suffix}`}</small>
                         <p>{`${event.description}`}</p>
@@ -97,17 +107,16 @@ function EventTypes() {
                             <button className='items-center transition flex justify-center border h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <FaLink className='w-5 h-5' />
                             </button>
-                            
                             <div className='dropdown last:rounded-r-md items-center transition flex justify-center border h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <button tabIndex={0} className='items-center' onClick={onDropdownChange}>
-                                <HiDotsHorizontal className='w-5 h-5'/>
+                                <HiDotsHorizontal className='w-5 h-5' />
                               </button>
                               {dropdown && (
                                 <ul tabIndex={0} className="dropdown-content right-0 top-full z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52 mt-3" onBlur={onDropdownBlur}>
                                   <li><a>Edit</a></li>
-                                  <li><button className='text-red-500' onClick={() => handleDelete(event._id)}>Delete</button></li>
+                                  <li><button className='text-red-500' onClick={() => handleDelete(event._id, event.title)}>Delete</button></li>
                                 </ul>
-                                )}
+                              )}
                             </div>
                           </div>
                         </div>

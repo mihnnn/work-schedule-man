@@ -1,26 +1,38 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuthContext } from '../../../../context/AuthContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useCreateEvent from '../../../../hooks/event-hooks/useCreateEvent';
 
-function EventCreationModal() {
+function EventCreationModal({ onNewEventAdded }) {
   const { authUser: { username } } = useAuthContext();
-  const modalRef = useRef(null);
   const { createEvent, loading } = useCreateEvent();
+  
+  const modalRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [suffix, setSuffix] = useState('');
   const [description, setDescription] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState(15);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('dialog') === 'new' && params.get('eventPage') === username) {
+      modalRef.current.showModal();
+    }
+  }, [location.search, username]);
 
   const handleContinueButtonClick = async () => {
-    await createEvent({ title, suffix, description, duration });
+    const newEvent = await createEvent({ title, suffix, description, duration });
     modalRef.current.close();
-    window.location.reload();
+    onNewEventAdded(newEvent._id);
   };
 
   const handleCloseModal = (e) => {
     if (e.target === modalRef.current) {
       modalRef.current.close();
+      navigate('/app/event-types');
     }
   };
 
@@ -40,6 +52,7 @@ function EventCreationModal() {
               placeholder="Quick chat"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              required={true}
             />
           </div>
 
@@ -53,6 +66,7 @@ function EventCreationModal() {
                 placeholder="quick-chat"
                 value={suffix}
                 onChange={(e) => setSuffix(e.target.value)}
+                required={true}
               />
             </div>
           </div>
@@ -73,7 +87,7 @@ function EventCreationModal() {
               <input
                 type="number"
                 className="w-full"
-                placeholder="15"
+                placeholder='15'
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
               />
@@ -86,12 +100,12 @@ function EventCreationModal() {
           <div className="mt-5 flex flex-row-reverse gap-2">
             <button
               className="btn btn-outline bg-gray-50 text-[#222] hover:bg-opacity-50"
-              onClick={handleContinueButtonClick}
+              onClick={() => { modalRef.current.close(); navigate('/app/event-types'); handleContinueButtonClick(); }}
               disabled={loading}
             >
               {loading ? 'Creating...' : 'Continue'}
             </button>
-            <button className="btn btn-ghost" onClick={handleCloseModal}>Close</button>
+            <button className="btn btn-ghost" onClick={() => { modalRef.current.close(); navigate('/app/event-types'); }}>Close</button>
           </div>
         </form>
       </div>
