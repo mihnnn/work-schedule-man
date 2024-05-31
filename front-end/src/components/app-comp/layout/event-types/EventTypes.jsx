@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import EventCreationModal from './EventCreationModal';
-import { MdPreview } from 'react-icons/md';
-import { FaLink } from "react-icons/fa6";
-import { HiDotsHorizontal } from "react-icons/hi";
 import { useAuthContext } from "../../../../context/AuthContext";
 import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
 import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';
+import { MdPreview } from 'react-icons/md';
+import { FaLink } from "react-icons/fa6";
+import { HiDotsHorizontal } from "react-icons/hi";
+import EventCreationModal from './EventCreationModal';
+
 
 function EventTypes() {
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ function EventTypes() {
           </div>
         </header>
       </div>
+      
 
       <div className='divider'></div>
 
