@@ -33,6 +33,7 @@ function EventTypes() {
   const handleDelete = async (eventId,title) => {
     try {
       await deleteEvent(eventId,title);
+      setDropdown(false);
       await refetchEvents();
     } catch (error) {
       console.error("Error in deleting events", error);
