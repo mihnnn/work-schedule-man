@@ -73,7 +73,7 @@ function EventTypes() {
       <div className='divider'></div>
 
       <div className='flex w-full max-w-none items-center justify-between'>
-        <div className='flex flex-col bg-default border-gray-500 mb-16 rounded-md border w-full'>
+        <div className='flex flex-col bg-default border-gray-500 mb-16 rounded-md border w-full animate-grow'>
           <ul className='!static w-full divide-current divide-y'>
             {loadingGet ? (
               <li className='p-5'>Loading...</li>
@@ -88,7 +88,7 @@ function EventTypes() {
                 <li key={event._id} className={event._id === newEventId ? 'animate-grow' : ''}>
                   <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
                     <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
-                      <a href={event.URL} title={event.title} className='flex-1 pr-4 text-sm'>
+                      <a href="event-types/testedit" title={event.title} className='flex-1 pr-4 text-sm'>
                         <span className='text-gray-200'>{event.title}</span>
                         <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.suffix}`}</small>
                         <p>{`${event.description}`}</p>
