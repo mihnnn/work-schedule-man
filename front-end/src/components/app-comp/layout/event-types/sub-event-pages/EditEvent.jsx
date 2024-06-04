@@ -5,7 +5,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { FaArrowLeft } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
 import { FaLink } from "react-icons/fa";
-import { HiDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 
