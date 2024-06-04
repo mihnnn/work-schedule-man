@@ -12,6 +12,18 @@ export const getEvents = async (req, res) => {
   }
 };
 
+//find event by id given to query params
+export const getEventsById = async (req, res) => {
+    try {
+      const { findEvent } = req;
+      res.status(200).json(findEvent);
+    } catch {
+      console.error("Error in getEventsById:", error.message);
+      res.status(500).json({ error: "Internal server error" });
+    
+    }
+}
+
 export const createEvent = async (req, res) => {
   try {
     const { title, description, duration, suffix } = req.body;

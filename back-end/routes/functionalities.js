@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getEvents,
+  getEventsById,
   createEvent,
   deleteEvent,
 } from "../controllers/eventController.js";
@@ -11,12 +12,8 @@ const router = Router();
 
 router.get("/api/settings");
 router.get("/api/event-types", protectRoute, getEvents);
-router.delete(
-  "/api/event-types/:id",
-  protectRoute,
-  resolveIndexByEventId,
-  deleteEvent
-);
+router.get("/api/event-types/:id",protectRoute, resolveIndexByEventId, getEventsById);
+router.delete("/api/event-types/:id", protectRoute, resolveIndexByEventId, deleteEvent);
 router.post("/api/event-types", protectRoute, createEvent);
 
 export default router;
