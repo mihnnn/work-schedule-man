@@ -13,7 +13,7 @@ import EventCreationModal from './EventCreationModal';
 function EventTypes() {
   const navigate = useNavigate();
   
-  const [dropdown, setDropdown] = useState(false);
+  const [dropdowns, setDropdowns] = useState(false);
   const [newEventId, setNewEventId] = useState(null);
 
   const { loading: loadingGet, events, refetchEvents } = useGetEvent();
@@ -28,13 +28,28 @@ function EventTypes() {
     }
   };
   
-  const onDropdownChange = () => setDropdown(!dropdown);
-  const onDropdownBlur = () => setDropdown(false);
+  const onDropdownChange = (eventId) => {
+    setDropdowns(prevDropdowns => ({
+      ...prevDropdowns,
+      [eventId]: !prevDropdowns[eventId],
+    }))
+  }
+  const onDropdownBlur = (eventId) => {
+    setTimeout(() => {
+      setDropdowns(prevDropdowns => ({
+        ...prevDropdowns,
+        [eventId]: false,
+      }));
+    }, 200);
+  };
   
   const handleDelete = async (eventId,title) => {
     try {
       await deleteEvent(eventId,title);
-      setDropdown(false);
+      setDropdowns(prevDropdowns => ({
+        ...prevDropdowns,
+        [eventId]: false,
+      }));
       await refetchEvents();
     } catch (error) {
       console.error("Error in deleting events", error);
@@ -51,7 +66,7 @@ function EventTypes() {
       <div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
         <header className='flex w-full max-w-full items-center truncate'>
           <div className='w-full truncate ltr:mr-4 rtl:ml-4 md:block'>
-            <h3 className='text-emphasis max-w-28 sm:max-w-72 md:max-w-80 truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl hidden'>
+            <h3 className='text-emphasis -maxw-28 sm:max-w-72 md:max-w-80 truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl hidden'>
               Event Types
             </h3>
             <p className='text-emphasis hidden text-sm md:block'>
@@ -112,11 +127,11 @@ function EventTypes() {
                               <FaLink className='w-5 h-5' />
                             </button>
                             <div className='dropdown last:rounded-r-md items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
-                              <button tabIndex={0} className='items-center' onClick={onDropdownChange}>
+                              <button tabIndex={0} className='items-center' onClick={() => onDropdownChange(event._id)} onBlur={()=> onDropdownBlur(event._id)}>
                                 <HiDotsHorizontal className='w-5 h-5' />
                               </button>
-                              {dropdown && (
-                                <ul tabIndex={0} className="dropdown-content right-0 top-full z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52 mt-3" onBlur={onDropdownBlur}>
+                              {dropdowns[event._id] && (
+                                <ul tabIndex={0} className="dropdown-content right-0 top-full z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52 mt-3" >
                                   <li><a href='event-types/testedit'>Edit</a></li>
                                   <li><button className='text-red-500' onClick={() => handleDelete(event._id, event.title)}>Delete</button></li>
                                 </ul>
