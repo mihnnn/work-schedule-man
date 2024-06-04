@@ -26,6 +26,9 @@ export default {
       animation: {
         grow: 'grow 0.3s ease-in-out forwards',
       },
+      backgroundColor: {
+        'subtle' : 'rgba(243, 244, 246, 0.1)',
+      },
     },
 
   },
@@ -46,6 +49,27 @@ export default {
           },
         },
       });
-    }
+    },
+    function( {addUtilities} ) {
+      const newUtilities = {
+        '.no-scrollbar::-webkit-scrollbar': {
+          display: 'none',
+        },
+        '.no-scrollbar': {
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
+        },
+        '.text-emphasis': {
+          color: '#F3F4F6',
+        },
+        '.border-subtle': {
+          borderColor: '6B7280',
+          'border-width': '1px',
+        },
+
+
+      }
+    addUtilities(newUtilities, ['responsive', 'hover'])
+    },
   ],
 }

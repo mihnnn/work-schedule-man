@@ -6,6 +6,7 @@ import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';
 import { MdPreview } from 'react-icons/md';
 import { FaLink } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
+import { FaRegClock } from "react-icons/fa6";
 import EventCreationModal from './EventCreationModal';
 
 
@@ -50,10 +51,10 @@ function EventTypes() {
       <div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
         <header className='flex w-full max-w-full items-center truncate'>
           <div className='w-full truncate ltr:mr-4 rtl:ml-4 md:block'>
-            <h3 className='text-gray-50 max-w-28 sm:max-w-72 md:max-w-80 truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl hidden'>
+            <h3 className='text-emphasis max-w-28 sm:max-w-72 md:max-w-80 truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl hidden'>
               Event Types
             </h3>
-            <p className='text-gray-100 hidden text-sm md:block'>
+            <p className='text-emphasis hidden text-sm md:block'>
               Create events to share for people to book on your calendar.
             </p>
           </div>
@@ -89,12 +90,12 @@ function EventTypes() {
                   <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
                     <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
                       <a href="event-types/testedit" title={event.title} className='flex-1 pr-4 text-sm'>
-                        <span className='text-gray-200'>{event.title}</span>
+                        <span className='text-emphasis font-semibold text-base'>{event.title}</span>
                         <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.suffix}`}</small>
-                        <p>{`${event.description}`}</p>
-                        <div className='text-gray-200 mt-2 flex flex-wrap gap-x-2 gap-y-1'>
-                          <div className='bg-gray-700 font-medium inline-flex items-center justify-center rounded gap-x-1 py-1 px-1.5 text-xs leading-3'>
-                            {event.duration}m
+                        <p className='py-1'>{`${event.description}`}</p>
+                        <div className='text-emphasis mt-2 flex flex-wrap gap-x-2 gap-y-1'>
+                          <div className='bg-gray-700 font-semibold inline-flex items-center justify-center rounded gap-x-1 py-1 px-1.5 text-xs leading-3'>
+                            <FaRegClock/>{event.duration}m
                           </div>
                         </div>
                       </a>
@@ -104,19 +105,19 @@ function EventTypes() {
                             <input type="checkbox" className="toggle" />
                           </div>
                           <div className='rounded-lg flex'>
-                            <a className='first:rounded-l-md items-center relative transition flex justify-center border h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
+                            <a className='first:rounded-l-md items-center relative transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <MdPreview className='w-5 h-5' />
                             </a>
-                            <button className='items-center transition flex justify-center border h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
+                            <button className='items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <FaLink className='w-5 h-5' />
                             </button>
-                            <div className='dropdown last:rounded-r-md items-center transition flex justify-center border h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
+                            <div className='dropdown last:rounded-r-md items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <button tabIndex={0} className='items-center' onClick={onDropdownChange}>
                                 <HiDotsHorizontal className='w-5 h-5' />
                               </button>
                               {dropdown && (
                                 <ul tabIndex={0} className="dropdown-content right-0 top-full z-[9999] menu p-2 shadow bg-base-100 rounded-box w-52 mt-3" onBlur={onDropdownBlur}>
-                                  <li><a>Edit</a></li>
+                                  <li><a href='event-types/testedit'>Edit</a></li>
                                   <li><button className='text-red-500' onClick={() => handleDelete(event._id, event.title)}>Delete</button></li>
                                 </ul>
                               )}
