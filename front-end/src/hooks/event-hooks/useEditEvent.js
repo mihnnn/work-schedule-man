@@ -1,26 +1,7 @@
-import React from 'react'
+import { useState } from 'react'
 
 function useEditEvent() {
     const [loading, setLoading] = useState(false);
-
-    const getEventById = async (eventId) => {
-        setLoading(true);
-        try {
-            const res = await fetch(`/api/event-types/${eventId}`);
-            const data = await res.json();
-
-            if (data.error) {
-                throw new Error(data.error);
-            }
-
-            return data.event;
-        } catch (error) {
-            console.error(error);
-            toast.error('An error occurred: ' + error.message);
-        } finally {
-            setLoading(false);
-        }
-    }
 
     const editEvent = async (eventId, title) => {
         setLoading(true);
@@ -46,7 +27,7 @@ function useEditEvent() {
         }
     }
   return (
-    { getEventById, editEvent, loading}
+    {editEvent, loading}
   )
 }
 

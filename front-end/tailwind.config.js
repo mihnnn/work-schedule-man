@@ -5,10 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend:{
+    extend: {
       // Extend the default theme
       colors: {
         'custom-primary': '#1DA1F2', // example color
+        'gray-400': '#9CA3AF',
+        'gray-50': '#F9FAFB',
       },
       borderRadius: {
         'custom': '0.375rem', // example radius
@@ -27,10 +29,9 @@ export default {
         grow: 'grow 0.3s ease-in-out forwards',
       },
       backgroundColor: {
-        'subtle' : 'rgba(243, 244, 246, 0.1)',
+        'subtle': 'rgba(243, 244, 246, 0.1)',
       },
     },
-
   },
   plugins: [
     require("daisyui"),
@@ -50,7 +51,7 @@ export default {
         },
       });
     },
-    function( {addUtilities} ) {
+    function ({ addUtilities }) {
       const newUtilities = {
         '.no-scrollbar::-webkit-scrollbar': {
           display: 'none',
@@ -63,13 +64,16 @@ export default {
           color: '#F3F4F6',
         },
         '.border-subtle': {
-          borderColor: '6B7280',
+          borderColor: '#6B7280', // Fixed the color to be a valid hex
           'border-width': '1px',
         },
-
-
+        // '.bg-active-tab': {
+        //   backgroundColor: '#9CA3AF', // Tailwind's bg-gray-400 color
+        //   opacity: '0.3',
+        //   color: '#F9FAFB', // Tailwind's text-gray-50 color
+        // },
       }
-    addUtilities(newUtilities, ['responsive', 'hover'])
+      addUtilities(newUtilities, ['responsive', 'hover']);
     },
   ],
 }

@@ -14,8 +14,8 @@ function AppContent() {
         <Route path="event-types" element={<EventTypes />} />
         <Route path="bookings/*" element={<Bookings />} />
         <Route path="availability" element={<Availability />} />
-        {/* <Route path='event-types/:eventId' element={<EditEvent />} /> */}
-        <Route path='event-types/testedit' element={<EditEvent />} />
+        <Route path='event-types/:eventId' element={<EditEvent />} />
+        {/* <Route path='event-types/testedit' element={<EditEvent />} /> */}
         
       </Routes>
     </div>

@@ -61,6 +61,10 @@ function EventTypes() {
     refetchEvents();
   };
 
+  const handleEventClick = (eventId) => {
+    navigate(`/app/event-types/${eventId}?tabName=setup`);
+  }
+
   return (
     <div className='max-w-full px-2 py-4 lg:px-6'>
       <div className='flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0'>
@@ -89,7 +93,7 @@ function EventTypes() {
       <div className='divider'></div>
 
       <div className='flex w-full max-w-none items-center justify-between'>
-        <div className='flex flex-col bg-default border-gray-500 mb-16 rounded-md border w-full animate-grow'>
+        <div className='flex flex-col border-gray-500 mb-16 rounded-md border w-full animate-grow'>
           <ul className='!static w-full divide-current divide-y'>
             {loadingGet ? (
               <li className='p-5'>Loading...</li>
@@ -104,7 +108,7 @@ function EventTypes() {
                 <li key={event._id} className={event._id === newEventId ? 'animate-grow' : ''}>
                   <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
                     <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
-                      <a href="event-types/testedit" title={event.title} className='flex-1 pr-4 text-sm'>
+                      <a onClick={() => handleEventClick(event._id)} title={event.title} className='flex-1 pr-4 text-sm'>
                         <span className='text-emphasis font-semibold text-base'>{event.title}</span>
                         <small className='ml-1 hidden font-normal leading-4 sm:inline'>{`${username}/${event.suffix}`}</small>
                         <p className='py-1'>{`${event.description}`}</p>
