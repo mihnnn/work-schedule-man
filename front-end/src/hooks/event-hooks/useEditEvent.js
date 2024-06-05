@@ -7,7 +7,7 @@ function useEditEvent() {
         setLoading(true);
         try {
             const res = await fetch(`/api/event-types/${eventId}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title })
             });

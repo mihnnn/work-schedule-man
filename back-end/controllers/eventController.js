@@ -52,6 +52,28 @@ export const createEvent = async (req, res) => {
   }
 };
 
+export const updateEvent = async (req, res) => {
+  console.log("updateEvent called");
+  try {
+    const { body, findEvent } = req;
+
+    // Update the event details with the new values from the request body
+    findEvent.title = body.title || findEvent.title;
+    findEvent.description = body.description || findEvent.description;
+    findEvent.duration = body.duration || findEvent.duration;
+    findEvent.suffix = body.suffix || findEvent.suffix;
+
+    // Save the updated event to the database
+    const updatedEvent = await findEvent.save();
+
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    console.error("Error in updateEvent:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 export const deleteEvent = async (req, res) => {
   try {
     const { findEvent } = req;
