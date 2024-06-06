@@ -13,14 +13,14 @@ function EventRoutes() {
         route="/app/event-types"
         routeName="Event Types"
         icon={FaLink}
-        isActive={currentPath === "/app/event-types"}
+        isActive={currentPath.startsWith("/app/event-types")}
       />
       
       <WsmItem
         route="/app/bookings/upcoming"
         routeName="Bookings"
         icon={FaRegCalendar}
-        isActive={currentPath === "/app/bookings/upcoming" || currentPath === "/app/bookings/past" || currentPath === "/app/bookings/canceled"}
+        isActive={currentPath.startsWith("/app/bookings")}
       />
       <WsmItem
         route="/app/availability"

@@ -55,15 +55,27 @@ export const createEvent = async (req, res) => {
 export const updateEvent = async (req, res) => {
   console.log("updateEvent called");
   try {
-    const { body, findEvent } = req;
+    const { title, description, duration, suffix } = req.body;
+    const { findEvent } = req;
 
-    // Update the event details with the new values from the request body
-    findEvent.title = body.title || findEvent.title;
-    findEvent.description = body.description || findEvent.description;
-    findEvent.duration = body.duration || findEvent.duration;
-    findEvent.suffix = body.suffix || findEvent.suffix;
+    if (title && typeof title !== 'string') {
+      return res.status(400).json({ error: "Invalid title" });
+    }
+    if (description && typeof description !== 'string') {
+      return res.status(400).json({ error: "Invalid description" });
+    }
+    if (duration && typeof duration !== 'number') {
+      return res.status(400).json({ error: "Invalid duration" });
+    }
+    if (suffix && typeof suffix !== 'string') {
+      return res.status(400).json({ error: "Invalid suffix" });
+    }
 
-    // Save the updated event to the database
+    if (title) findEvent.title = title;
+    if (description) findEvent.description = description;
+    if (duration) findEvent.duration = duration;
+    if (suffix) findEvent.suffix = suffix;
+
     const updatedEvent = await findEvent.save();
 
     res.status(200).json(updatedEvent);

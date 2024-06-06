@@ -17,14 +17,25 @@ function EditEvent() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const tabName = queryParams.get('tabName') || 'setup';
+  
 
   const { eventId } = useParams();
   useEffect( () => {
     if (eventId) {
       getEventById(eventId);
     }    
-
   }, [eventId]);
+
+  useEffect(() => {
+    // Default to 'setup' if tabName is not present
+    if (!queryParams.get('tabName')) {
+      queryParams.set('tabName', 'setup');
+      navigate({
+        pathname: location.pathname,
+        search: queryParams.toString(),
+      }, { replace: true });
+    }
+  }, [location.search, navigate]);
 
   const handleBackClick = () => {
     navigate("/app/event-types");
@@ -69,8 +80,8 @@ function EditEvent() {
         </div>
       </header>
       <div className="flex">
-        <EditEventSideBar eventId={eventId} tabName={tabName} />
-        <EditEventPage eventId={eventId} tabName={tabName} />
+        <EditEventSideBar tabName={tabName} />
+        <EditEventPage tabName={tabName} />
       </div>
     </div>
   );

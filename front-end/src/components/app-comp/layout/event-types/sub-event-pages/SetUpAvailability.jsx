@@ -2,8 +2,8 @@ import React from 'react'
 
 function SetUpAvailability() {
     return (
-        <div className='ml-5 flex flex-col max-w-full w-full text-emphasis'>
-            <div className='border-gray-400 rounded-lg p-4 flex flex-col input-border w-full mb-4'>
+        <div className='ml-5 flex flex-col max-w-full w-full text-emphasis animate-grow'>
+            <div className='border border-gray-400 rounded-lg flex flex-col input-border w-full mb-4'>
                 <form id="event-type-form">
                     <div>
                         <div className=' border-subtle rounded-t-md border p-6'>
