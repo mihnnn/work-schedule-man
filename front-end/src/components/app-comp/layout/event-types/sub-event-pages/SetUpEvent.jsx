@@ -1,36 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useAuthContext } from '../../../../../context/AuthContext'
-import useGetEventById from '../../../../../hooks/event-hooks/useGetEventById';
-import useEditEvent from '../../../../../hooks/event-hooks/useEditEvent';
-import { useParams } from 'react-router-dom';
 
-
-
-function SetUpEvent() {
-  const { authUser: { username } } = useAuthContext();
-  const { eventData, getEventById } = useGetEventById();
-  const { loading, editEvent } = useEditEvent();
-  const { eventId } = useParams();
-
-  const [title, setTitle] = useState('');
-  const [suffix, setSuffix] = useState('');
-  const [description, setDescription] = useState('');
-  const [duration, setDuration] = useState(15);
-
-  useEffect(() => {
-    if (eventId) {
-      getEventById(eventId);
-    }
-  }, [eventId])
-
-  useEffect(() => {
-    if (eventData) {
-      setTitle(eventData.title);
-      setDescription(eventData.description);
-      setSuffix(eventData.suffix);
-      setDuration(eventData.duration);
-    }
-  }, [eventData])
+function SetUpEvent({ title, setTitle, description, setDescription, suffix, setSuffix, duration, setDuration }) {
+  const { authUser: {username} } = useAuthContext();
 
   return (
     <div className='ml-5 flex flex-col max-w-full w-full text-emphasis animate-grow'>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 function useGetEventById() {
   const [loading, setLoading] = useState(false);

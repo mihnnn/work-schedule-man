@@ -1,15 +1,17 @@
 import { useState } from "react";
+import toast from 'react-hot-toast'
 
 function useEditEvent() {
+  console.log("useEditEvent called");
   const [loading, setLoading] = useState(false);
 
-  const editEvent = async (eventId, title) => {
+  const editEvent = async (eventId, {title, description, suffix, duration}) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/event-types/${eventId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title }),
+        body: JSON.stringify({ title, description, suffix, duration }),
       });
 
       if (!res.ok) {
