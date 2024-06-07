@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import ProfileDropdown from "../sidebar-comp/ProfileDropdown.jsx";
 import EventRoutes from "../sidebar-comp/EventRoutes.jsx";
 import LogoutButton from "../sidebar-comp/LogoutButton.jsx";
+import CopyPublicPageLink from "../sidebar-comp/CopyPublicPageLink.jsx";
+import PublicPageButton from "../sidebar-comp/PublicPageButton.jsx";
 
 function SideBar() {
 
@@ -13,6 +15,8 @@ function SideBar() {
       <ProfileDropdown />
       <div className="divider px-3"></div>
       <EventRoutes />
+      <PublicPageButton />
+      <CopyPublicPageLink />
       <LogoutButton />
     </div>
   )

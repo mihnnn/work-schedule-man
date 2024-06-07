@@ -8,6 +8,7 @@ import Tos from './components/pages/Tos';
 import AppPage from './components/pages/AppPage';
 import './components/styles/App.css';
 import { useAuthContext } from './context/AuthContext';
+import PublicPage from './components/pages/PublicPage';
 
 function App() {
   const { authUser } = useAuthContext();
@@ -20,6 +21,8 @@ function App() {
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/tos" element={<Tos />} />
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
+        <Route path={`/${authUser.username}`} element={ authUser ? <Navigate to= "/" /> : <PublicPage /> } />
+        
       </Routes>
       <Toaster />
     </>
