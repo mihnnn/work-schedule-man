@@ -25,7 +25,17 @@ function useCreateEvent() {
       }
 
       const data = await res.json();
-      toast.success(`Event ${title}  created successfully`);
+      toast.success(`Event ${title}  created successfully`, {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#333',
+        }
+      });
       return data;
     } catch (error) {
       console.error(error);

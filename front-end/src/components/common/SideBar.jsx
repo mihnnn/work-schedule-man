@@ -11,7 +11,7 @@ function SideBar() {
     // profile dropdown on top, along with avatar and username
     // sidebar routes: /event-types, /bookings, /availability, /settings
     // bottom of sidebar: logout button
-    <div className="fixed top-0 left-0 h-screen w-[16%] text-white flex flex-col justify-start border-r border-white bg-[#333] p-4">
+    <div className="fixed top-0 left-0 h-screen w-[16%] text-white text-sm flex flex-col justify-start border-r border-[#888] bg-[#333] p-4">
       <ProfileDropdown />
       <div className="divider px-3"></div>
       <EventRoutes />

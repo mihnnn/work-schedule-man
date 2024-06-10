@@ -94,7 +94,7 @@ function EventTypes() {
 
       <div className='flex w-full max-w-none items-center justify-between'>
         <div className='flex flex-col border-gray-500 mb-16 rounded-md border w-full animate-grow'>
-          <ul className='!static w-full divide-current divide-y'>
+          <ul className='!static w-full divide-[#888] divide-y'>
             {loadingGet ? (
               <li className='p-5'>Loading...</li>
             ) : events.length === 0 ? (

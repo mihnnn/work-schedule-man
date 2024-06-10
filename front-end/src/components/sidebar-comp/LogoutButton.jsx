@@ -7,17 +7,14 @@ function LogoutButton() {
   return (
     //stays at the bottom of the sidebar
     <div
-      className='flex p-2 items-center mt-auto text-white cursor-pointer hover:bg-gray-400 hover:bg-opacity-30 rounded-xl'
+      className='flex p-2 items-center text-white cursor-pointer hover:bg-gray-400 hover:bg-opacity-30 rounded-xl hover:font-bold'
       onClick={logout}
     >
-      {/* <p className="font-bold">Logout</p>
-      <BiLogOut className="w-6 h-6 self-end" 
-        onClick={logout}
-      /> */}
+
       {!loading ? (
         <>
           <BiLogOut className='w-6 h-6 mr-2 self-end' />
-          <span className='font-bold'>Logout</span>
+          <span className=''>Logout</span>
         </>
       ) : (
         <span className='loading loading-spinner'></span>

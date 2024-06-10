@@ -18,7 +18,18 @@ function useDeleteEvent() {
                 throw new Error(errorText);
             }
 
-            toast.success(`Event "${title}" deleted successfully`);
+            toast.success(`Event "${title}" deleted successfully`,{
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+                iconTheme: {
+                    primary: '#fff',
+                    secondary: '#333',
+                }
+            
+            });
         } catch (error) {
             console.error(error);
             toast.error('An error occurred: ' + error.message);

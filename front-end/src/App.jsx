@@ -21,7 +21,8 @@ function App() {
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/tos" element={<Tos />} />
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
-        <Route path={`/${authUser.username}`} element={ authUser ? <Navigate to= "/" /> : <PublicPage /> } />
+        {/* if authed, this route is accessable */}
+        {authUser && <Route path={`/${authUser?.username}`} element={authUser ? <PublicPage /> : <Navigate to="/" />} /> }
         
       </Routes>
       <Toaster />

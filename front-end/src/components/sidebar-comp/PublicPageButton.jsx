@@ -1,16 +1,17 @@
 import { LuExternalLink } from "react-icons/lu";
+import { useAuthContext } from "../../context/AuthContext";
 
 function PublicPageButton() {
+  const { authUser: {username} } = useAuthContext();
   return (
     //stays at the bottom of the sidebar
-    <div
-      className='flex p-2 items-center mt-auto text-white cursor-pointer hover:bg-gray-400 hover:bg-opacity-30 rounded-xl'
+    <button
+      className='flex p-2 items-center mt-auto cursor-pointer hover:bg-gray-400 hover:bg-opacity-30 rounded-xl hover:font-bold'
+      onClick={() => window.open(`http://localhost:3001/${username}`, '_blank')}
     >
-        <div>
           <LuExternalLink className='w-6 h-6 mr-2 self-end' />
-          <span className='font-bold'>View public page</span>
-        </div>
-    </div>
+          <span className=''>View public page</span>
+    </button>
   )
 }
 

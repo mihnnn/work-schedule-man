@@ -64,7 +64,7 @@ export default {
           color: '#F3F4F6',
         },
         '.border-subtle': {
-          borderColor: '#6B7280', // Fixed the color to be a valid hex
+          borderColor: '##333', // Fixed the color to be a valid hex
           'border-width': '1px',
         },
         // '.bg-active-tab': {
