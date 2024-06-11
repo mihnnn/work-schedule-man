@@ -9,72 +9,84 @@ import { BsGlobe } from "react-icons/bs";
 
 function BookEvent() {
   return (
-    <main className='flex h-full justify-center min-h-dvh bg-gray-950'>
-      <div className='flex min-h-full w-full flex-col items-center overflow-visible'>
-        <div className='fixed top-4 z-10'>
+    <main className='flex h-full justify-center min-h-screen bg-gray-950'>
+      <div className='flex flex-col min-h-full w-full items-center overflow-visible m-auto'>
+        <div className='fixed top-4 z-10 right-4 flex gap-2'>
           {/* Need help? and switch layout */}
-          <div className='grid fixed top-4 z-10 right-4'>
-            <div className='flex gap-2'>
-              <button className='btn btn-outline px-4 py-2.5'>Need help?</button>
-              <div role='group' dir='ltr' className='min-h-9 border relative inline-flex gap-0.5 rounded-md p-1'>
-                <button type='button' role='radio' aria-checked='true' className='aria-checked:bg-gray-400 aria-checked:bg-opacity-30 relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors [&[aria-checked=false]]:hover:text-emphasis' tabIndex={-1}>
-                  <FaRegCalendarAlt className='text-xl' />
-                </button>
-                <button type='button' role='radio' aria-checked='false' className='aria-checked:bg-gray-400 aria-checked:bg-opacity-30 relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors [&[aria-checked=false]]:hover:text-emphasis' tabIndex={-1}>
-                  <MdCalendarViewMonth className='text-xl' />
-                </button>
-                <button type='button' role='radio' aria-checked='false' className='aria-checked:bg-gray-400 aria-checked:bg-opacity-30 relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors [&[aria-checked=false]]:hover:text-emphasis' tabIndex={-1}>
-                  <MdOutlineCalendarViewWeek className='text-xl' />
-                </button>
-              </div>
-            </div>
+          <button className='btn btn-outline px-4 py-2.5'>Need help?</button>
+          <div role='group' dir='ltr' className='min-h-9 border relative inline-flex gap-0.5 rounded-md p-1'>
+            <button type='button' role='radio' aria-checked='true' className='aria-checked:bg-gray-400 aria-checked:bg-opacity-30 relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors [&[aria-checked=false]]:hover:text-emphasis' tabIndex={-1}>
+              <FaRegCalendarAlt className='text-xl' />
+            </button>
+            <button type='button' role='radio' aria-checked='false' className='aria-checked:bg-gray-400 aria-checked:bg-opacity-30 relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors [&[aria-checked=false]]:hover:text-emphasis' tabIndex={-1}>
+              <MdCalendarViewMonth className='text-xl' />
+            </button>
+            <button type='button' role='radio' aria-checked='false' className='aria-checked:bg-gray-400 aria-checked:bg-opacity-30 relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors [&[aria-checked=false]]:hover:text-emphasis' tabIndex={-1}>
+              <MdOutlineCalendarViewWeek className='text-xl' />
+            </button>
           </div>
+        </div>
 
+        <div className='flex flex-col md:flex-row w-full max-w-6xl mt-16 md:mt-0'>
           {/* User and event info */}
-          <div className='relative z-10 flex [grid-area:meta]' style={{ position: 'sticky', top: '0px' }}>
-            <div className='[grid-area:meta] max-w-screen flex w-full flex-col'>
-              <div className='relative z-10 p-6'>
-                <div className='opacity-100 transform-none'>
-                  <ul className='flex items-center border'>
-                    <li className='-mr-1 inline-block'>
-                      <img className='aspect-square rounded-full w-6 h-6 min-w-6 min-h-6' src={avatar} alt="user avatar" />
-                    </li>
-                  </ul>
-                  <p className='text-gray-500 mt-2 text-sm font-semibold'>Kita Ikuyo</p>
-                  <h1 className='text-xl font-semibold my-2'>Meeting Title</h1>
-                </div>
-
-                <div className='space-y-4 font-medium'>
-                  <div className='flex items-start justify-start text-sm'>
-                    <div className='flex my-auto'>
-                      <FaRegClock className='w-4 h-4 mr-2' />
-                    </div>
-                    <span className='relative z-10 max-w-full break-words'>30 minutes</span>
-                  </div>
-                  <div className='flex items-start justify-start text-sm'>
-                    <div className='flex my-auto'>
-                      <IoLocationOutline className='w-4 h-4 mr-2' />
-                    </div>
-                    <span className='relative z-10 max-w-full break-words'>Online</span>
-                  </div>
-                  <div className='flex items-start justify-start text-sm'>
-                    <div className='flex my-auto'>
-                      <BsGlobe className='w-4 h-4 mr-2' />
-                    </div>
-                    <span className='relative z-10 max-w-full break-words'>Timezone dropdown</span>
-                  </div>
-                </div>
+          <div className='[grid-area:meta] w-full md:w-1/2 p-6 flex flex-col items-center md:items-start text-center md:text-left'>
+            <img className='aspect-square rounded-full w-24 h-24 mb-4' src={avatar} alt="user avatar" />
+            <p className='text-gray-500 text-sm font-semibold'>Kita Ikuyo</p>
+            <h1 className='text-xl font-semibold my-2'>Meeting Title</h1>
+            <div className='space-y-4 font-medium mt-4'>
+              <div className='flex items-center text-sm'>
+                <FaRegClock className='w-4 h-4 mr-2' />
+                <span>30 minutes</span>
+              </div>
+              <div className='flex items-center text-sm'>
+                <IoLocationOutline className='w-4 h-4 mr-2' />
+                <span>Online</span>
+              </div>
+              <div className='flex items-center text-sm'>
+                <BsGlobe className='w-4 h-4 mr-2' />
+                <span>Timezone dropdown</span>
               </div>
             </div>
           </div>
 
           {/* Calendar view */}
-          <div className='[grid-area:main] md:border-subtle ml-[-1px] h-full flex-shrink px-5 py-3 md:border-l' style={{ opacity: 1, transform: 'none' }}>
+          <div className='[grid-area:main] w-full md:w-1/2 p-6 flex flex-col items-center md:items-start'>
             <CalendarView />
           </div>
 
-          {/* Time slots */}
-          
+          <div className='[grid-area:timeslots] w-full md:w-1/2 p-6 flex flex-col items-center md:items-start'>
+            <div className='w-full max-w-md mx-auto mt-6'>
+              <div className='grid grid-cols-1 gap-2'>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  9:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  10:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  11:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  12:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  13:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  14:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  15:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  16:00
+                </div>
+                <div className='h-16 flex items-center justify-center bg-gray-800 text-white rounded'>
+                  17:00
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
