@@ -6,6 +6,7 @@ import {
   deleteEvent,
   updateEvent,
   getPublicEvents,
+  getPublicUser,
 } from "../controllers/eventController.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 import { resolveIndexByEventId } from "../middleware/resolveIndexByEventId.js";
@@ -22,5 +23,8 @@ router.delete("/api/event-types/:id", protectRoute, resolveIndexByEventId, delet
 router.post("/api/event-types", protectRoute, createEvent);
 
 router.get("/api/public-events/:username", getPublicEvents);
+router.get("/api/public-user/:username", getPublicUser);
+
+router.get("")
 
 export default router;

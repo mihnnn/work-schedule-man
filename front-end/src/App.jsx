@@ -8,14 +8,13 @@ import Tos from './components/pages/Tos';
 import AppPage from './components/pages/AppPage';
 import PublicPage from './components/pages/PublicPage';
 import PageNotFound from './components/pages/PageNotFound';
+import BookEvent from './components/app-comp/layout/book-event/BookEvent';
 import './components/styles/App.css';
 import { useAuthContext } from './context/AuthContext';
-import BookEventPage from './components/app-comp/layout/book-event/BookEvent'; 
-import useGetEventById from './hooks/event-hooks/useGetEventById';
+
 
 function App() {
   const { authUser } = useAuthContext();
-  const { loading, eventData, getEventById} = useGetEventById();
 
   return (
     <>
@@ -25,8 +24,11 @@ function App() {
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/tos" element={<Tos />} />
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
-        {/* this page shouldnt require auth user */}
-        <Route path={`/${authUser.username}`} element={<PublicPage />} /> 
+
+        {/* Public route for username profiles */}
+        <Route path="/:username" element={<PublicPage />} /> 
+        <Route path="/:username/*" element={<BookEvent />} /> 
+
 
         {/* Catch-all route for undefined paths */}
         <Route path="*" element={<PageNotFound />} />
