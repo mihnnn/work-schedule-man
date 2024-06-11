@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-// Custom hook to fetch public user
 export const useGetPublicEvents = () => {
   const [loading, setLoading] = useState(false)
   const [events, setEvents] = useState([]);

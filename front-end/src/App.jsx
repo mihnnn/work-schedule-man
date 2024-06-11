@@ -9,7 +9,6 @@ import AppPage from './components/pages/AppPage';
 import PublicPage from './components/pages/PublicPage';
 import PageNotFound from './components/pages/PageNotFound';
 import BookEvent from './components/app-comp/layout/book-event/BookEvent';
-import './components/styles/App.css';
 import { useAuthContext } from './context/AuthContext';
 
 
@@ -25,9 +24,8 @@ function App() {
         <Route path="/tos" element={<Tos />} />
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
 
-        {/* Public route for username profiles */}
         <Route path="/:username" element={<PublicPage />} /> 
-        <Route path="/:username/*" element={<BookEvent />} /> 
+        <Route path="/:username/*" element={<BookEvent />} />
 
 
         {/* Catch-all route for undefined paths */}
