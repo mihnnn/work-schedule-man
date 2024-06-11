@@ -1,6 +1,6 @@
 import React from 'react'
 
-function bookEvent() {
+function BookEvent() {
   return (
     <main>
         <div>
@@ -22,4 +22,4 @@ function bookEvent() {
   )
 }
 
-export default main
+export default BookEvent

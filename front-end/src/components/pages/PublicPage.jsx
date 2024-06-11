@@ -4,6 +4,7 @@ import avatar from "../../assets/images/avatar.jpg";
 import useGetEvent from '../../hooks/event-hooks/useGetEvent';
 import { FaArrowRight } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 
 function PublicPage() {
   const { authUser: { displayName,username } } = useAuthContext();
@@ -30,7 +31,7 @@ function PublicPage() {
                 <div key={event._id} className=' bg-[#333] border-gray-500 transition group w-[720px] min-w-[320px]'>
                   <div className='relative  flex p-5 w-full group-hover:bg-gray-100 group-hover:bg-opacity-10'>
                     <div className='block w-full'>
-                      <a href={`${username}/${event.suffix}`}>
+                      <Link to={`${username}/${event.suffix}`}>
                         <div>
                           <h2 className='text-emphasis font-semibold text-sm'>{event.title}</h2>
                           <p className='py-1 text-sm'>{event.description}</p>
@@ -40,7 +41,7 @@ function PublicPage() {
                             <FaRegClock />{event.duration}m
                           </div>
                         </div>
-                      </a>
+                      </Link>
                     </div>
                     <FaArrowRight className='text-emphasis absolute right-4 top-4 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity' />
                   </div>

@@ -1,4 +1,5 @@
 import { Event } from "../db/schemas/events.js";
+import { User } from "../db/schemas/user.js";
 
 export const getEvents = async (req, res) => {
   console.log("getEvents called");
@@ -8,6 +9,38 @@ export const getEvents = async (req, res) => {
     res.status(200).json({ events });
   } catch (error) {
     console.error("Error in getEvents:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getPublicEvents = async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // Find the user by username
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Find events by user ID
+    const events = await Event.find({ organizer: user._id });
+
+    if (!events || events.length === 0) {
+      return res.status(404).json({ events: ["No events found for this user"] });
+    }
+
+    // Map and return the events
+    res.status(200).json({
+      events: events.map(event => {
+        const { title, description, duration, URL } = event;
+        return { title, description, duration, URL };
+      })
+    });
+
+  } catch (error) {
+    console.error("Error in getPublicEvents:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
