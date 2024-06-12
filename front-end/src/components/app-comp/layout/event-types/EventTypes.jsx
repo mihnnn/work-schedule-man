@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from "../../../../context/AuthContext";
 import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
 import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';
@@ -124,9 +124,9 @@ function EventTypes() {
                             <input type="checkbox" className="toggle" />
                           </div>
                           <div className='rounded-lg flex'>
-                            <a className='first:rounded-l-md items-center relative transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
+                            <Link to={`/${username}/${event.suffix}`} className='first:rounded-l-md items-center relative transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <MdPreview className='w-5 h-5' />
-                            </a>
+                            </Link>
                             <button className='items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <FaLink className='w-5 h-5' />
                             </button>
