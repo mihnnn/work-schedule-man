@@ -106,7 +106,7 @@ function BookEvent() {
                     <div key={index} className='relative grid place-content-center text-sm'>
                       <button className={cn(
                         currentMonth ? 'text-gray-50 hover:shadow-outline hover:cursor-pointer' : 'text-gray-400 opacity-30 cursor-not-allowed',
-                        today ? 'border-2' : '',
+                        today ? 'shadow-outline' : '',
                         selectedDate.toDate().toDateString() === today ? 'bg-gray-200 text-gray-700 rounded-xl' : '',
                         selectedDate.toDate().toDateString() === date.toDate().toDateString() ? "bg-gray-200 text-gray-700 rounded-xl" : '',
                         "w-full min-w-6 min-h-6 p-5 grid place-content-center rounded-xl text-sm overflow-visible"
@@ -139,15 +139,17 @@ function BookEvent() {
                 <div className='h-full w-full overflow-y-auto overflow-x-hidden'>
                   <div className='flex flex-col'>
                     <div className='h-full pb-4'>
-                      <div className='flex gap-2'>
+                      {/* Map divs of start event time  */}
+
+
+                      {/* <div className='flex gap-2'>
                         <button className='whitespace-nowrap items-center text-sm font-medium relative rounded-md transition disabled:cursor-not-allowed text-emphasis border border-default bg-default hover:bg-muted focus-visible:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-empthasis disabled:border-subtle disabled:bg-opacity-30 disabled:text-muted disabled:hover:bg-opacity-30 disabled:hover:text-muted disabled:hover:border-subtle disabled:hover:bg-default px-4 min-h-9 hover:border-brand-default mb-2 flex h-auto w-full flex-grow flex-col justify-center py-2 undefined'>
                           <div className='flex items-center gap-2'>
-                            9:00 am
+                            Current Time: { selectedDate.format('HH:mm:ss')}
                           </div>
                         </button>
-                      </div>
+                      </div> */}
                     </div>
-
                   </div>
                 </div>
 
