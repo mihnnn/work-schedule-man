@@ -31,6 +31,9 @@ export default {
       backgroundColor: {
         'subtle': 'rgba(243, 244, 246, 0.1)',
       },
+      boxShadow: {
+        outline: '0 0 0 2px rgba(255, 255, 255, 0.5)'
+      }
     },
   },
   plugins: [
@@ -76,4 +79,9 @@ export default {
       addUtilities(newUtilities, ['responsive', 'hover']);
     },
   ],
+  variants: {
+    extend: {
+      boxShadow: ['hover'],
+    },
+  },
 }
