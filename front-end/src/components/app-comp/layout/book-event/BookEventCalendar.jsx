@@ -11,6 +11,22 @@ function BookEventCalendar() {
   const [today, setToday] = useState(currentDate);
   const [selectedDate, setSelectedDate] = useState(currentDate);
 
+  // interval is based on event duration
+  const generateTimeSlots = (interval = 30) => {
+    const slots = [];
+    const startTime = dayjs().startOf('day'); // start time will account work hour + be based on current time + 2 hours
+    const endTime = dayjs().endOf('day'); // end time will be based on end of work hour end
+
+    let current = startTime;
+
+    while (current.isBefore(endTime)) {
+      slots.push(current);
+      current = current.add(interval, 'minute');
+    }
+
+    return slots;
+  };
+
 
   return (
     <>
@@ -65,7 +81,7 @@ function BookEventCalendar() {
         </div>
       </div>
 
-      <div className='min-w-[240px] w-full md:w-1/2 px-5 py-5 flex flex-col pb-0 overflow-hidden'>
+      <div className='min-w-[240px] h-full w-full md:w-1/2 px-5 py-5 flex flex-col pb-0 overflow-hidden' style={{opacity:1, transform:'none'}}>
         <div className='flex mb-3'>
           <header>
             <span className='text-emphasis font-semibold text-lg'>
@@ -79,22 +95,22 @@ function BookEventCalendar() {
           </header>
         </div>
 
-        <div className=''>
-          <div className='h-full w-full overflow-y-auto overflow-x-hidden'>
+        <div className='scrollbar-track-transparent scrollbar-thin flex-grow overflow-auto md:h-[480px]'>
+          <div className=' scrollbar-thin scrollbar-thumb-slate-500 h-full w-full overflow-y-auto overflow-x-hidden'>
             <div className='flex flex-col'>
-              <div className='h-full pb-4'>
-                {/* Map divs of start event time  */}
-                <div className='flex gap-2'>
-                  <button className='whitespace-nowrap items-center text-sm font-medium relative rounded-md transition disabled:cursor-not-allowed text-emphasis border border-default bg-default hover:bg-muted focus-visible:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-empthasis disabled:border-subtle disabled:bg-opacity-30 disabled:text-muted disabled:hover:bg-opacity-30 disabled:hover:text-muted disabled:hover:border-subtle disabled:hover:bg-default px-4 min-h-9 hover:border-brand-default mb-2 flex h-auto w-full flex-grow flex-col justify-center py-2 undefined'>
-                    <div className='flex items-center gap-2'>
-                      Current Time: {selectedDate.format('HH:mm:ss')}
-                    </div>
-                  </button>
-                </div>
+              <div className=' h-full pb-4'>
+                {generateTimeSlots().map((time,index) => (
+                  <div key={index} className='flex gap-2'>
+                    <button className='whitespace-nowrap items-center text-sm font-medium relative rounded-md transition text-emphasis border-subtle hover:bg-muted hover:border-gray-200 focus-visible:bg-subtle focus-visible:ring-2 px-4 min-h-9 mb-2 flex h-auto w-full flex-grow flex-col justify-center py-2'>
+                      <div className='flex items-center gap-2'> 
+                        {time.format('HH:mm')}
+                      </div>
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-
         </div>
 
       </div>

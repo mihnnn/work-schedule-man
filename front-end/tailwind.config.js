@@ -1,4 +1,4 @@
-/** @type {import ('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -6,7 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-      // Extend the default theme
       colors: {
         'custom-primary': '#1DA1F2', // example color
         'gray-400': '#9CA3AF',
@@ -36,8 +35,15 @@ export default {
       }
     },
   },
+  variants: {
+    extend: {
+      scrollbar: ['rounded'],
+      boxShadow: ['hover'],
+    },
+  },
   plugins: [
     require("daisyui"),
+    require("tailwind-scrollbar"),
     function ({ addComponents }) {
       addComponents({
         '.mini-btn': {
@@ -67,21 +73,11 @@ export default {
           color: '#F3F4F6',
         },
         '.border-subtle': {
-          borderColor: '##333', // Fixed the color to be a valid hex
+          borderColor: '#333', // Fixed the color to be a valid hex
           'border-width': '1px',
         },
-        // '.bg-active-tab': {
-        //   backgroundColor: '#9CA3AF', // Tailwind's bg-gray-400 color
-        //   opacity: '0.3',
-        //   color: '#F9FAFB', // Tailwind's text-gray-50 color
-        // },
       }
       addUtilities(newUtilities, ['responsive', 'hover']);
     },
   ],
-  variants: {
-    extend: {
-      boxShadow: ['hover'],
-    },
-  },
 }
