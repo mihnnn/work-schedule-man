@@ -26,8 +26,6 @@ function BookEventCalendar() {
 
     return slots;
   };
-
-
   return (
     <>
       <div className=' min-w-[420px] px-5 py-4'>
@@ -101,7 +99,7 @@ function BookEventCalendar() {
               <div className=' h-full pb-4'>
                 {generateTimeSlots().map((time,index) => (
                   <div key={index} className='flex gap-2'>
-                    <button className='whitespace-nowrap items-center text-sm font-medium relative rounded-md transition text-emphasis border-subtle hover:bg-muted hover:border-gray-200 focus-visible:bg-subtle focus-visible:ring-2 px-4 min-h-9 mb-2 flex h-auto w-full flex-grow flex-col justify-center py-2'>
+                    <button className='whitespace-nowrap items-center text-sm font-medium relative rounded-md transition text-emphasis border-subtle bg-gray-950 hover:bg-muted hover:border-gray-200 focus-visible:bg-subtle focus-visible:ring-2 px-4 min-h-9 mb-2 flex h-auto w-full flex-grow flex-col justify-center py-2'>
                       <div className='flex items-center gap-2'> 
                         {time.format('HH:mm')}
                       </div>

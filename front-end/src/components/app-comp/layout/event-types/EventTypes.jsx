@@ -106,7 +106,7 @@ function EventTypes() {
             ) : (
               events.map(event => (
                 <li key={event._id} className={event._id === newEventId ? 'animate-grow' : ''}>
-                  <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
+                  <div className='flex w-full items-center justify-between transition hover:bg-gray-600 hover:bg-opacity-10'>
                     <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
                       <a onClick={() => handleEventClick(event._id)} title={event.title} className='flex-1 pr-4 text-sm'>
                         <span className='text-emphasis font-semibold text-base'>{event.title}</span>
@@ -130,7 +130,7 @@ function EventTypes() {
                             <button className='items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <FaLink className='w-5 h-5' />
                             </button>
-                            <div className='dropdown last:rounded-r-md items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
+                            <div className='dropdown dropdown-end last:rounded-r-md items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>
                               <button tabIndex={0} className='items-center' onClick={() => onDropdownChange(event._id)} onBlur={()=> onDropdownBlur(event._id)}>
                                 <HiDotsHorizontal className='w-5 h-5' />
                               </button>
