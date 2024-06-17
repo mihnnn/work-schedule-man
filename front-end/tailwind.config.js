@@ -1,3 +1,4 @@
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -23,9 +24,14 @@ export default {
           '0%': { opacity: 0, transform: 'scale(0.8)' },
           '100%': { opacity: 1, transform: 'scale(1)' },
         },
+        shrink: {
+          '0%': { opacity: 1, transform: 'scale(1)' },
+          '100%': { opacity: 0, transform: 'scale(0.8)' },
+        },
       },
       animation: {
         grow: 'grow 0.3s ease-in-out forwards',
+        shrink: 'shrink 0.3s ease-in-out forwards',
       },
       backgroundColor: {
         'subtle': 'rgba(243, 244, 246, 0.1)',

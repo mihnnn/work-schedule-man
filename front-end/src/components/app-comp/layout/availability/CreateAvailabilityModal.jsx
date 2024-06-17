@@ -1,24 +1,37 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import useCreateAvail from '../../../../hooks/availability-hooks/useCreateAvail'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function CreateAvailabilityModal() {
 
+  const { createAvail, loading} = useCreateAvail();
   const modalRef = useRef(null);
+  const navigate = useNavigate();
 
+  const [title, setTitle ] = useState('');
+
+  const handleContinueButtonClick = async () => {
+    try {
+      const newAvail = await createAvail({ title });
+      modalRef.current.close();
+      if (newAvail && newAvail.availability._id && newAvail.availability._id) {
+        navigate(`/app/availability/${newAvail.availability._id}`);
+      } else {
+        console.error('Fail to get new availability id', newAvail);
+      } 
+    } catch (error){
+      console.error('Failed to create availability: ', error);
+    }
+  };
+  
   const handleCloseModal = (e) => {
     if (e.target === modalRef.current) {
       modalRef.current.close();
     }
-  }
-
-  const handleContinueButtonClick = async () => {
-    // const newEvent = await createEvent({ title, suffix, description, duration });
-    // modalRef.current.close();
-    // onNewEventAdded(newEvent._id);
   };
-  
 
   return (
-    <dialog id='my_modal_3' className='modal text-white' ref={modalRef} onClick={{handleCloseModal}}>
+    <dialog id='my_modal_3' className='modal text-white' ref={modalRef} onClick={handleCloseModal}>
       <div className='modal-box overflow-hidden border-none'>
         <div className="flex flex-col">
           <h3 className="text-lg font-semibold">Add a new schedule</h3>
@@ -31,7 +44,7 @@ function CreateAvailabilityModal() {
               type="text"
               className="input input-bordered w-full mt-2"
               placeholder="Working hours"
-              
+              value={title}
               onChange={(e) => setTitle(e.target.value)}
               required={true}
             />
@@ -43,9 +56,14 @@ function CreateAvailabilityModal() {
               className="btn btn-outline bg-gray-50 text-[#222] hover:bg-opacity-50"
               onClick={() => { modalRef.current.close(); handleContinueButtonClick(); }}
             >
-              Continue
+              {loading? 'Creating...' : 'Continue'}
             </button>
-            <button className="btn btn-ghost" onClick={() => { modalRef.current.close();}}>Close</button>
+            <button 
+              className="btn btn-ghost"
+              onClick={() => modalRef.current.close()}
+            >
+              Close
+            </button>
           </div>
         </form>
 

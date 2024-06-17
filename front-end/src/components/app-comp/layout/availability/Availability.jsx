@@ -1,11 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { HiDotsHorizontal } from "react-icons/hi";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaGlobe } from 'react-icons/fa6';
 import CreateAvailabilityModal from './CreateAvailabilityModal';
+import useGetAvail from '../../../../hooks/availability-hooks/useGetAvail';
+import useDeleteAvail from '../../../../hooks/availability-hooks/useDeleteAvail';
 
 function Availability() {
-  const [dropdowns, setDropdowns] = useState(false);
+  const [dropdowns, setDropdowns] = useState({});
+  const [newAvailId, setNewAvailId] = useState(null);
+  const [shrinkIds, setShrinkIds] = useState([]);
+  const [localAvails, setLocalAvails] = useState([]); //store the avails fetch from backend
+
+  const { loading: loadingGet, avails } = useGetAvail();
+  const { deleteAvail } = useDeleteAvail();
+
+  useEffect(() => {
+    if (!loadingGet) {
+      setLocalAvails(avails);
+    }
+  }, [loadingGet, avails]);
+
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     document.querySelector('#my_modal_3').showModal();
@@ -15,7 +31,7 @@ function Availability() {
     setDropdowns(prevDropdowns => ({
       ...prevDropdowns,
       [availId]: !prevDropdowns[availId],
-    }))
+    }));
   }
 
   const onDropDownBlur = (availId) => {
@@ -26,39 +42,26 @@ function Availability() {
       }));
     }, 200);
   }
-  // const navigate = useNavigate();
 
-  // const onDropDownChange = (availId) => {
-  //   setDropDowns(prevDropDowns => ({
-  //     ...prevDropDowns,
-  //     [availId]: !prevDropDowns[availId],
-  //   }))
-  // }
+  const handleDelete = async (availId, title) => {
+    try {
+      setShrinkIds(prevShrinkIds => [...prevShrinkIds, availId]);
+      await new Promise(resolve => setTimeout(resolve, 300)); // Wait for the animation to complete
+      await deleteAvail(availId, title);
+      setDropdowns(prevDropdowns => ({
+        ...prevDropdowns,
+        [availId]: false,
+      }));
+      setShrinkIds(prevShrinkIds => prevShrinkIds.filter(id => id !== availId));
+      setLocalAvails(prevAvails => prevAvails.filter(avail => avail._id !== availId));
+    } catch (error) {
+      console.error("Error in deleting avail", error);
+    }
+  }
 
-  // const onDropdownBlur = (availId) => {
-  //   setTimeout(() => {
-  //     setDropDowns(prevDropDowns => ({
-  //       ...prevDropDowns,
-  //       [availId]: false,
-  //     }));
-  //   }, 200);
-  // }
-
-  // const handleDelete = async (availId, title) => {
-  //   try {
-  //     await deleteAvailability(availId, title);
-  //     setDropDowns(prevDropDowns => ({
-  //       ...prevDropDowns,
-  //       [availId]: false,
-  //     }));
-  //     await refetchAvailabilities();
-  //   } catch (error) {
-  //     console.error("Error in deleting availabilities", error);
-  //   }
-
-
-
-  
+  const handleAvailClick = (availId) => {
+    navigate(`/app/availability/${availId}`);
+  }
 
   return (
     <div className='max-w-full px-2 py-4 lg:px-6'>
@@ -82,74 +85,60 @@ function Availability() {
             <CreateAvailabilityModal />
           </div>
         </header>
-
-
       </div>
       <div className='divider'></div>
 
       <div className='flex w-full max-w-none items-center justify-between'>
         <div className='flex flex-col border-gray-500 mb-16 rounded-md border w-full animate-grow'>
-          
-
-          <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10 border-b border-gray-500'>
-            <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
-              <a className='flex-1 pr-4 text-sm'>
-                <span className='text-emphasis font-semibold text-base'>Working Hours</span>
-                <p className='py-1'>Mon-Fri, 9 AM - 5 PM </p>
-                <p className='py-1 flex items-center'>
-                  <FaGlobe className='mr-1'/> 
-                  Asia Bangkok</p>
-              </a>
-              <div className='mt-4 hidden sm:mt-0 sm:flex'>
-                <div className='flex justify-between space-x-2 space-x-reverse'>
-                  <div className='rounded-lg flex'>
-                    <div className='dropdown rounded-md items-center transition flex justify-center border-gray-400 h-9 px-4 py-2.5 min-h-[36px] !p-2 hover'>
-                      <button tabIndex={0} className='items-center'>
-                        <HiDotsHorizontal className='w-5 h-5' />
-                      </button>
-                      <ul tabIndex={0} className='dropdown-content right-0 top-full z-50 menu p-2 shadow bg-base-100 rounded-box w-52 mt-3'>
-                        <li>Set as default</li>
-                        <li><button className='text-red-500'>Delete</button></li>
-                      </ul>
+          <ul className='!static w-full divide-[#888] divide-y'>
+            { loadingGet ? (
+              <li className='p-5'> Loading ......</li>
+            ) : localAvails.length === 0 ? (
+              <li className='text-white text-xl'> 
+                <h1 className='text-5xl'> No Availability set up yet!</h1>
+                <p>Click "+NEW" button to create your schedules</p>
+              </li>
+            ) : (
+              localAvails.map(avail => (
+                <li key={avail._id} className={`${avail._id === newAvailId ? 'animate-grow' : ''} ${shrinkIds.includes(avail._id) ? 'animate-shrink' : ''}`}>
+                  <div className='flex w-full items-center justify-between transition hover:bg-gray-600 hover:bg-opacity-10'>
+                    <div className='group flex w-full max-w-full items-center justify-between px-4 py-4 sm:px-6'>
+                      <a onClick={() => handleAvailClick(avail._id)} title={avail.title} className='flex-1 pr-4 text-sm'>
+                        <span className=' text-emphasis font-semibold text-base'> {avail.title}</span>
+                        <p className='py-1'> Days of the Weeks</p> 
+                        <p className='py-1 flex items-center'>
+                          <FaGlobe className='mr-1'/>
+                          {avail.timezone}
+                        </p>
+                      </a>
+                      <div className='mt-4 hidden sm:mt-0 sm:flex'>
+                        <div className='flex justify-between space-x-2 space-x-reverse'>
+                          <div className="rounded-lg flex">
+                            <div className="dropdown dropdown-end rounded-md items-center transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] !p-2 hover">
+                              <button tabIndex={0} className="items-center" onClick={() => onDropDownChange(avail._id)} onBlur={() => onDropDownBlur(avail._id)}>
+                                <HiDotsHorizontal className="w-5 h-5" />
+                              </button>
+                              {dropdowns[avail._id] && (
+                                <ul tabIndex={0} className="dropdown-content right-0 top-full z-50 menu p-2 shadow bg-base-100 rounded-box w-52 mt-3">
+                                  <li>
+                                    <button className="text-red-500" onClick={() => handleDelete(avail._id, avail.title)}>Delete</button>
+                                  </li>
+                                </ul>                                
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10'>
-            <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
-              <a className='flex-1 pr-4 text-sm'>
-                <span className='text-emphasis font-semibold text-base'>Working Hours</span>
-                <p className='py-1'>Mon-Fri, 9 AM - 5 PM </p>
-                <p className='py-1 flex items-center'>
-                  <FaGlobe className='mr-1'/> 
-                  Asia Bangkok</p>
-              </a>
-              <div className='mt-4 hidden sm:mt-0 sm:flex'>
-                <div className='flex justify-between space-x-2 space-x-reverse'>
-                  <div className='rounded-lg flex'>
-                    <div className='dropdown rounded-md items-center transition flex justify-center border-gray-400 h-9 px-4 py-2.5 min-h-[36px] !p-2 hover'>
-                      <button tabIndex={0} className='items-center'>
-                        <HiDotsHorizontal className='w-5 h-5' />
-                      </button>
-                      <ul tabIndex={0} className='dropdown-content right-0 top-full z-50 menu p-2 shadow bg-base-100 rounded-box w-52 mt-3'>
-                        <li> <button className='text-red-500'>Delete </button></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       </div>
-
-
     </div>
-  )
+  );
 }
 
-export default Availability
+export default Availability;

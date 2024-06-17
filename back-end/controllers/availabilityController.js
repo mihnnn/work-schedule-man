@@ -7,7 +7,7 @@ export const getAvailability = async (req, res) => {
     try { 
         const userId = req.user._id;
         const availability = await Availability.find({ user: userId });
-        res.status(200).json({ availability });
+        res.status(200).json({ avails: availability });
     } catch (error) {
         console.error("Error in getAvailability:", error.message);
         res.status(500).json({ error: "Internal server error" });

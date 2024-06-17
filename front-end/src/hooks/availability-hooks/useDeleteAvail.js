@@ -1,28 +1,22 @@
 import { useState } from "react";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
-function useCreateAvail() {
-    const [loading, setLoading] = useState(false);
-
-    const createAvail = async ({title} ) => {
+function useDeleteAvail() {
+    const [ loading, setLoading ] = useState(false); 
+    const deleteAvail = async (availId, title) => {
         setLoading(true);
         try {
-            const res = await fetch('/api/availability', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title,
-                }),
+            const res = await fetch(`/api/availability/${availId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
             });
             
             if (!res.ok) {
-                // Handle non-JSON error response
                 const errorText = await res.text();
                 throw new Error(errorText);
             }
 
-            const data = await res.json(); 
-            toast.success(`Availability ${title} created successfully`, {
+            toast.success(`Availability "${title}" deleted successfully`, {
                 style: {
                     borderRadius: '10px',
                     background: '#333',
@@ -33,16 +27,16 @@ function useCreateAvail() {
                     secondary: '#333',
                 }
             });
-            return data;
-        } catch(error) {
+
+        } catch (error) {
             console.error(error);
             toast.error('An error occurred: ' + error.message);
+
         } finally {
             setLoading(false);
         }
     }
-
-    return { createAvail, loading }
+    return { deleteAvail, loading };
 }
 
-export default useCreateAvail;
+export default useDeleteAvail;

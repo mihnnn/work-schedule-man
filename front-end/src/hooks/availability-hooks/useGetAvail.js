@@ -9,13 +9,21 @@ function useGetAvail() {
         setLoading (true)
         try {
             const res = await fetch("/api/availability");
+            
+            if(!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
             const data = await res.json();
 
             if (data.error) {
                 throw new Error(data.error);
             }
 
-            setAvails(data.avails);
+            if (Array.isArray(data.avails)) {
+                setAvails(data.avails);
+            } else {
+                throw new Error("Data format error: expected an array of avails");
+            }
              
         } catch (error) {
             toast.error(error.message);

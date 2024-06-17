@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from "../../../../context/AuthContext";
 import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
@@ -9,17 +9,24 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { FaRegClock } from "react-icons/fa6";
 import EventCreationModal from './EventCreationModal';
 
-
 function EventTypes() {
   const navigate = useNavigate();
   
-  const [dropdowns, setDropdowns] = useState(false);
+  const [dropdowns, setDropdowns] = useState({});
   const [newEventId, setNewEventId] = useState(null);
-
+  const [shrinkIds, setShrinkIds] = useState([]);
+  const [localEvents, setLocalEvents] = useState([]);
+  
   const { loading: loadingGet, events, refetchEvents } = useGetEvent();
   const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
   const { authUser: { username } } = useAuthContext();
-  
+
+  useEffect(() => {
+    if (!loadingGet) {
+      setLocalEvents(events);
+    }
+  }, [loadingGet, events]);
+
   const handleOpenModal = () => {
     if (document.querySelector('#my_modal_3')) {
       navigate('/app/event-types?dialog=new&eventPage=' + username);
@@ -32,8 +39,9 @@ function EventTypes() {
     setDropdowns(prevDropdowns => ({
       ...prevDropdowns,
       [eventId]: !prevDropdowns[eventId],
-    }))
-  }
+    }));
+  };
+
   const onDropdownBlur = (eventId) => {
     setTimeout(() => {
       setDropdowns(prevDropdowns => ({
@@ -42,15 +50,18 @@ function EventTypes() {
       }));
     }, 200);
   };
-  
-  const handleDelete = async (eventId,title) => {
+
+  const handleDelete = async (eventId, title) => {
     try {
-      await deleteEvent(eventId,title);
+      setShrinkIds(prevShrinkIds => [...prevShrinkIds, eventId]);
+      await new Promise(resolve => setTimeout(resolve, 300)); // Wait for the animation to complete
+      await deleteEvent(eventId, title);
       setDropdowns(prevDropdowns => ({
         ...prevDropdowns,
         [eventId]: false,
       }));
-      await refetchEvents();
+      setShrinkIds(prevShrinkIds => prevShrinkIds.filter(id => id !== eventId));
+      setLocalEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
     } catch (error) {
       console.error("Error in deleting events", error);
     }
@@ -63,7 +74,7 @@ function EventTypes() {
 
   const handleEventClick = (eventId) => {
     navigate(`/app/event-types/${eventId}?tabName=setup`);
-  }
+  };
 
   return (
     <div className='max-w-full px-2 py-4 lg:px-6'>
@@ -89,7 +100,6 @@ function EventTypes() {
         </header>
       </div>
       
-
       <div className='divider'></div>
 
       <div className='flex w-full max-w-none items-center justify-between'>
@@ -97,16 +107,16 @@ function EventTypes() {
           <ul className='!static w-full divide-[#888] divide-y'>
             {loadingGet ? (
               <li className='p-5'>Loading...</li>
-            ) : events.length === 0 ? (
-              <li className='text-white'>
+            ) : localEvents.length === 0 ? (
+              <li className='text-white text-xl'>
                 <h1 className='text-5xl'> Create your first event type.</h1>
-                <p className='text-xl'>Click new "NEW" button in the corner to start creating an event.</p>
-                <p className='text-xl'>Event types enable you to share links that show available times on your calendar and allow people to make bookings with you.</p>
+                <p>Click new "NEW" button in the corner to start creating an event.</p>
+                <p>Event types enable you to share links that show available times on your calendar and allow people to make bookings with you.</p>
               </li>
             ) : (
-              events.map(event => (
-                <li key={event._id} className={event._id === newEventId ? 'animate-grow' : ''}>
-                  <div className='flex w-full items-center justify-between transition hover:bg-gray-600 hover:bg-opacity-10'>
+              localEvents.map(event => (
+                <li key={event._id} className={`${event._id === newEventId ? 'animate-grow' : ''} ${shrinkIds.includes(event._id) ? 'animate-shrink' : ''}`}>
+                  <div className='flex w-full items-center justify-between transition hover:bg-gray-600 hover:bg-opacity-10 cursor-pointer'>
                     <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>
                       <a onClick={() => handleEventClick(event._id)} title={event.title} className='flex-1 pr-4 text-sm'>
                         <span className='text-emphasis font-semibold text-base'>{event.title}</span>
