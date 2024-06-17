@@ -1,13 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { HiDotsHorizontal } from "react-icons/hi";
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGlobe } from 'react-icons/fa6';
 import CreateAvailabilityModal from './CreateAvailabilityModal';
 
 function Availability() {
+  const [dropdowns, setDropdowns] = useState(false);
 
   const handleOpenModal = () => {
     document.querySelector('#my_modal_3').showModal();
+  }
+
+  const onDropDownChange = (availId) => {
+    setDropdowns(prevDropdowns => ({
+      ...prevDropdowns,
+      [availId]: !prevDropdowns[availId],
+    }))
+  }
+
+  const onDropDownBlur = (availId) => {
+    setTimeout(() => {
+      setDropdowns(prevDropdowns => ({
+        ...prevDropdowns,
+        [availId]: false,
+      }));
+    }, 200);
   }
   // const navigate = useNavigate();
 
@@ -72,6 +89,7 @@ function Availability() {
 
       <div className='flex w-full max-w-none items-center justify-between'>
         <div className='flex flex-col border-gray-500 mb-16 rounded-md border w-full animate-grow'>
+          
 
           <div className='flex w-full items-center justify-between transition hover:bg-gray-100 hover:bg-opacity-10 border-b border-gray-500'>
             <div className='group flex w-full max-w-full items-center justify-between  px-4 py-4 sm:px-6'>

@@ -11,11 +11,15 @@ import {
 
 import { 
   getAvailability,
-  createAvailability
+  createAvailability,
+  getAvailabilityById,
+  updateAvailability,
+  deleteAvailability
 
 } from "../controllers/availabilityController.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 import { resolveIndexByEventId } from "../middleware/resolveIndexByEventId.js";
+import { resolveIndexByAvailId } from "../middleware/resolveIndexByAvailId.js";
 
 const router = Router();
 
@@ -33,6 +37,9 @@ router.get("/api/public-user/:username", getPublicUser);
 
 router.get("/api/availability", protectRoute, getAvailability);
 router.post("/api/availability",protectRoute, createAvailability);
+router.get("/api/availability/:id", protectRoute,resolveIndexByAvailId, getAvailabilityById);
+router.patch("/api/availability/:id", protectRoute, resolveIndexByAvailId, updateAvailability);
+router.delete("/api/availability/:id", protectRoute, resolveIndexByAvailId, deleteAvailability);
 
 router.get("")
 
