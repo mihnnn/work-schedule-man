@@ -57,7 +57,7 @@ const TimeDropdown = ({ defaultTime }) => {
   };
 
   return (
-    <div className="relative inline-block text-left w-[100px]">
+    <div className="block w-[90px] sm:w-[100px]">
       <input
         className="focus:ring-0 focus:ring-offset-0 !text-emphasis w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 text-sm"
         type="text"
@@ -65,13 +65,14 @@ const TimeDropdown = ({ defaultTime }) => {
         onChange={handleInputChange}
         onClick={handleDropdownToggle}
         onBlur={handleDropdownBlur}
-        aria-expanded={isOpen} // Aria expanded set based on isOpen state
+        aria-expanded={isOpen}
         style={{zIndex: 1}}
+        role=''
       />
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="mt-2 w-full rounded-md shadow-lg ring-1 ring-black ring-opacity-5 h-[300px] overflow-auto bg-[#222] absolute"
+          className="mt-2 w-[100px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 h-[300px] overflow-auto bg-[#222] absolute"
           style={{ zIndex: 9999 }}
         >
           <div className="py-1">
