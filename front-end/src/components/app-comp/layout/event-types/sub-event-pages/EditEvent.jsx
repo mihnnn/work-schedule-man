@@ -71,7 +71,7 @@ function EditEvent() {
         </div>
         <div className="flex justify-end items-center">
           <div className="lg:flex items-center">
-            <input type="checkbox" className="toggle" />
+            <input type="checkbox" className="toggle toggle-sm" />
           </div>
           <svg className="mx-3 hidden lg:block" width="2" height="16" viewBox="0 0 2 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="2" height="16" fill="currentColor" />

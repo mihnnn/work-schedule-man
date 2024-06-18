@@ -131,7 +131,7 @@ function EventTypes() {
                       <div className='mt-4 hidden sm:mt-0 sm:flex'>
                         <div className='flex justify-between space-x-2 rtl:space-x-reverse'>
                           <div className='flex items-center mr-2'>
-                            <input type="checkbox" className="toggle" />
+                            <input type="checkbox" className="toggle toggle-sm" />
                           </div>
                           <div className='rounded-lg flex'>
                             <Link to={`/${username}/${event.suffix}`} className='first:rounded-l-md items-center relative transition flex justify-center border-subtle h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover'>

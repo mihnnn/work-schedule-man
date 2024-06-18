@@ -26,7 +26,7 @@ function EventRoutes() {
         route="/app/availability"
         routeName="Availability"
         icon={FaRegClock}
-        isActive={currentPath === "/app/availability"}
+        isActive={currentPath.startsWith("/app/availability")}
       />
     </div>
   );
