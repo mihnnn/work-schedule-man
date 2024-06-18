@@ -16,27 +16,28 @@ function EditEvent() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const tabName = queryParams.get('tabName') || 'setup';
-  
+
   const [title, setTitle] = useState('');
   const [suffix, setSuffix] = useState('');
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState('');
   const { eventId } = useParams();
 
-    useEffect(() => {
-      // Default to 'setup' if tabName is not present
-      if (!queryParams.get('tabName')) {
-        queryParams.set('tabName', 'setup');
-        navigate({
-          pathname: location.pathname,
-          search: queryParams.toString(),
-        }, { replace: true });
-      }
-    }, [location.search, navigate]);
-  useEffect( () => {
+  useEffect(() => {
+    // Default to 'setup' if tabName is not present
+    if (!queryParams.get('tabName')) {
+      queryParams.set('tabName', 'setup');
+      navigate({
+        pathname: location.pathname,
+        search: queryParams.toString(),
+      }, { replace: true });
+    }
+  }, [location.search, navigate]);
+
+  useEffect(() => {
     if (eventId) {
       getEventById(eventId);
-    }    
+    }
   }, [eventId]);
 
 
@@ -54,7 +55,7 @@ function EditEvent() {
   };
   const handleSave = async () => {
     try {
-      await editEvent (eventId, {title, description, suffix, duration})
+      await editEvent(eventId, { title, description, suffix, duration })
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +67,7 @@ function EditEvent() {
         <div className="flex items-center mr-4 w-full">
           <FaArrowLeft onClick={handleBackClick} className="cursor-pointer w-5 h-5 text-emphasis" />
           <h3 className="text-emphasis max-w-28 sm:max-w-72 md:max-w-80 inline truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl ml-2">
-            {eventData?.title }
+            {title}
           </h3>
         </div>
         <div className="flex justify-end items-center">
@@ -93,19 +94,19 @@ function EditEvent() {
           <svg className="mx-3 hidden lg:block" width="2" height="16" viewBox="0 0 2 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="2" height="16" fill="currentColor" />
           </svg>
-          <button 
+          <button
             className="overflow-hidden text-sm font-semibold border border-gray-400 py-1.5 px-3 rounded-md btn-outline bg-gray-50 text-gray-800 hover:bg-opacity-95"
             onClick={handleSave}
-            disabled={loading}  
+            disabled={loading}
           >
             Save
           </button>
-          
+
         </div>
       </header>
       <div className="flex">
-        <EditEventSideBar tabName={tabName}  />
-        <EditEventPage 
+        <EditEventSideBar tabName={tabName} />
+        <EditEventPage
           tabName={tabName}
           title={title}
           setTitle={setTitle}

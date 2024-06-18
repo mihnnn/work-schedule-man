@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaRegTrashCan } from 'react-icons/fa6';
 import useGetAvailById from '../../../../../hooks/availability-hooks/useGetAvailById';
 import TimeZoneDropdown from './TimeZoneDropdown';
 import TimeDropdown from './TimeDropdown';
 
+const dayMapping = {
+  0: 'Sunday',
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Saturday'
+};
+
 function EditAvail() {
   const { availData, getAvailById } = useGetAvailById();
+  const { availId } = useParams();
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
   const [toggledDays, setToggledDays] = useState({
@@ -20,6 +30,33 @@ function EditAvail() {
     Friday: false,
     Saturday: false,
   });
+  
+  const [title, setTitle] = useState('');
+  const [days, setDays] = useState({});
+  const [timezone, setTimezone] = useState('');
+
+  useEffect(() => {
+    if (availData) {
+      console.log(availData.availability)
+      setTitle(availData.availability.title);
+      setDays(availData.availability.days);
+      setTimezone(availData.availability.timezone);
+      const updatedToggledDays = { ...toggledDays };
+      for (const dayKey in availData.availability.days) {
+        const dayName = dayMapping[dayKey];
+        if (dayName) {
+          updatedToggledDays[dayName] = true;
+        }
+      }
+      setToggledDays(updatedToggledDays);
+    }
+  }, [availData]);
+
+  useEffect(() => {
+    if (availId) {
+      getAvailById(availId);
+    }
+  }, [availId]);
 
   const handleBackClick = () => {
     navigate("/app/availability");
@@ -37,6 +74,10 @@ function EditAvail() {
     }));
   };
 
+  const handleTimezoneChange = (newTimezone) => {
+    setTimezone(newTimezone);
+  };
+
   return (
     <div className="max-w-full px-2 py-4 lg:px-6">
       <header className="flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-6">
@@ -47,7 +88,7 @@ function EditAvail() {
             aria-label="Go back"
           />
           <h3 className="text-emphasis max-w-28 sm:max-w-72 md:max-w-80 inline truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl ml-2">
-            Edit Availability
+            {title}
           </h3>
         </div>
         <div className="flex justify-end items-center">
@@ -82,33 +123,36 @@ function EditAvail() {
           <div className="flex-1 xl:mr-0">
             <div className="border-subtle mb-6 rounded-md border">
               <div className="p-2 sm:p-4">
-                {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
-                  <div key={day} className="flex gap-4 mb-4">
-                    <div className='flex min-h-[38px] items-center justify-between'>
-                      <div>
-                        <label className='flex flex-row items-center space-x-2'>
-                          <input
-                            type="checkbox"
-                            id={day}
-                            className="toggle toggle-sm"
-                            onChange={() => handleToggleChange(day)}
-                            checked={toggledDays[day]}
-                          />
-                          <span className="inline-block min-w-[88px] text-sm capitalize text-emphasis">{day}</span>
-                        </label>
-                      </div>
-                    </div>
-                    {toggledDays[day] && (
-                      <div className='flex sm:gap-2'>
-                        <div className='flex flex-row gap-2 scrollbar-thin scrollbar-track-transparent'>
-                          <TimeDropdown defaultTime="9:00am" />
-                          <span className="w-2 self-center"> - </span>
-                          <TimeDropdown defaultTime="5:00pm" />
+                {Object.keys(dayMapping).map(key => {
+                  const day = dayMapping[key];
+                  return (
+                    <div key={key} className="flex gap-4 mb-4">
+                      <div className='flex min-h-[38px] items-center justify-between'>
+                        <div>
+                          <label className='flex flex-row items-center space-x-2'>
+                            <input
+                              type="checkbox"
+                              id={day}
+                              className="toggle toggle-sm"
+                              onChange={() => handleToggleChange(day)}
+                              checked={toggledDays[day]}
+                            />
+                            <span className="inline-block min-w-[88px] text-sm capitalize text-emphasis">{day}</span>
+                          </label>
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      {toggledDays[day] && days[key] && (
+                        <div className='flex sm:gap-2'>
+                          <div className='flex flex-row gap-2 scrollbar-thin scrollbar-track-transparent'>
+                            <TimeDropdown defaultTime={days[key].startTime} />
+                            <span className="w-2 self-center"> - </span>
+                            <TimeDropdown defaultTime={days[key].endTime} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -118,7 +162,7 @@ function EditAvail() {
               <div>
                 <label className="text-emphasis text-sm font-medium mb-0 inline-block leading-none">Timezone</label>
                 <div className="border mt-1 block w-72 rounded-md text-sm">
-                  <TimeZoneDropdown />
+                  <TimeZoneDropdown value={timezone} onChange={handleTimezoneChange} />
                 </div>
               </div>
             </div>
