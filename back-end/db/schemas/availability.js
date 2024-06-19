@@ -24,11 +24,11 @@ const availabilitySchema = new mongoose.Schema({
             }
         },
         default: {
-            0: { startTime: '9:00 AM', endTime: '5:00 PM' },
-            1: { startTime: '9:00 AM', endTime: '5:00 PM' },
-            2: { startTime: '9:00 AM', endTime: '5:00 PM' },
-            3: { startTime: '9:00 AM', endTime: '5:00 PM' },
-            4: { startTime: '9:00 AM', endTime: '5:00 PM' }
+            0: { startTime: '9:00am', endTime: '5:00pm' },
+            1: { startTime: '9:00am', endTime: '5:00pm' },
+            2: { startTime: '9:00am', endTime: '5:00pm' },
+            3: { startTime: '9:00am', endTime: '5:00pm' },
+            4: { startTime: '9:00am', endTime: '5:00pm' }
         }
     },
     timezone: {

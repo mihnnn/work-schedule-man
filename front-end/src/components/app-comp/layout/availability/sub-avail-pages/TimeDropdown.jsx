@@ -38,9 +38,8 @@ const TimeDropdown = ({ defaultTime }) => {
     if (!isOpen && dropdownRef.current) {
       const defaultTimeIndex = filteredTimes.indexOf(defaultTime);
       if (defaultTimeIndex > -1) {
-        // Calculate the approximate position to scroll to
-        const itemHeight = 36; // Adjust if necessary based on item height
-        dropdownRef.current.scrollTop = Math.max(0, (defaultTimeIndex - 2) * itemHeight); // Scroll a bit above the default time
+        const itemHeight = 36;
+        dropdownRef.current.scrollTop = Math.max(0, (defaultTimeIndex - 2) * itemHeight); 
       }
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // List of time zones
 const timeZones = [
@@ -16,7 +16,7 @@ const timeZones = [
   'Europe/Athens', 'Europe/Istanbul', 'Europe/Minsk', 'Asia/Jerusalem', 'Africa/Harare', 'Europe/Moscow', 'Asia/Kuwait',
   'Asia/Riyadh', 'Africa/Nairobi', 'Asia/Baghdad', 'Asia/Tehran', 'Asia/Muscat', 'Asia/Baku', 'Asia/Tbilisi',
   'Asia/Yerevan', 'Asia/Kabul', 'Asia/Yekaterinburg', 'Asia/Karachi', 'Asia/Tashkent', 'Asia/Calcutta', 'Asia/Colombo',
-  'Asia/Katmandu', 'Asia/Almaty', 'Asia/Dhaka', 'Asia/Novosibirsk', 'Asia/Rangoon', 'Asia/Bangkok', 'Asia/Jakarta',
+  'Asia/Katmandu', 'Asia/Almaty', 'Asia/Dhaka', 'Asia/Novosibirsk', 'Asia/Rangoon', 'Asia/Bangkok', 'Asia/Ho_Chi_Minh', 'Asia/Jakarta',
   'Asia/Krasnoyarsk', 'Asia/Shanghai', 'Asia/Chongqing', 'Asia/Hong_Kong', 'Asia/Urumqi', 'Asia/Kuala_Lumpur',
   'Asia/Singapore', 'Asia/Taipei', 'Australia/Perth', 'Asia/Irkutsk', 'Asia/Ulaanbaatar', 'Asia/Seoul', 'Asia/Tokyo',
   'Asia/Yakutsk', 'Australia/Darwin', 'Australia/Adelaide', 'Australia/Melbourne', 'Australia/Sydney', 'Australia/Brisbane',
@@ -24,7 +24,7 @@ const timeZones = [
   'Pacific/Noumea', 'Pacific/Fiji', 'Asia/Kamchatka', 'Pacific/Majuro', 'Pacific/Auckland', 'Pacific/Tongatapu'
 ];
 
-const TimeZoneDropdown = () => {
+const TimeZoneDropdown = ( {defaultTz } ) => {
   const [inputValue, setInputValue] = useState('');
   const [filteredTimeZones, setFilteredTimeZones] = useState(timeZones);
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +48,12 @@ const TimeZoneDropdown = () => {
     setInputValue(timeZone);
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (defaultTz) {
+      setInputValue(defaultTz);
+    }
+  }, [defaultTz]);
 
   return (
     <div className="relative inline-block text-left w-full">

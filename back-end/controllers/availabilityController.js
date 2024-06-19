@@ -36,11 +36,11 @@ export const createAvailability = async (req, res) => {
          
 
         const defaultDays = {
-            1: {startTime: '9:00 AM', endTime: '5:00 PM'}, // Monday
-            2: {startTime: '9:00 AM', endTime: '5:00 PM'}, // Tuesday
-            3: {startTime: '9:00 AM', endTime: '5:00 PM'}, // Wednesday
-            4: {startTime: '9:00 AM', endTime: '5:00 PM'}, // Thursday
-            5: {startTime: '9:00 AM', endTime: '5:00 PM'}, // Friday
+            1: {startTime: '9:00am', endTime: '5:00pm'}, // Monday
+            2: {startTime: '9:00am', endTime: '5:00pm'}, // Tuesday
+            3: {startTime: '9:00am', endTime: '5:00pm'}, // Wednesday
+            4: {startTime: '9:00am', endTime: '5:00pm'}, // Thursday
+            5: {startTime: '9:00am', endTime: '5:00pm'}, // Friday
         };
 
         const newAvailability = new Availability({

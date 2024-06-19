@@ -5,6 +5,7 @@ import cn from '../../../../utils/cn';
 import dayjs from 'dayjs';
 import useGetEventInfoBySuffix from '../../../../hooks/event-hooks/useGetEventInfoBySuffix';
 import { useParams } from 'react-router-dom';
+import useGetAvailById from '../../../../hooks/availability-hooks/useGetAvailById';
 
 function BookEventCalendar() {
 
@@ -13,6 +14,7 @@ function BookEventCalendar() {
 
   //get from availability: start time, end time
   //get from event: duration
+  useGetAvailById();
   
   useEffect(() => {
     getEventInfo(username, suffix);
