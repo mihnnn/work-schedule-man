@@ -7,6 +7,7 @@ import {
   updateEvent,
   getPublicEvents,
   getPublicUser,
+  getEventBySuffix,
 } from "../controllers/eventController.js";
 
 import { 
@@ -34,8 +35,8 @@ router.delete("/api/event-types/:id", protectRoute, resolveIndexByEventId, delet
 
 // Public page route
 router.get("/api/public-events/:username", getPublicEvents);
+router.get("/api/public-events/:username/:suffix", getEventBySuffix);
 router.get("/api/public-user/:username", getPublicUser);
-
 // Availability routes
 router.get("/api/availability", protectRoute, getAvailability);
 router.post("/api/availability",protectRoute, createAvailability);

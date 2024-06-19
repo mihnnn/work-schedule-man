@@ -8,8 +8,10 @@ import { FaLink } from 'react-icons/fa';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import useEditEvent from '../../../../../hooks/event-hooks/useEditEvent';
 import useGetEventById from '../../../../../hooks/event-hooks/useGetEventById';
+import { useAuthContext } from '../../../../../context/AuthContext';
 
 function EditEvent() {
+  const { authUser: { username } } = useAuthContext();
   const { eventData, getEventById } = useGetEventById();
   const { editEvent, loading } = useEditEvent();
   const location = useLocation();
@@ -80,7 +82,7 @@ function EditEvent() {
           <div className="rounded-lg flex">
             <a
               className="first:rounded-l-md items-center relative transition flex justify-center border border-gray-400 h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover"
-              href="#"
+              href={`/${username}/${suffix}`}
             >
               <MdPreview className="w-5 h-5" />
             </a>

@@ -1,10 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { generateDate, months } from '../../../../utils/calendar';
 import cn from '../../../../utils/cn';
 import dayjs from 'dayjs';
+import useGetEventInfoBySuffix from '../../../../hooks/event-hooks/useGetEventInfoBySuffix';
+import { useParams } from 'react-router-dom';
 
 function BookEventCalendar() {
+
+  const { username, suffix } = useParams();
+  const { loading, event, getEventInfo } = useGetEventInfoBySuffix();
+
+  //get from availability: start time, end time
+  //get from event: duration
+  
+  useEffect(() => {
+    getEventInfo(username, suffix);
+  }, [suffix, username])
+
+  console.log("event from calendar",event);
 
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const currentDate = dayjs();
@@ -12,7 +26,7 @@ function BookEventCalendar() {
   const [selectedDate, setSelectedDate] = useState(currentDate);
 
   // interval is based on event duration
-  const generateTimeSlots = (interval = 30) => {
+  const generateTimeSlots = (interval=event.duration) => {
     const slots = [];
     const startTime = dayjs().startOf('day'); // start time will account work hour + be based on current time + 2 hours
     const endTime = dayjs().endOf('day'); // end time will be based on end of work hour end
@@ -25,6 +39,8 @@ function BookEventCalendar() {
     }
 
     return slots;
+
+
   };
   return (
     <>

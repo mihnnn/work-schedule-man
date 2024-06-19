@@ -68,6 +68,33 @@ export const getEventsById = async (req, res) => {
   }
 };
 
+export const getEventBySuffix = async (req, res) => {
+  try {
+    const { username, suffix } = req.params;
+    const user = await User.findOne({username});
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const event = await Event.findOne({ suffix, organizer: user._id});
+    
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.status(200).json({
+      title: event.title,
+      description: event.description,
+      duration: event.duration,
+  
+    });
+  } catch (error) {
+    console.error("Error in getEventBySuffix:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+}
+
 export const createEvent = async (req, res) => {
   try {
     const { title, description, duration, suffix } = req.body;

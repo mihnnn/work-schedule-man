@@ -25,7 +25,7 @@ function App() {
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
 
         <Route path="/:username" element={<PublicPage />} /> 
-        <Route path="/:username/*" element={<BookEvent />} />
+        <Route path="/:username/:suffix" element={<BookEvent />} />
 
 
         {/* Catch-all route for undefined paths */}
