@@ -42,7 +42,7 @@ export const getPublicEvents = async (req, res) => {
     if (!events || events.length === 0) {
       return res
         .status(404)
-        .json({ events: ["No events found for this user"] });
+        
     }
 
     // Map and return the events

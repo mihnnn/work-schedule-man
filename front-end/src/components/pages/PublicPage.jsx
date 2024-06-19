@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import avatar from "../../assets/images/avatar.jpg";
+import avatar from "../../assets/images/avatar.png";
 import { FaArrowRight } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
@@ -24,14 +24,14 @@ function PublicPage() {
           {user && (
             <div className='mb-8 text-center'>
               <span className='w-24 h-24 rounded-full relative inline-flex aspect-square justify-center align-top overflow-hidden min-w-24 min-h-24'>
-                <img className="aspect-square rounded-full w-24 h-24 min-w-24 min-h-24" src={avatar} alt="Kita Avatar" />
+                <img className="aspect-square rounded-full w-24 h-24 min-w-24 min-h-24" src={avatar} alt="First User" />
               </span>
               <h1 className='text-emphasis my-1 text-3xl font-bold'>{user.displayName}</h1>
             </div>
           )}
           <div className='w-full rounded-xl border-[#888] border divide-y divide-[#888] overflow-hidden'>
             {loadPubEvent ? (
-              <div>Loading...</div>
+              <div>No Event found</div>
             ) : events.length === 0 ? (
               <div>No events found</div>
             ) : (

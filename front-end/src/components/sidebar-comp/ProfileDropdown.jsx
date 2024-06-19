@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import avatar from "../../assets/images/avatar.jpg";
+import avatar from "../../assets/images/avatar.png";
 import { useAuthContext } from "../../context/AuthContext";
 import { FaChevronDown } from "react-icons/fa";
 

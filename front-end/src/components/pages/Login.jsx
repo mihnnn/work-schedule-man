@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import backgroundImage from "../../assets/images/auth-background.jpg"
 import useLogin from "../../hooks/auth-hooks/useLogin";
 // import "./styles/Login.css";
 
@@ -16,8 +15,8 @@ function Login() {
   };
 
   return (
-    <div className="text-[#eee] h-screen flex items-center justify-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-      <div className="p-4 mg h-full w-full bg-purple-500 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-10 border border-gray-100 max-w-md">
+    <div className="text-[#eee] h-screen flex items-center justify-center">
+      <div className="p-4 mg h-full w-full bg-gray-200 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-10 border border-gray-100 max-w-md">
         <h2 className="text-2xl mb-2 text-center">Welcome back</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-4">

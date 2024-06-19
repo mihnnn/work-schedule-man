@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import useSignup from "../../hooks/auth-hooks/useSignup";
-import backgroundImage from "../../assets/images/auth-background.jpg"
 
 function SignUp() {
   const [tosChecked, setTosChecked] = useState(false);
@@ -24,8 +23,8 @@ function SignUp() {
   };
 
   return (
-    <div className="text-[#eee] h-screen flex items justify-center " style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-      <div className="p-4 mg h-full w-full bg-purple-500 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-10 border border-gray-100 max-w-max">
+    <div className="text-[#eee] h-screen flex items justify-center " >
+      <div className="p-4 mg h-full w-full bg-gray-200 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-10 border border-gray-100 max-w-max">
         <h2 className="text-2xl mb-2 text-center">Create your WSL account</h2>
         <p className="text-center mb-4 text-xl">Sign up to start scheduling your meetings</p>
 

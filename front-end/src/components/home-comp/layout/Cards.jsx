@@ -11,35 +11,35 @@ function Cards() {
         <div className="relative mt-[50px] mb-[45px] mx-0">
           <ul className="cards__items">
             <CardItem
-              src="/src/assets/images/img-1.jpeg"
-              text="Kita doing the omurice thing1"
-              label="kita1"
-              path="/kita"
+              src="/src/assets/images/create-event.png"
+              text="Create events and allow others to book them"
+              label="Create"
+              path="/app/event-types"
             />
             <CardItem
-              src="/src/assets/images/img-2.jpeg"
-              text="Kita doing the omurice thing1"
-              label="kita1"
-              path="/kita"
+              src="/src/assets/images/public-event.png"
+              text="Check out events created by others"
+              label="Public Page"
+              path="/kita123"
             />
           </ul>
           <ul className="cards__items ">
             <CardItem
-              src="/src/assets/images/img-3.jpeg"
-              text="Kwaii"
-              label="kita2"
-              path="/kita"
+              src="/src/assets/images/create-booking.png"
+              text="Set up your profile and start creating events"
+              label="Profile"
+              path="/app/bookings/"
             />
             <CardItem
-              src="/src/assets/images/img-4.png"
-              text="Kita doing the omurice thing1 kita"
-              label="kita2"
-              path="/kita"
+              src="/src/assets/images/create-availability.png"
+              text="Set up your availability and Working hours"
+              label="Availability"
+              path="/app/availability"
             />
             <CardItem
-              src="/src/assets/images/img-5.jpeg"
-              text="Kita doing the omurice thing1"
-              label="kita2"
+              src="/src/assets/images/google-calendar.png"
+              text="Integrate your schedule with Google Calendar"
+              label="Google Calendar"
               path="/kita"
             />
           </ul>

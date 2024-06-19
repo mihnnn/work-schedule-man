@@ -1,6 +1,6 @@
 // src/components/pages/PageNotFound.js
 import React from 'react';
-import img_404 from '../../assets/images/img_404.jpeg';
+import img_404 from '../../assets/images/img_404.jpg';
 
 function PageNotFound() {
   return (
