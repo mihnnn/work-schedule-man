@@ -16,11 +16,11 @@ const availabilitySchema = new mongoose.Schema({
         of: {
             startTime: {
                 type: String,
-                default: '9:00 AM'
+                default: '9:00am'
             },
             endTime: {
                 type: String,
-                default: '5:00 PM'
+                default: '5:00pm'
             }
         },
         default: {

@@ -1,6 +1,26 @@
 import mongoose from 'mongoose';
 
-//event created in schedule by user
+// Enum for location types
+const locationTypes = {
+    CONFERENCE: 'conference',
+    ORGANIZER_ADDRESS: 'organizer_address',
+    ATTENDEE_ADDRESS: 'attendee_address'
+};
+
+// Define the schema for location
+const locationSchema = new mongoose.Schema({
+    type: {
+        type: String,
+        enum: Object.values(locationTypes),
+        required: true,
+    },
+    details: {
+        type: String, // This can be a URL for conference or an address for in-person
+        required: true,
+    }
+});
+
+// Event schema
 const eventSchema = new mongoose.Schema({
     title: {
         type: String, 
@@ -13,10 +33,9 @@ const eventSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    //defaults to be user who created the event
     organizer: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', //reference to user model
+        ref: 'User', // reference to user model
         required: true,
     },
     suffix: {
@@ -26,8 +45,10 @@ const eventSchema = new mongoose.Schema({
     URL: {
         type: String,
     },
-
-    //createdAt, updatedAt => event.createdAt
+    location: {
+        type: [locationSchema],
+        default: [],
+    }
 }, {timestamps: true});
 
 export const Event = mongoose.model('Event', eventSchema);
