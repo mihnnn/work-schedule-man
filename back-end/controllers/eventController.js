@@ -22,8 +22,8 @@ export const getPublicUser = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const { displayName, profilePic } = user;
-    res.status(200).json({ username, displayName, profilePic });
+    const { displayName, profilePic, email } = user;
+    res.status(200).json({ username, displayName, profilePic, email  });
   } catch (error) {
     console.error("Error in getPublicUser:", error.message);
     res.status(500).json({ error: "Internal server error" });

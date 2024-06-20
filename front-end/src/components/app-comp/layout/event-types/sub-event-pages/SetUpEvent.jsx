@@ -6,7 +6,7 @@ function SetUpEvent({ title, setTitle, description, setDescription, suffix, setS
 
   return (
     <div className='ml-5 flex flex-col max-w-full w-full text-emphasis animate-grow'>
-      <div className='border border-gray-400 rounded-lg p-4 flex flex-col input-border w-full mb-4'>
+      <div className='border border-gray-400 rounded-lg p-4 flex flex-col w-full mb-4'>
         <div className='mb-5'>
           <label className='block text-sm'>Title</label>
           <input type='text' className='input input-bordered w-full mt-1' value={title}

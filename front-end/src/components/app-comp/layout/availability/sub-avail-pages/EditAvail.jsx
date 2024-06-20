@@ -35,6 +35,7 @@ function EditAvail() {
   const [days, setDays] = useState({});
   const [timezone, setTimezone] = useState('');
 
+
   useEffect(() => {
     if (availData) {
       console.log(availData.availability)
@@ -77,6 +78,7 @@ function EditAvail() {
   const handleTimezoneChange = (newTimezone) => {
     setTimezone(newTimezone);
   };
+  console.log(timezone)
 
   return (
     <div className="max-w-full px-2 py-4 lg:px-6">
@@ -162,7 +164,7 @@ function EditAvail() {
               <div>
                 <label className="text-emphasis text-sm font-medium mb-0 inline-block leading-none">Timezone</label>
                 <div className="border mt-1 block w-72 rounded-md text-sm">
-                  <TimeZoneDropdown value={timezone} onChange={handleTimezoneChange} />
+                  <TimeZoneDropdown defaultTz={timezone} value={timezone} onChange={handleTimezoneChange} />
                 </div>
               </div>
             </div>
