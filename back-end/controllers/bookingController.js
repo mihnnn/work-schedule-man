@@ -3,25 +3,32 @@ import { Booking } from '../db/schemas/bookings.js';
 import { User } from '../db/schemas/user.js';
 import { Event } from '../db/schemas/events.js';
 
-
-// Function to get bookings with optional state filter
-
 export const getBookings = async (req, res) => {
     try {
         const { state } = req.query; // Get the state from query parameters
+        const userEmail = req.user.email; // Get the email of the authenticated user
 
         let query = {};
         if (state) {
             query.state = state; // Add state to the query if it exists
         }
 
-        const bookings = await Booking.find(query).populate('event').populate('host');
+        // Find bookings where the authenticated user is either the host or a participant
+        const bookings = await Booking.find({
+            ...query,
+            $or: [
+                { 'host.email': userEmail },
+                { 'participants.email': userEmail }
+            ]
+        }).populate('event');
+
         res.status(200).json(bookings);
     } catch (error) {
         console.error('Error fetching bookings:', error);
         res.status(500).json({ message: 'Server error' });
     }
-}
+};
+
 
 
 export const createBookings = async (req, res) => {
@@ -40,37 +47,32 @@ export const createBookings = async (req, res) => {
             name: host.name,
         };
 
-
-
         // Initialize an empty array for formatted participants
         const formattedParticipants = [];
 
         for (const participant of participants) {
-            if (!participant._id) {
-                // Case: Participant is not in the database
+            let user;
+            // check if email exist in db
+            if (participant.email) {
+                user = await User.findOne({email : participant.email})
+            }
+            // if email provided exist in the db, use their details
+            if (user) {
+                formattedParticipants.push({
+                    email: user.email,
+                    name: user.displayName
+                })
+            } else if(participant.email) {
                 formattedParticipants.push({
                     email: participant.email,
-                    name: participant.name,
-                });
+                    name: ""
+                })
             } else {
-                // Case: Participant is in the database
-                const user = await User.findById(participant._id);
-                if (user) {
-                    formattedParticipants.push({
-                        email: user.email,
-                        name: user.displayName,
-                    });
-                } else {
-                    return res.status(404).json({ message: 'User not found' });
-                }
+                return res.status(400).json({ message: 'Please provide email for participants' });
             }
         }
 
-        // Add host as participant if not already in participants
-        const hostExistsInParticipants = formattedParticipants.some(participant => participant.email === hostDetails.email);
-        if (!hostExistsInParticipants) {
-            formattedParticipants.push(hostDetails);
-        }
+        formattedParticipants.push(hostDetails);
 
         // Create the booking
         const newBooking = new Booking({

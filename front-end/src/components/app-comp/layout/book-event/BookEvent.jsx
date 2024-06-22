@@ -36,7 +36,7 @@ function BookEvent() {
         <div className='md:flex-row' >
           <div className='flex w-full max-w-6xl mt-16 md:mt-0 divide-x-[1px] divide-gray-500 bg-[#222] rounded-xl min-h-[540px]'>
             <BookEventInfo username={username} suffix={suffix}/>
-            {shouldRenderConfirm ? <BookEventConfirm /> : <BookEventCalendar />}
+            {shouldRenderConfirm ? <BookEventConfirm username={username} suffix={suffix} /> : <BookEventCalendar />}
           </div>
         </div>
       </div>

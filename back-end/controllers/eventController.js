@@ -83,6 +83,7 @@ export const getEventBySuffix = async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
     res.status(200).json({
+      id: event._id,
       title: event.title,
       description: event.description,
       duration: event.duration,

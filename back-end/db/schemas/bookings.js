@@ -8,7 +8,6 @@ const participantSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true,
     },
 }, { _id: false });
 
