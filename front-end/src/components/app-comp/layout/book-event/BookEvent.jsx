@@ -20,13 +20,13 @@ function BookEvent() {
       <div className='fixed top-4 z-10 right-4 flex gap-2'>
         <button className='btn btn-outline px-4 py-2.5'>Need help?</button>
         <div role='group' dir='ltr' className='min-h-9 border relative inline-flex gap-0.5 rounded-md p-1'>
-          <button type='button' role='radio' aria-checked={!shouldRenderConfirm} className={`relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors ${!shouldRenderConfirm ? 'text-emphasis' : ''}`} tabIndex={-1}>
+          <button type='button' role='radio' aria-checked={!shouldRenderConfirm} className='relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors text-emphasis'>
             <FaRegCalendarAlt className='text-xl' />
           </button>
-          <button type='button' role='radio' aria-checked={!shouldRenderConfirm} className={`relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors ${!shouldRenderConfirm ? 'text-emphasis' : ''}`} tabIndex={-1}>
+          <button type='button' role='radio' aria-checked={!shouldRenderConfirm} className='relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors '>
             <MdCalendarViewMonth className='text-xl' />
           </button>
-          <button type='button' role='radio' aria-checked={shouldRenderConfirm} className={`relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors ${shouldRenderConfirm ? 'text-emphasis' : ''}`} tabIndex={-1}>
+          <button type='button' role='radio' aria-checked={shouldRenderConfirm} className='relative rounded-[4px] px-3 py-1 text-sm leading-tight transition-colors'>
             <MdOutlineCalendarViewWeek className='text-xl' />
           </button>
         </div>

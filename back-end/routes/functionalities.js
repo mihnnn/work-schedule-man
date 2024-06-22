@@ -18,11 +18,20 @@ import {
   deleteAvailability
 
 } from "../controllers/availabilityController.js";
+import { 
+  cancelBooking,
+  createBookings, 
+  getBookings, 
+  rescheduleBooking
+} from "../controllers/bookingController.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 import { resolveIndexByEventId } from "../middleware/resolveIndexByEventId.js";
 import { resolveIndexByAvailId } from "../middleware/resolveIndexByAvailId.js";
+import { updateBookingState } from "../middleware/bookingMiddleware.js";
+import { resolveIndexByBookingId } from "../middleware/resolveIndexByBookingId.js";
 
 const router = Router();
+updateBookingState();
 
 router.get("/api/settings");
 
@@ -37,6 +46,13 @@ router.delete("/api/event-types/:id", protectRoute, resolveIndexByEventId, delet
 router.get("/api/public-events/:username", getPublicEvents);
 router.get("/api/public-events/:username/:suffix", getEventBySuffix);
 router.get("/api/public-user/:username", getPublicUser);
+
+// Bookings routes,
+router.get("/api/bookings", protectRoute, getBookings);
+router.post("/api/bookings", createBookings);
+router.patch("/api/bookings/reschedule/:id",resolveIndexByBookingId, rescheduleBooking);
+router.patch("/api/bookings/cancel/:id", resolveIndexByBookingId, cancelBooking);
+
 // Availability routes
 router.get("/api/availability", protectRoute, getAvailability);
 router.post("/api/availability",protectRoute, createAvailability);

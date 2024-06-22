@@ -1,40 +1,73 @@
 import mongoose from "mongoose";
 
-const bookingSchema = new mongoose.Schema({
+// Define a sub-schema for participants
+const participantSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+}, { _id: false });
 
-    event : {
+// Define the main booking schema
+const bookingSchema = new mongoose.Schema({
+    event: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event',
+        required: true,
     },
-    host : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    host: {
+        email: {
+            type: String,
+            required: true,
+        }, 
+        name: {
+            type: String,
+            required: true,
+        }
     },
-    participant: {
-        type: Array,
+    participants: {
+        type: [participantSchema],
         required: true,
         default: [],
     },
-    //use to calculate the state of booking: upcoming, past
-    confriemdAt: {
+    confirmedAt: {
         type: Date,
         default: Date.now,
     },
-    startTime : {
+    startTime: {
         type: Date,
-
+        required: true,
     },
-
-    endTime : {
+    endTime: {
         type: Date,
-
+        required: true,
     },
-    state : {
+    state: {
         type: String,
+        enum: ['upcoming', 'past', 'canceled'],
         default: 'upcoming',
     },
-}, {timestamps: true});
+    additionalNotes: {
+        type: String,
+        default: '',
+    },
+    cancelReason: {
+        type: String,
+        default: '',
+    },
+    rescheduleReason: {
+        type: String,
+        default: '',
+    },
+    rescheduledAt: {
+        type: Date,
+    },
+    
+}, { timestamps: true });
 
 export const Booking = mongoose.model('Booking', bookingSchema);
 
-    

@@ -3,7 +3,6 @@ import { useAuthContext } from '../../../../context/AuthContext';
 
 function BookEventConfirm() {
 
-  // Deconstruct displayName and email from authUser
   const { authUser } = useAuthContext();
 
   const [displayName, setDisplayName] = useState('');
