@@ -5,7 +5,6 @@ function PastBookings() {
     <main className='w-full'>
       <div className='flex w-full flex-col' style={{ position: 'relative' }}>
         <div className='mb-6 pt-2 xl:pt-0'>
-          <p className='mb-2 text-xs font-medium uppercase leading-4'>today</p>
           <div className='border-gray-400 overflow-hidden rounded-md border animate-grow'>
             <table className='w-full max-w-full table-fixed'>
               <tbody className=' divide-current divide-y'>

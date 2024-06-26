@@ -25,8 +25,11 @@ function EditEvent() {
   const [duration, setDuration] = useState('');
   const { eventId } = useParams();
 
+  const formatSuffix = (input) => {
+    return input.toLowerCase().replace(/\s+/g, '-');
+  };
+
   useEffect(() => {
-    // Default to 'setup' if tabName is not present
     if (!queryParams.get('tabName')) {
       queryParams.set('tabName', 'setup');
       navigate({
@@ -42,7 +45,6 @@ function EditEvent() {
     }
   }, [eventId]);
 
-
   useEffect(() => {
     if (eventData) {
       setTitle(eventData.title);
@@ -50,18 +52,33 @@ function EditEvent() {
       setSuffix(eventData.suffix);
       setDuration(eventData.duration);
     }
-  }, [eventData])
+  }, [eventData]);
+
+  useEffect(() => {
+    // Only update suffix if it matches the formatted title, to allow manual edits to persist
+    if (suffix === formatSuffix(eventData?.title || '')) {
+      setSuffix(formatSuffix(title));
+    }
+  }, [title, eventData]);
 
   const handleBackClick = () => {
     navigate("/app/event-types");
   };
+
   const handleSave = async () => {
     try {
-      await editEvent(eventId, { title, description, suffix, duration })
+      const formattedSuffix = formatSuffix(suffix);
+      const parsedDuration = parseInt(duration, 10);
+      await editEvent(eventId, { title, description, suffix: formattedSuffix, duration: parsedDuration });
+      // Update the state with the newly saved data
+      setSuffix(formattedSuffix);
+      setDescription(description);
+      setDuration(parsedDuration);
+      setTitle(title);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <div className="max-w-full px-2 py-4 lg:px-6">
@@ -103,7 +120,6 @@ function EditEvent() {
           >
             Save
           </button>
-
         </div>
       </header>
       <div className="flex">

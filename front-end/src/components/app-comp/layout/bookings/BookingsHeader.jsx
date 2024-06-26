@@ -15,11 +15,6 @@ function BookingsHeader() {
 						</p>
 					</div>
 
-					<div className='fixed bottom-20 z-40 ltr:right-4 rtl:left-4 md:z-auto md:ltr:right-0 md:rtl:left-0 flex-shrink-0 [-webkit-app-region:no-drag] md:relative md:bottom-auto md:right-auto'>
-						<button className='btn btn-outline bg-white text-black'>
-							+ {" "} New
-						</button>
-					</div>
 				</header>
 			</div>
 		</div>

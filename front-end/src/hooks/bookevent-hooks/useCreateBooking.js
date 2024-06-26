@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 function useCreateBooking() {
   const [loading, setLoading] = useState(false);
-
+  const [bookingId, setBookingId] = useState(null); //booking id returned from the server
   const createBooking = async ({
     event,
     host,
@@ -14,7 +14,6 @@ function useCreateBooking() {
   }) => {
     setLoading(true);
     try {
-      // check if event exists in db
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,18 +33,21 @@ function useCreateBooking() {
       }
 
       const data = await res.json();
-      toast.success(`Booking created successfully`, {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-        iconTheme: {
-          primary: "#fff",
-          secondary: "#333",
-        },
-      });
-      return data;
+      if (data) {
+        setBookingId(data._id);
+        toast.success(`Booking created successfully`, {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+          iconTheme: {
+            primary: "#fff",
+            secondary: "#333",
+          },
+        });
+      }
+      
     } catch (error) {
       console.error(error);
       toast.error("An error occurred: " + error.message);
@@ -54,7 +56,7 @@ function useCreateBooking() {
     }
   };
 
-  return { loading, createBooking };
+  return { loading, createBooking, bookingId };
 }
 
 export default useCreateBooking;

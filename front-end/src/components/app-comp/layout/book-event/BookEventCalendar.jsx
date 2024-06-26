@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { generateDate, months } from '../../../../utils/calendar';
 import cn from '../../../../utils/cn';
-import dayjs from 'dayjs'; // Import dayjs without UTC plugin
+import dayjs from 'dayjs';
 import useGetEventInfoBySuffix from '../../../../hooks/event-hooks/useGetEventInfoBySuffix';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import useGetAvailById from '../../../../hooks/availability-hooks/useGetAvailById';
 
 function BookEventCalendar() {
   const { username, suffix } = useParams();
-  const { loading, event, getEventInfo } = useGetEventInfoBySuffix();
+  const { loading, eventInfo, getEventInfo } = useGetEventInfoBySuffix();
   const navigate = useNavigate();
   const location = useLocation();
 
   useGetAvailById();
+
+  console.log(eventInfo)
 
   useEffect(() => {
     getEventInfo(username, suffix);
@@ -25,11 +27,13 @@ function BookEventCalendar() {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
+
+
   useEffect(() => {
-    if (event.duration) {
+    if (eventInfo.duration) {
       updateUrl(selectedDate, selectedTimeSlot);
     }
-  }, [selectedDate, selectedTimeSlot, event.duration]);
+  }, [selectedDate, selectedTimeSlot, eventInfo.duration]);
 
   const updateUrl = (date, slot) => {
     const formattedDate = date.format('YYYY-MM-DD');
@@ -37,14 +41,14 @@ function BookEventCalendar() {
     let newUrl = `${location.pathname}?date=${formattedDate}&month=${formattedMonth}`;
     
     if (slot) {
-      const formattedSlot = slot.format(); // Use local time format
+      const formattedSlot = slot.format(); // local time format
       newUrl += `&slot=${encodeURIComponent(formattedSlot)}`;
     }
 
     navigate(newUrl);
   };
 
-  const generateTimeSlots = (interval = event.duration) => {
+  const generateTimeSlots = (interval = eventInfo.duration) => {
     const slots = [];
     const startTime = dayjs().startOf('day'); // start time will account work hour + be based on current time + 2 hours
     const endTime = dayjs().endOf('day'); // end time will be based on end of work hour end

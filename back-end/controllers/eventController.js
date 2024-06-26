@@ -13,51 +13,6 @@ export const getEvents = async (req, res) => {
   }
 };
 
-export const getPublicUser = async (req, res) => {
-  try {
-    const { username } = req.params;
-    const user = await User.findOne({ username });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const { displayName, profilePic, email } = user;
-    res.status(200).json({ username, displayName, profilePic, email  });
-  } catch (error) {
-    console.error("Error in getPublicUser:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-export const getPublicEvents = async (req, res) => {
-  try {
-    const { username } = req.params;
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    // Find events by user ID
-    const events = await Event.find({ organizer: user._id });
-
-    if (!events || events.length === 0) {
-      return res
-        .status(404)
-        
-    }
-
-    // Map and return the events
-    res.status(200).json({
-      events: events.map((event) => {
-        const { _id, title, description, duration, suffix } = event;
-        return { _id, title, description, duration, suffix };
-      }),
-    });
-  } catch (error) {
-    console.error("Error in getPublicEvents:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
 export const getEventsById = async (req, res) => {
   try {
     const { findEvent } = req;
@@ -93,7 +48,69 @@ export const getEventBySuffix = async (req, res) => {
     console.error("Error in getEventBySuffix:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
+}
 
+export const getPublicUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const { displayName, profilePic, email } = user;
+    res.status(200).json({ username, displayName, profilePic, email  });
+  } catch (error) {
+    console.error("Error in getPublicUser:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+export const getPublicEvents = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    // Find events by user ID
+    const events = await Event.find({ organizer: user._id });
+
+    if (!events || events.length === 0) {
+      return res
+        .status(404)
+    }
+
+    // Map and return the events
+    res.status(200).json({
+      events: events.map((event) => {
+        const { _id, title, description, duration, suffix } = event;
+        return { _id, title, description, duration, suffix };
+      }),
+    });
+  } catch (error) {
+    console.error("Error in getPublicEvents:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getPublicEventById = async (req, res) => {
+  try {
+    const{ findEvent } = req;
+    if (!findEvent) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.status(200).json({  
+      id: findEvent._id,
+      title: findEvent.title,
+      description: findEvent.description,
+      duration: findEvent.duration,
+      suffix: findEvent.suffix,
+    })
+  } catch (error) {
+    console.error("Error in getPublicEventById:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
 
 export const createEvent = async (req, res) => {

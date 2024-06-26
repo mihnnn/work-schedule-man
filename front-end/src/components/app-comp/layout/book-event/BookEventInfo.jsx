@@ -10,19 +10,20 @@ import dayjs from 'dayjs';
 import { FaRegCalendar } from 'react-icons/fa';
 
 function BookEventInfo({username, suffix}) {
-  const { loading: loadPubEvent, getEventInfo, event } = useGetEventInfoBySuffix(username, suffix);
-  const { loading: loadPubUser, getPubUser, user } = useGetPublicUser(username);
+  const { loading: loadPubEvent, getEventInfo, eventInfo } = useGetEventInfoBySuffix();
+  const { loading: loadPubUser, getPubUser, user } = useGetPublicUser();
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedDateTime, setSelectedDateTime] = useState(null);
 
   useEffect(() => {
-    getPubUser(username);
-    getEventInfo(username, suffix);
-    parseQueryParams();
-  }, [username, suffix, location.search]);
+    const fetchData = async () => {
+      await getEventInfo(username, suffix);
+      await getPubUser(username);
+      parseQueryParams();
+    }
+    fetchData();
 
-  useEffect(() => {
     const handlePopState = () => {
       const searchParams = new URLSearchParams(location.search);
       if (!searchParams.has('slot')) {
@@ -34,7 +35,9 @@ function BookEventInfo({username, suffix}) {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [location]);
+  }, [username,suffix, location.search]);
+
+
 
   const parseQueryParams = () => {
     const searchParams = new URLSearchParams(location.search);
@@ -59,8 +62,8 @@ function BookEventInfo({username, suffix}) {
     <div className='w-full md:w-1/2 p-6 flex flex-col items-center md:items-start text-center md:text-left mr-20'>
       <img className='aspect-square rounded-full w-6 h-6 mb-2' src={avatar} alt="user avatar" />
       <p className='text-gray-400 text-sm font-semibold'>{user?.username}</p>
-      <h1 className='text-xl font-semibold my-2'>{event.title}</h1>
-      <p>{event.description}</p>
+      <h1 className='text-xl font-semibold my-2'>{eventInfo.title}</h1>
+      <p>{eventInfo.description}</p>
       {selectedDateTime && (
         <div className='text-gray-100 space-y-4 font-medium mt-4'>
           <div className='flex items-center text-sm'>
@@ -68,7 +71,7 @@ function BookEventInfo({username, suffix}) {
             <div>
               <span>{dayjs(selectedDateTime).format('ddd, MMMM D, YYYY')}</span>
               <br />
-              <span>{dayjs(selectedDateTime).format('HH:mm')} - {dayjs(selectedDateTime).add(event.duration, 'minute').format('HH:mm')}</span>
+              <span>{dayjs(selectedDateTime).format('HH:mm')} - {dayjs(selectedDateTime).add(eventInfo.duration, 'minute').format('HH:mm')}</span>
             </div>
           </div>
         </div>
@@ -76,7 +79,7 @@ function BookEventInfo({username, suffix}) {
       <div className=' text-gray-100 space-y-4 font-medium mt-4'>
         <div className='flex items-center text-sm'>
           <FaRegClock className='w-4 h-4 mr-2' />
-          <span>{event.duration} minutes</span>
+          <span>{eventInfo.duration} minutes</span>
         </div>
         <div className='flex items-center text-sm'>
           <IoLocationOutline className='w-4 h-4 mr-2' />

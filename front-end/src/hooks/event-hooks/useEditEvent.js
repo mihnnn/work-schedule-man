@@ -2,7 +2,6 @@ import { useState } from "react";
 import toast from 'react-hot-toast'
 
 function useEditEvent() {
-  console.log("useEditEvent called");
   const [loading, setLoading] = useState(false);
 
   const editEvent = async (eventId, {title, description, suffix, duration}) => {

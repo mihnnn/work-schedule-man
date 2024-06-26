@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import useCreateAvail from '../../../../hooks/availability-hooks/useCreateAvail'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function CreateAvailabilityModal() {
 
@@ -66,12 +66,6 @@ function CreateAvailabilityModal() {
             </button>
           </div>
         </form>
-
-
-
-          
-
-
         </div>
       </div>
     </dialog>

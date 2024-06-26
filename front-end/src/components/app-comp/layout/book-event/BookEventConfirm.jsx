@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { useAuthContext } from '../../../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useCreateBooking from '../../../../hooks/bookevent-hooks/useCreateBooking';
 import useGetEventInfoBySuffix from '../../../../hooks/event-hooks/useGetEventInfoBySuffix';
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
+dayjs.extend(utc);
 
-function BookEventConfirm({username, suffix}) {
+function BookEventConfirm({ username, suffix }) {
 
   const { authUser } = useAuthContext();
 
-  const { loading:loadBooking, createBooking } = useCreateBooking();
-  const { loading:loadPubEvent, getEventInfo, event } = useGetEventInfoBySuffix(username, suffix);
+  const { loading: loadBooking, createBooking, bookingId } = useCreateBooking();
+  const { loading: loadPubEvent, getEventInfo, eventInfo } = useGetEventInfoBySuffix();
 
-  const [eventId, setEventId] = useState(''); //event id
+  const [eventDuration, setEventDuration] = useState(''); //event duration [minutes]
   const [displayName, setDisplayName] = useState(''); //host name
   const [email, setEmail] = useState(''); //host email
   const [additionalNotes, setAdditionalNotes] = useState('');
+  const [guests, setGuests] = useState([]); //guests = [{ email: ''}
+  const [startTime, setStartTime] = useState(null); //selected date and time [YYYY-MM-DDTHH:mm:ss.SSSZ]
+
   const location = useLocation();
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    getEventInfo(username, suffix);
+    const fetchEventData = async () => {
+      await getEventInfo(username, suffix);
+    }
+    fetchEventData();
   }, [username, suffix]);
 
   useEffect(() => {
@@ -31,18 +39,60 @@ function BookEventConfirm({username, suffix}) {
     }
   }, [authUser]);
 
+  useEffect(() => {
+    parseQueryParams();
+  }, [location.search]);
 
   const handleConfirmBooking = async () => {
-    console.log('Confirm button');
-    const newBooking = await createBooking({
-      
+    const event = await eventInfo.id;
+    const duration = await eventInfo.duration;
+    const endTime = dayjs.utc(startTime).add(duration, 'minute').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    await createBooking({
+      event,
+      host: {
+        email,
+        name: displayName,
+      },
+      participants: guests,
+      startTime,
+      endTime,
+      additionalNotes
     })
+    //navigate to a confirmation page
+    navigate(`/app/booking/${bookingId}`);
+  }
+  
+  const addGuests = () => {
+    setGuests([...guests, { email: '' }])
+  }
+  
+  const handleGuestsChange = (index, field, value) => {
+    const newGuests = [...guests];
+    newGuests[index][field] = value;
+    setGuests(newGuests);
+  }
+  
+  const handleBackButton = () => {
+    //date object without miliseconds
+    // new Date().toISOString() = dayjs(new Date().toISOString()).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    //post to db with this format
+    // navigate(-1);
   }
 
-  const handleBackButton = () => {
-    console.log('Back button')
+  const parseQueryParams = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const selectedDate = searchParams.get('date');
+    const selectedTimeSlot = searchParams.get('slot');
 
-    // navigate(-1);
+    if (selectedDate && selectedTimeSlot) {
+      const timeSlot = dayjs(selectedTimeSlot).format('HH:mm:ss');
+      console.log('timeSlot:', timeSlot);
+      const dateTime = dayjs(`${selectedDate}T${timeSlot}`).format( 'YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      console.log('dateTime:', dateTime);
+      setStartTime(dateTime);
+    } else {
+      setStartTime(null);
+    }
   }
 
   return (
@@ -64,7 +114,7 @@ function BookEventConfirm({username, suffix}) {
             </div>
           </div>
 
-          <div className='mb-4'>
+          <div className='mb-2'>
             <div className='w-full'>
               <div className='flex flex-col'>
                 <label htmlFor='email-input' className='text-emphasis mb-2 block text-sm font-medium leading-none'>Email Address *</label>
@@ -96,16 +146,31 @@ function BookEventConfirm({username, suffix}) {
           </div>
 
           {/* add guest: */}
-          <div className='mb-4'>
-            <div className=''>
-              <div className=''>
-                <button className='btn flex items-center btn-ghost'>
-                  <MdOutlinePersonAddAlt1 className='w-6 h-6' />
-                  <span className='text-emphasis text-sm ml-2'>Add guest</span>
-                </button>
-              </div>
+          {guests.length > 0 && (
+            <div className='mb-4'>
+              {guests.map((guest, index) => (
+                <div key={index} className=''>
+                  <div className='flex flex-col mb-3'>
+                    <label className=' text-emphasis mb-1 block text-sm font-medium leading-none '> Guest {index + 1}</label>
+                    <input
+                      type="text"
+                      placeholder='Email Address'
+                      className='text-emphasis input input-bordered mt-1 focus:ring-emphasis focus:ring-white h-9 rounded-md px-3 py-2 text-sm leading-4 transition focus:ring-2 w-full'
+                      value={guest.email}
+                      onChange={(e) => handleGuestsChange(index, 'email', e.target.value)}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          )}
+          <button
+            className='btn flex items-center btn-ghost'
+            onClick={addGuests}
+          >
+            <MdOutlinePersonAddAlt1 className='w-6 h-6' />
+            <span className='text-emphasis text-sm ml-2'>Add guest</span>
+          </button>
 
         </div>
 

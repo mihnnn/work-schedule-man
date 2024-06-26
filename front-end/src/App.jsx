@@ -10,7 +10,7 @@ import PublicPage from './components/pages/PublicPage';
 import PageNotFound from './components/pages/PageNotFound';
 import BookEvent from './components/app-comp/layout/book-event/BookEvent';
 import { useAuthContext } from './context/AuthContext';
-
+import BookingConfirmation from './components/app-comp/layout/bookings/booking-routes/BookingConfirmation';
 
 function App() {
   const { authUser } = useAuthContext();
@@ -22,6 +22,7 @@ function App() {
         <Route path="/signup" element={authUser ? <Navigate to="/" /> : <SignUp />} />
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/tos" element={<Tos />} />
+        <Route path="/app/booking/:bookingId" element={<BookingConfirmation />} />
         <Route path="/app/*" element={authUser ? <AppPage /> : <Navigate to="/" />} />
 
         <Route path="/:username" element={<PublicPage />} /> 

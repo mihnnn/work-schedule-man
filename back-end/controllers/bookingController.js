@@ -29,9 +29,22 @@ export const getBookings = async (req, res) => {
     }
 };
 
+export const getBookingById = async (req, res) => {
+    try {
+        const {findBooking} = req;
+        // const { email } = req.query;
+
+        res.status(200).json(findBooking);
+    } catch (error) {
+        console.error('Error fetching booking by ID:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
 
 
 export const createBookings = async (req, res) => {
+    console.log("post booking called, with req body: ", req.body);
     try {
         const { event, host, participants, startTime, endTime, additionalNotes } = req.body;
 
@@ -84,8 +97,8 @@ export const createBookings = async (req, res) => {
             additionalNotes,
         });
 
-        await newBooking.save();
-        res.status(201).json(newBooking);
+        const savedBooking = await newBooking.save();
+        res.status(201).json(savedBooking);
     } catch (error) {
         console.error('Error creating booking:', error);
         res.status(500).json({ message: 'Server error' });

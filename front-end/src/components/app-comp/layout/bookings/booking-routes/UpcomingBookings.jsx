@@ -1,6 +1,8 @@
 import React from 'react'
+import useGetBooking from '../../../../../hooks/bookevent-hooks/useGetBookings'
 
 function UpcomingBookings() {
+  const { loading, bookings} = useGetBooking();
   return (
     <main className='w-full'>
       <div className='flex w-full flex-col' style={{position: 'relative'}}>

@@ -16,6 +16,10 @@ function EventCreationModal({ onNewEventAdded }) {
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState(15);
 
+  const formatSuffix = (input) => {
+    return input.toLowerCase().replace(/\s+/g, '-');
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('dialog') === 'new' && params.get('eventPage') === username) {
@@ -23,8 +27,13 @@ function EventCreationModal({ onNewEventAdded }) {
     }
   }, [location.search, username]);
 
+  useEffect(() => {
+    setSuffix(formatSuffix(title));
+  }, [title]);
+
   const handleContinueButtonClick = async () => {
-    const newEvent = await createEvent({ title, suffix, description, duration });
+    const formattedSuffix = formatSuffix(suffix);
+    const newEvent = await createEvent({ title, suffix: formattedSuffix, description, duration });
     modalRef.current.close();
     onNewEventAdded(newEvent._id);
   };
@@ -100,7 +109,11 @@ function EventCreationModal({ onNewEventAdded }) {
           <div className="mt-5 flex flex-row-reverse gap-2">
             <button
               className="btn btn-outline bg-gray-50 text-[#222] hover:bg-opacity-50"
-              onClick={() => { modalRef.current.close(); navigate('/app/event-types'); handleContinueButtonClick(); }}
+              onClick={async () => { 
+                modalRef.current.close(); 
+                navigate('/app/event-types'); 
+                await handleContinueButtonClick(); 
+              }}
               disabled={loading}
             >
               {loading ? 'Creating...' : 'Continue'}

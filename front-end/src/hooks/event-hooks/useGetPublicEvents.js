@@ -8,7 +8,7 @@ export const useGetPublicEvents = () => {
   const getPubEvents = async (username) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/public-events/${username}`);
+      const res = await fetch(`/api/public-page/${username}`);
       const data = await res.json();
 
       if (data.error) {

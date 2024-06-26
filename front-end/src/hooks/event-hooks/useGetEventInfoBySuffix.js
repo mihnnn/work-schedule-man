@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 
 export const useGetEventInfoBySuffix = () => {
   const [loading, setLoading] = useState(false);
-  const [event, setEvent] = useState([]);
+  const [eventInfo, setEventInfo] = useState([]);
 
   const getEventInfo = async (username, suffix) => {
     setLoading(true);
@@ -16,7 +16,7 @@ export const useGetEventInfoBySuffix = () => {
         throw new Error(data.error);
       }
 
-      setEvent(data);
+      setEventInfo(data);
     } catch (error) {
       console.error(error);
       toast.error("An error occurred: " + error.message);
@@ -25,7 +25,7 @@ export const useGetEventInfoBySuffix = () => {
     }
   };
 
-  return { loading, event, getEventInfo };
+  return { loading, eventInfo, getEventInfo };
 };
 
 export default useGetEventInfoBySuffix;
