@@ -7,8 +7,6 @@ import CanceledBookings from './booking-routes/CanceledBookings';
 
 
 function BookingsPage() {
-
-
   return (
     <div>
       <Routes>

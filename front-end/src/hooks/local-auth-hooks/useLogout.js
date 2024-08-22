@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 
@@ -9,7 +9,7 @@ function useLogout() {
   const logout = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/logout", {
+      const res = await fetch("/auth/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -20,7 +20,7 @@ function useLogout() {
         throw new Error(data.error);
       }
 
-      localStorage.removeItem("wsm-user");
+      localStorage.removeItem("jwt-token");
       toast.success("Logged out successfully");
       setAuthUser(null);
     } catch (error) {

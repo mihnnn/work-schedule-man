@@ -6,6 +6,7 @@ function useGetBookingById() {
   const [bookingData, setBookingData] = useState(null);
 
   const getBookingById = async (bookingId) => {
+    console.log("Fetching booking with ID:", bookingId); // Add this line
     setLoading(true);
     try {
       const res = await fetch(`/api/bookings/${bookingId}`);

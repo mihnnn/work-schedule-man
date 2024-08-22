@@ -8,10 +8,12 @@ import { FaLink } from 'react-icons/fa';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import useEditEvent from '../../../../../hooks/event-hooks/useEditEvent';
 import useGetEventById from '../../../../../hooks/event-hooks/useGetEventById';
-import { useAuthContext } from '../../../../../context/AuthContext';
+// import { useAuthContext } from '../../../../../context/AuthContext';
+import { useSelector } from 'react-redux';
 
 function EditEvent() {
-  const { authUser: { username } } = useAuthContext();
+  // const { authUser: { username } } = useAuthContext();
+  const { currentUser: { username } } = useSelector((state) => state.user);
   const { eventData, getEventById } = useGetEventById();
   const { editEvent, loading } = useEditEvent();
   const location = useLocation();

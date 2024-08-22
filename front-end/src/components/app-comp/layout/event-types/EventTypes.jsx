@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from "../../../../context/AuthContext";
+// import { useAuthContext } from "../../../../context/AuthContext";
+import { useSelector } from 'react-redux';
 import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
 import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';
 import { MdPreview } from 'react-icons/md';
@@ -19,7 +20,8 @@ function EventTypes() {
   
   const { loading: loadingGet, events, refetchEvents } = useGetEvent();
   const { loading: loadingDelete, deleteEvent } = useDeleteEvent();
-  const { authUser: { username } } = useAuthContext();
+  // const { authUser: { username } } = useAuthContext();
+  const { currentUser: {username} } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (!loadingGet) {
@@ -108,7 +110,7 @@ function EventTypes() {
             {loadingGet ? (
               <li className='p-5'>Loading...</li>
             ) : localEvents.length === 0 ? (
-              <li className='text-white text-xl'>
+              <li className='text-white text-xl p-5'>
                 <h1 className='text-5xl'> Create your first event type.</h1>
                 <p>Click new "NEW" button in the corner to start creating an event.</p>
                 <p>Event types enable you to share links that show available times on your calendar and allow people to make bookings with you.</p>

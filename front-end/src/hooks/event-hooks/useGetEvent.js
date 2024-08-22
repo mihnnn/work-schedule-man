@@ -8,7 +8,7 @@ function useGetEvent() {
   const getEvents = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/event-types");
+      const res = await fetch("/api/event-types")
       const data = await res.json();
 
       if (data.error) {

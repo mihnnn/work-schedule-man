@@ -1,8 +1,10 @@
+import { set } from "mongoose";
 import React, { useState } from "react";
-import useSignup from "../../hooks/auth-hooks/useSignup";
+// import useSignup from "../../hooks/local-auth-hooks/useSignup";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-  const [tosChecked, setTosChecked] = useState(false);
+  
   const [inputs, setInputs] = useState({
     email: "",
     displayName: "",
@@ -10,8 +12,12 @@ function SignUp() {
     password: "",
     confirmPassword: "",
   });
-
-  const { loading, signup } = useSignup();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] =useState(false);
+  const [tosChecked, setTosChecked] = useState(false);
+  
+  // const { loading, signup } = useSignup();
+  const navigate = useNavigate();
 
   const handleTosChange = () => {
     setTosChecked(!tosChecked); // Toggle checkbox state
@@ -19,7 +25,42 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signup(inputs);
+    const formData = {
+      email: inputs.email.trim(),
+      displayName: inputs.displayName,
+      username: inputs.username.trim(),
+      password: inputs.password.trim(),
+      confirmPassword: inputs.confirmPassword.trim(),
+    };
+    
+    if (!formData.email || !formData.displayName || !formData.username || !formData.password || !formData.confirmPassword) {
+      return setErrorMessage("Please fill in all fields");
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch('/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+      if (data.error) {
+        return setErrorMessage(data.error);
+      }
+      console.log(data);
+      navigate('/login');
+      
+
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+      console.log(errorMessage)
+    } finally {
+      setLoading(false);
+    }
+    // await signup(inputs);
   };
 
   return (
@@ -110,6 +151,22 @@ function SignUp() {
               <a href="/cookies" className="underline">Cookie Policy</a>
             </label>
           </div>
+          {errorMessage && (
+            <div role="alert" className=" my-3 alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{errorMessage}</span>
+            </div>
+          )}
           <button
             type="submit"
             className="btn w-full mb-4 btn-outline bg-[#222]"
@@ -118,6 +175,8 @@ function SignUp() {
           >
             {loading ? <span className="loading loading-spinner"></span> : "Sign Up"}
           </button>
+
+
         </form>
 
 
@@ -131,8 +190,6 @@ function SignUp() {
             Facebook
           </button>
         </div>
-
-
 
         {/* Sign up link */}
         <p className="text-center mt-4 text-[#ccc]">

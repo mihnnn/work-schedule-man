@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAuthContext } from '../../../../context/AuthContext';
+// import { useAuthContext } from '../../../../context/AuthContext';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useCreateEvent from '../../../../hooks/event-hooks/useCreateEvent';
 
 function EventCreationModal({ onNewEventAdded }) {
-  const { authUser: { username } } = useAuthContext();
+  // const { authUser: { username } } = useAuthContext();
+  const { currentUser: {username} } = useSelector((state) => state.user);
   const { createEvent, loading } = useCreateEvent();
   
   const modalRef = useRef(null);

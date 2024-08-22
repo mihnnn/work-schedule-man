@@ -1,15 +1,16 @@
 import { Event } from "../db/schemas/events.js";
-import { User } from "../db/schemas/user.js";
+import User from "../db/schemas/user.js";
 
 export const getEvents = async (req, res) => {
   console.log("getEvents called");
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
+    console.log("userId (getEvents):", userId);
     const events = await Event.find({ organizer: userId });
     res.status(200).json({ events });
   } catch (error) {
     console.error("Error in getEvents:", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error (getEvents)" });
   }
 };
 
@@ -19,7 +20,7 @@ export const getEventsById = async (req, res) => {
     res.status(200).json(findEvent);
   } catch {
     console.error("Error in getEventsById:", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error(geteventbyid)" });
   }
 };
 
@@ -46,7 +47,7 @@ export const getEventBySuffix = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in getEventBySuffix:", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error (geteventbysuffix)" });
   }
 }
 
@@ -121,7 +122,17 @@ export const createEvent = async (req, res) => {
       return res.status(400).send("Bad request: Missing required fields");
     }
 
-    const username = req.user.username;
+    const userId = req.user.id;
+    const user = await User.findById(userId).select("username").exec();
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    } else {
+      // console.log("username:", user.username);
+    }
+
+    const username = user.username;
+    const organizerId = user._id;
+    
     const URL = `https://wsm.com/${username}/${suffix}`;
 
     const newEvent = new Event({
@@ -130,7 +141,7 @@ export const createEvent = async (req, res) => {
       description,
       duration,
       URL,
-      organizer: req.user._id,
+      organizer: organizerId,
     });
 
     const savedEvent = await newEvent.save();

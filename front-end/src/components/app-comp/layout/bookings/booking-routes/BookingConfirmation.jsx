@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import BookingSuccess from './BookingSuccess'
 import BookingCanceled from './BookingCanceled'
-import { useAuthContext } from '../../../../../context/AuthContext'
+// import { useAuthContext } from '../../../../../context/AuthContext'
+import { useSelector } from 'react-redux';
 import { FaArrowLeft } from "react-icons/fa";
 import { useLocation, useParams } from 'react-router-dom';
 import useGetBookingById from '../../../../../hooks/bookevent-hooks/useGetBookingById';
 
 
 function BookingConfirmation() {
-  const { authUser } = useAuthContext(); 
+  // const { authUser } = useAuthContext(); 
+  const { currentUser } = useSelector(state => state.user);
   const { loading, getBookingById, bookingData } = useGetBookingById();
   const { bookingId } = useParams();
   const [bookingState, setBoookingState] = useState(null)
@@ -31,7 +33,7 @@ function BookingConfirmation() {
   return (
 
     <div className='bg-[#111] overflow-auto h-screen'>
-      {authUser &&
+      {currentUser &&
         <div className='-mb-4 ml-4 mt-2 z-0'>
           <a href="/app/bookings/upcoming" className='mt-2 inline-flex items-center px-1 py-2 text-sm'>
             <FaArrowLeft className='w-5 h-5 mr-2' />

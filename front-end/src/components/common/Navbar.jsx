@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
-import { useAuthContext } from "../../context/AuthContext";
+import { useSelector } from "react-redux";
 
 function Navbar() {
-  // useState hooks
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
-  const location = useLocation();
 
-  const { authUser } = useAuthContext();
-
+  const {currentUser} = useSelector((state) => state.user);
+  
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
@@ -68,21 +66,21 @@ function Navbar() {
 
             <li className="nav-item">
               <Link
-                to={authUser ? '/app/event-types' : '/signup'}
+                to={currentUser ? '/app/event-types' : '/signup'}
                 className="nav-links-mobile"
                 onClick={closeMobileMenu}
               >
-                {authUser ? 'GO TO APP' : 'SIGN UP'}
+                {currentUser ? 'GO TO APP' : 'SIGN UP'}
               </Link>
             </li>
           </ul>
           {button && (
             <Link
-              to={authUser ? '/app/event-types' : '/signup'}
+              to={currentUser ? '/app/event-types' : '/signup'}
               className="btn btn-outline"
               onClick={closeMobileMenu}
             >
-              {authUser ? 'GO TO APP' : 'SIGN UP'}
+              {currentUser ? 'GO TO APP' : 'SIGN UP'}
             </Link>
           )}
         </div>

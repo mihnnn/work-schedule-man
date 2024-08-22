@@ -1,6 +1,6 @@
 
 import { Booking } from '../db/schemas/bookings.js';
-import { User } from '../db/schemas/user.js';
+import User from '../db/schemas/user.js';
 import { Event } from '../db/schemas/events.js';
 
 export const getBookings = async (req, res) => {
@@ -97,7 +97,9 @@ export const createBookings = async (req, res) => {
             additionalNotes,
         });
 
+
         const savedBooking = await newBooking.save();
+        console.log("saved booking: ", savedBooking);
         res.status(201).json(savedBooking);
     } catch (error) {
         console.error('Error creating booking:', error);

@@ -8,7 +8,13 @@ function useGetEventById() {
   const getEventById = async (eventId) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/event-types/${eventId}`);
+      const token = localStorage.getItem("jwt-token");
+
+      const res = await fetch(`/api/event-types/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
 
       if (data.error) {

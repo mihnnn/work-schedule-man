@@ -1,10 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAuthContext } from "../../context/AuthContext";
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
-  const { setAuthUser } = useAuthContext();
 
   const signup = async ({
     email,
@@ -26,7 +24,7 @@ const useSignup = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch("/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -43,15 +41,12 @@ const useSignup = () => {
       if (data.error) {
         throw new Error(data.error);
       }
+      console.log(data);
 
-      //localstorage: save to localstoreage to know if logged in or not
-      localStorage.setItem("wsm-user", JSON.stringify(data));
-
-      //context
-      setAuthUser(data);
+      toast.success("Signup in successfully");
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred");
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

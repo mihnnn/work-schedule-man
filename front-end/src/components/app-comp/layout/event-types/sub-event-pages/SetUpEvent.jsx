@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useAuthContext } from '../../../../../context/AuthContext'
+// import { useAuthContext } from '../../../../../context/AuthContext'
+import { useSelector } from 'react-redux'
 
 function SetUpEvent({ title, setTitle, description, setDescription, suffix, setSuffix, duration, setDuration }) {
-  const { authUser: {username} } = useAuthContext();
+  // const { authUser: {username} } = useAuthContext();
+  const { currentUser: {username} } = useSelector((state) => state.user);
 
   return (
     <div className='ml-5 flex flex-col max-w-full w-full text-emphasis animate-grow'>

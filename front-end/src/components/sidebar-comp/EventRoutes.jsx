@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import WsmItem from './WsmItem.jsx';
 import { FaLink, FaRegCalendar, FaRegClock } from "react-icons/fa6";
+import { MdDashboard } from "react-icons/md";
 
 function EventRoutes() {
   const location = useLocation();
@@ -9,11 +10,11 @@ function EventRoutes() {
 
   return (
     <div className='py-2 flex flex-col text-lg h-10'>
-      <WsmItem
-        route=""
+      <WsmItem  
+        route="/app/dashboard"
         routeName="Dashboard"
-        icon={FaLink}
-        isActive=""
+        icon={MdDashboard}
+        isActive={currentPath.startsWith("/app/dashboard")}
       />
       <WsmItem
         route="/app/event-types"

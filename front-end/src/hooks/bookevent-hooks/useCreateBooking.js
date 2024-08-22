@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 function useCreateBooking() {
   const [loading, setLoading] = useState(false);
-  const [bookingId, setBookingId] = useState(null); //booking id returned from the server
+  const [bookingId, setBookingId] = useState(null);
   const createBooking = async ({
     event,
     host,
@@ -33,8 +33,11 @@ function useCreateBooking() {
       }
 
       const data = await res.json();
+      console.log("Booking created:", data);
       if (data) {
         setBookingId(data._id);
+        console.log("Booking ID set:", data._id);
+        console.log("bookingId:", bookingId);
         toast.success(`Booking created successfully`, {
           style: {
             borderRadius: "10px",

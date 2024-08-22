@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { useAuthContext } from '../../../../context/AuthContext';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useCreateBooking from '../../../../hooks/bookevent-hooks/useCreateBooking';
 import useGetEventInfoBySuffix from '../../../../hooks/event-hooks/useGetEventInfoBySuffix';
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
+
 dayjs.extend(utc);
 
 function BookEventConfirm({ username, suffix }) {
-
-  const { authUser } = useAuthContext();
-
+  const { currentUser } = useSelector(state => state.user);
   const { loading: loadBooking, createBooking, bookingId } = useCreateBooking();
   const { loading: loadPubEvent, getEventInfo, eventInfo } = useGetEventInfoBySuffix();
 
-  const [eventDuration, setEventDuration] = useState(''); //event duration [minutes]
-  const [displayName, setDisplayName] = useState(''); //host name
-  const [email, setEmail] = useState(''); //host email
+  const [eventDuration, setEventDuration] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState('');
-  const [guests, setGuests] = useState([]); //guests = [{ email: ''}
-  const [startTime, setStartTime] = useState(null); //selected date and time [YYYY-MM-DDTHH:mm:ss.SSSZ]
+  const [guests, setGuests] = useState([]);
+  const [startTime, setStartTime] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,20 +32,40 @@ function BookEventConfirm({ username, suffix }) {
   }, [username, suffix]);
 
   useEffect(() => {
-    if (authUser) {
-      setDisplayName(authUser.displayName || '');
-      setEmail(authUser.email || '');
+    if (currentUser) {
+      setDisplayName(currentUser.displayName || '');
+      setEmail(currentUser.email || '');
     }
-  }, [authUser]);
+  }, [currentUser]);
 
   useEffect(() => {
     parseQueryParams();
   }, [location.search]);
 
+  // Move navigation logic here
+  useEffect(() => {
+    if (bookingId) {
+      navigate(`/app/booking/${bookingId}`);
+    }
+  }, [bookingId, navigate]);
+
   const handleConfirmBooking = async () => {
-    const event = await eventInfo.id;
-    const duration = await eventInfo.duration;
+    const event = eventInfo.id;
+    const duration = eventInfo.duration;
     const endTime = dayjs.utc(startTime).add(duration, 'minute').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    console.log("Creating booking with data:", {
+      event,
+      host: {
+        email,
+        name: displayName,
+      },
+      participants: guests,
+      startTime,
+      endTime,
+      additionalNotes
+    });
+
     await createBooking({
       event,
       host: {
@@ -57,27 +76,24 @@ function BookEventConfirm({ username, suffix }) {
       startTime,
       endTime,
       additionalNotes
-    })
-    //navigate to a confirmation page
-    navigate(`/app/booking/${bookingId}`);
-  }
-  
+    });
+
+    console.log('Booking created with id:', bookingId);
+  };
+
   const addGuests = () => {
     setGuests([...guests, { email: '' }])
-  }
-  
+  };
+
   const handleGuestsChange = (index, field, value) => {
     const newGuests = [...guests];
     newGuests[index][field] = value;
     setGuests(newGuests);
-  }
-  
+  };
+
   const handleBackButton = () => {
-    //date object without miliseconds
-    // new Date().toISOString() = dayjs(new Date().toISOString()).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-    //post to db with this format
-    // navigate(-1);
-  }
+    navigate(-1);
+  };
 
   const parseQueryParams = () => {
     const searchParams = new URLSearchParams(location.search);
@@ -86,14 +102,12 @@ function BookEventConfirm({ username, suffix }) {
 
     if (selectedDate && selectedTimeSlot) {
       const timeSlot = dayjs(selectedTimeSlot).format('HH:mm:ss');
-      console.log('timeSlot:', timeSlot);
-      const dateTime = dayjs(`${selectedDate}T${timeSlot}`).format( 'YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-      console.log('dateTime:', dateTime);
+      const dateTime = dayjs(`${selectedDate}T${timeSlot}`).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
       setStartTime(dateTime);
     } else {
       setStartTime(null);
     }
-  }
+  };
 
   return (
     <div className='min-w-[450px]'>
@@ -145,11 +159,11 @@ function BookEventConfirm({ username, suffix }) {
             </div>
           </div>
 
-          {/* add guest: */}
+          {/* Add guest */}
           {guests.length > 0 && (
             <div className='mb-4'>
               {guests.map((guest, index) => (
-                <div key={index} className=''>
+                <div key={index}>
                   <div className='flex flex-col mb-3'>
                     <label className=' text-emphasis mb-1 block text-sm font-medium leading-none '> Guest {index + 1}</label>
                     <input
@@ -175,9 +189,7 @@ function BookEventConfirm({ username, suffix }) {
         </div>
 
         <div className='flex justify-end mt-4 gap-2'>
-          <button className='btn btn-ghost'
-            onClick={handleBackButton}
-          >
+          <button className='btn btn-ghost' onClick={handleBackButton}>
             Back
           </button>
           <button
@@ -185,7 +197,6 @@ function BookEventConfirm({ username, suffix }) {
             onClick={handleConfirmBooking}
           >
             Confirm
-
           </button>
         </div>
       </div>

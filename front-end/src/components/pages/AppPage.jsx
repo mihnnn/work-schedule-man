@@ -1,13 +1,15 @@
 import React from 'react';
 import SideBar from '../common/SideBar.jsx';
 import AppContent from '../app-comp/AppContent.jsx';
-import { useAuthContext } from '../../context/AuthContext';
+// import { useAuthContext } from '../../context/AuthContext';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 function AppPage() {
-  const { authUser } = useAuthContext();
+  // const { authUser } = useAuthContext();
+  const { currentUser } = useSelector((state) => state.user);
 
-  if (!authUser) {
+  if (!currentUser) {
     return <Navigate to="/" />;
   }
 

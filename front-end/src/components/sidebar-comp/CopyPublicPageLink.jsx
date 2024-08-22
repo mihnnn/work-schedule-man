@@ -1,10 +1,12 @@
 import React from 'react'
 import { IoCopyOutline } from "react-icons/io5";
-import { useAuthContext } from '../../context/AuthContext';
+// import { useAuthContext } from '../../context/AuthContext';
+import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
 function CopyPublicPageLink() {
-  const { authUser : {username} } = useAuthContext();
+  // const { authUser : {username} } = useAuthContext();
+  const { currentUser: { username }} = useSelector(state => state.user);
   const handleCopy = () => {
     navigator.clipboard.writeText(`http://localhost:3001/${username}`);
     toast.success('Link copied to clipboard', {

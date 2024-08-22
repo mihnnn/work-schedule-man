@@ -1,5 +1,4 @@
 import React from 'react';
-import { useAuthContext } from '../../../../../context/AuthContext';
 import SetUpEvent from './SetUpEvent';
 import SetUpAvailability from './SetUpAvailability';
 import { useLocation } from 'react-router-dom';

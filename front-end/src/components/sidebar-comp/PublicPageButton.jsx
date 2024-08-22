@@ -1,8 +1,10 @@
 import { LuExternalLink } from "react-icons/lu";
-import { useAuthContext } from "../../context/AuthContext";
+// import { useAuthContext } from "../../context/AuthContext";
+import { useSelector } from "react-redux";
 
 function PublicPageButton() {
-  const { authUser: {username} } = useAuthContext();
+  // const { authUser: {username} } = useAuthContext();
+  const { currentUser: { username } } = useSelector((state) => state.user);
   return (
     //stays at the bottom of the sidebar
     <button

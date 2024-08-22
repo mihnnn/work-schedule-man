@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import avatar from "../../assets/images/avatar.png";
-import { useAuthContext } from "../../context/AuthContext";
+// import { useAuthContext } from "../../context/AuthContext";
+import { useSelector } from 'react-redux';
 import { FaChevronDown } from "react-icons/fa";
 
 function ProfileDropdown() {
     const [dropdown, setDropdown] = useState(false);
 
-    const { authUser: { displayName } } = useAuthContext();
+    // const { authUser: { displayName } } = useAuthContext();
+    const { currentUser: { displayName, role } } = useSelector(state => state.user);
 
     const onDropdownChange = () => setDropdown(!dropdown);
     const onDropdownBlur = () => setTimeout(() => setDropdown(false), 200);
@@ -22,7 +24,10 @@ function ProfileDropdown() {
                             <img alt="Kita Avatar" src={avatar} />
                         </div>
                     </div>
-                    <span className=" pr-3 ml-3 text-lg font-bold flex justify-start items-center h-10">{`${displayName}`}</span>
+                    <div className='pr-3 ml-3 text-lg font-bold flex justify-start items-center select-none flex-col'>
+                        <span className="ml-3 select-none">{`${displayName}`}</span>
+                        <span id='role' className='text-sm justify-start text-gray-300 bg-gray-600 rounded-xl p-1 px-2'>{role}</span>
+                    </div>
                     <FaChevronDown className="ml-auto" />
                 </div>
                 {dropdown && (
@@ -34,7 +39,6 @@ function ProfileDropdown() {
                             <a>Profile</a>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
                     </ul>
                 )}
                 {/* <span className="ml-2 text-lg font-bold">Kita</span> */}

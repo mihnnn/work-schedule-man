@@ -1,11 +1,11 @@
 import { Availability } from '../db/schemas/availability.js'
-import { User } from '../db/schemas/user.js';
+import User from '../db/schemas/user.js';
 
 export const getAvailability = async (req, res) => {
     console.log("getAvailability called");
 
     try { 
-        const userId = req.user._id;
+        const userId = req.user.id;
         const availability = await Availability.find({ user: userId });
         res.status(200).json({ avails: availability });
     } catch (error) {
@@ -45,7 +45,7 @@ export const createAvailability = async (req, res) => {
 
         const newAvailability = new Availability({
             title,
-            user: req.user._id,
+            user: req.user.id,
             days: defaultDays,
             timezone: 'Asia/Ho_Chi_Minh',
         });

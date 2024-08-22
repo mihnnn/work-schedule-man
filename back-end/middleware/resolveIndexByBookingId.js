@@ -2,10 +2,16 @@ import { Booking } from "../db/schemas/bookings.js";
 
 export const resolveIndexByBookingId = async (req, res, next) => {
     try {
+        console.log("req.params:", req.params); // Log the entire req.params object
+
         const {
             params: { id },
-        } = req;
+        } = req; // Use 'id' instead of '_id'
         console.log("booking id:", id);
+
+        if (!id || id === 'null') {
+            return res.status(400).send("Invalid booking ID");
+        }
 
         const findBooking = await Booking.findById(id).exec();
 
