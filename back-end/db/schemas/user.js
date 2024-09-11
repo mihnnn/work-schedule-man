@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
 
-const { Schema } = mongoose;
-
-//SCHEMA
-const userSchema = new Schema(
+// SCHEMA
+const userSchema = new mongoose.Schema(
   {
     displayName: {
       type: String,
     },
     username: {
       type: String,
-      lowercase: true, //converts to lowercase
+      lowercase: true,
       unique: true,
       require: [true, "Username is required"],
       match: [/^[a-zA-Z0-9_]+$/, "is invalid"],
@@ -33,7 +31,7 @@ const userSchema = new Schema(
       default: "",
     },
 
-    //google
+    // google
     googleId: {
       type: String,
       unique: true,
@@ -44,10 +42,25 @@ const userSchema = new Schema(
       enum: ["Manager", "Employee", "User"],
       default: "User",
     },
+    teamMemberships: [
+      {
+        team: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Team",
+        },
+        role: {
+          type: mongoose.Schema.Types.ObjectId,
+          refPath: 'team.roles',
+        },
+      },
+    ],
+    hasCompletedBoarding: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
-
 
 const User = mongoose.model("User", userSchema);
 export default User;

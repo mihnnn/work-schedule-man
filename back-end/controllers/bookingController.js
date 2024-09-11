@@ -5,15 +5,15 @@ import { Event } from '../db/schemas/events.js';
 
 export const getBookings = async (req, res) => {
     try {
-        const { state } = req.query; // Get the state from query parameters
-        const userEmail = req.user.email; // Get the email of the authenticated user
+        const { state } = req.query; // get sate of query
+        const userEmail = req.user.email; // get email of currentUser
 
         let query = {};
         if (state) {
-            query.state = state; // Add state to the query if it exists
+            query.state = state;
         }
 
-        // Find bookings where the authenticated user is either the host or a participant
+        // find bookings where the currentUser is host/participant
         const bookings = await Booking.find({
             ...query,
             $or: [
@@ -48,19 +48,16 @@ export const createBookings = async (req, res) => {
     try {
         const { event, host, participants, startTime, endTime, additionalNotes } = req.body;
 
-        // Fetch the event to check if it exists
         const eventDetails = await Event.findById(event);
         if (!eventDetails) {
             return res.status(404).json({ message: 'Event not found' });
         }
 
-        // Get host details
         const hostDetails = {
             email: host.email,
             name: host.name,
         };
 
-        // Initialize an empty array for formatted participants
         const formattedParticipants = [];
 
         for (const participant of participants) {

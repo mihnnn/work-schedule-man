@@ -1,5 +1,6 @@
 import React from 'react';
 import DashBoardContent from './DashBoardContent';
+import DashBoardNav from './DashBoardNav';
 
 function DashBoard() {
   return (
@@ -18,6 +19,7 @@ function DashBoard() {
       </div>
 
       <div className="calendar-section">
+        <DashBoardNav />
         <DashBoardContent />
       </div>
     </div>

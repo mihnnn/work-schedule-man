@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// Define a sub-schema for participants
+// sub-schema for participants
 const participantSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -11,7 +11,7 @@ const participantSchema = new mongoose.Schema({
     },
 }, { _id: false });
 
-// Define the main booking schema
+// booking schema
 const bookingSchema = new mongoose.Schema({
     event: {
         type: mongoose.Schema.Types.ObjectId,

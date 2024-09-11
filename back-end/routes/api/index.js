@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import usersRoutes from "./users.js";
+import teamRoutes from "./team.js";
 import eventsRoutes from "./event.js";
 import bookingsRoutes from "./booking.js";
 import availabilityRoutes from "./availability.js";
@@ -20,6 +21,7 @@ const router = Router();
 updateBookingState();
 
 router.use("/users", usersRoutes);
+router.use("/teams", teamRoutes);
 router.use("/event-types", eventsRoutes);
 router.use("/bookings", bookingsRoutes);
 router.use("/availability", availabilityRoutes);

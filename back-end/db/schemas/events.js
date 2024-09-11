@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-// Enum for location types
+// types of locations
 const locationTypes = {
     CONFERENCE: 'conference',
     ORGANIZER_ADDRESS: 'organizer_address',
     ATTENDEE_ADDRESS: 'attendee_address'
 };
 
-// Define the schema for location
+// Location schema
 const locationSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -15,7 +15,7 @@ const locationSchema = new mongoose.Schema({
         required: true,
     },
     details: {
-        type: String, // This can be a URL for conference or an address for in-person
+        type: String, 
         required: true,
     }
 });

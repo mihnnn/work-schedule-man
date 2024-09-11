@@ -8,6 +8,15 @@ function Navbar() {
   const [button, setButton] = useState(true);
 
   const {currentUser} = useSelector((state) => state.user);
+
+  let getStartedLink;
+  if (!currentUser) {
+    getStartedLink = "/login";
+  } else if (currentUser && !currentUser.hasCompletedBoarding) {
+    getStartedLink = "/onboarding";
+  } else {
+    getStartedLink = "/app/dashboard";
+  }
   
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -66,7 +75,7 @@ function Navbar() {
 
             <li className="nav-item">
               <Link
-                to={currentUser ? '/app/event-types' : '/signup'}
+                to={currentUser ? getStartedLink : '/signup'}
                 className="nav-links-mobile"
                 onClick={closeMobileMenu}
               >
@@ -76,7 +85,7 @@ function Navbar() {
           </ul>
           {button && (
             <Link
-              to={currentUser ? '/app/event-types' : '/signup'}
+              to={currentUser ? getStartedLink : '/signup'}
               className="btn btn-outline"
               onClick={closeMobileMenu}
             >

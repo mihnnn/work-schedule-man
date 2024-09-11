@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useAuthContext } from "../../../../context/AuthContext";
 import { useSelector } from 'react-redux';
 import useGetEvent from '../../../../hooks/event-hooks/useGetEvent';
 import useDeleteEvent from '../../../../hooks/event-hooks/useDeleteEvent';

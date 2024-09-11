@@ -17,6 +17,7 @@ import PageNotFound from './components/pages/PageNotFound';
 import BookEvent from './components/app-comp/layout/book-event/BookEvent';
 import BookingConfirmation from './components/app-comp/layout/bookings/booking-routes/BookingConfirmation';
 import PrivateRoute from './components/app-comp/PrivateRoute';
+import OnboardingPage from './components/app-comp/layout/broading-page/OnboardingPage';
 // import GoogleAuthCallback from './components/pages/GoogleAuthCallback';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Home />} />
         {/* <Route path="/auth/google/callback" element={<GoogleAuthCallback />} /> */}
         <Route element={<PrivateRoute />}>
+          <Route path='/onboarding' element={<OnboardingPage />} />
           <Route path="/app/*" element={<AppPage />} />
         </Route>
         <Route path="/signup" element={currentUser ? <Navigate to="/" /> : <SignUp />} />
