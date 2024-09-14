@@ -82,6 +82,7 @@ function EditAvail() {
 
   return (
     <div className="max-w-full px-2 py-4 lg:px-6">
+      {/* header */}
       <header className="flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-6">
         <div className="flex items-center mr-4 w-full">
           <FaArrowLeft
@@ -119,6 +120,8 @@ function EditAvail() {
           </button>
         </div>
       </header>
+
+      {/* edit availability */}
 
       <div className="mt-4 w-full md:mt-0">
         <form className="flex flex-col sm:mx-0 xl:flex-row xl:space-x-6 ">

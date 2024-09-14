@@ -14,22 +14,10 @@ const availabilitySchema = new mongoose.Schema({
     days: {
         type: Map,
         of: {
-            startTime: {
-                type: String,
-                default: '9:00am'
-            },
-            endTime: {
-                type: String,
-                default: '5:00pm'
-            }
+            startTime: String,
+            endTime: String,
         },
-        default: {
-            0: { startTime: '9:00am', endTime: '5:00pm' },
-            1: { startTime: '9:00am', endTime: '5:00pm' },
-            2: { startTime: '9:00am', endTime: '5:00pm' },
-            3: { startTime: '9:00am', endTime: '5:00pm' },
-            4: { startTime: '9:00am', endTime: '5:00pm' }
-        }
+        default: {}
     },
     timezone: {
         type: String,

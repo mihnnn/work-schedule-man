@@ -29,7 +29,7 @@ export const createAvailability = async (req, res) => {
     console.log("createAvailability called");
 
     try {
-        const { title } = req.body; 
+        const { title, timezone, user } = req.body; 
         if (!title) {
             return res.status(400).json({ error: "Title is required" });
         }

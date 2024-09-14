@@ -51,6 +51,7 @@ function SignUp() {
       }
       console.log(data);
       navigate('/login');
+      toast.success('Account created successfully. Please login to continue');
       
 
     } catch (error) {

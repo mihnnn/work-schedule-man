@@ -19,30 +19,37 @@ const TimeDropdown = ({ defaultTime }) => {
   const [inputValue, setInputValue] = useState('');
   const [filteredTimes, setFilteredTimes] = useState(times);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(defaultTime); // Track selected time
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (defaultTime) {
       setInputValue(defaultTime);
+      setSelectedTime(defaultTime); // Set selected time initially
     }
   }, [defaultTime]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
-    setFilteredTimes(times.filter(time => time.toLowerCase().includes(value.toLowerCase())));
+    setFilteredTimes(
+      times.filter((time) => time.toLowerCase().includes(value.toLowerCase()))
+    );
   };
 
   const handleDropdownToggle = () => {
     setIsOpen(!isOpen);
-    if (!isOpen && dropdownRef.current) {
-      const defaultTimeIndex = filteredTimes.indexOf(defaultTime);
-      if (defaultTimeIndex > -1) {
-        const itemHeight = 36;
-        dropdownRef.current.scrollTop = Math.max(0, (defaultTimeIndex - 2) * itemHeight); 
+  };
+
+  useEffect(() => {
+    if (isOpen && dropdownRef.current && selectedTime) {
+      const selectedTimeIndex = times.indexOf(selectedTime);
+      if (selectedTimeIndex > -1) {
+        const itemHeight = 36; // Approximate height of each item
+        dropdownRef.current.scrollTop = selectedTimeIndex * itemHeight;
       }
     }
-  };
+  }, [isOpen, selectedTime]);
 
   const handleDropdownBlur = () => {
     setTimeout(() => {
@@ -52,42 +59,43 @@ const TimeDropdown = ({ defaultTime }) => {
 
   const handleTimeSelect = (time) => {
     setInputValue(time);
+    setSelectedTime(time); // Update selected time
     setIsOpen(false);
   };
 
   return (
-    <div className="block w-[90px] sm:w-[100px]">
+    <div className="relative">
       <input
-        className="focus:ring-0 focus:ring-offset-0 !text-emphasis w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 text-sm"
+        className="input input-bordered w-full text-sm !text-emphasis"
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         onClick={handleDropdownToggle}
         onBlur={handleDropdownBlur}
         aria-expanded={isOpen}
-        style={{zIndex: 1}}
-        role=''
       />
       {isOpen && (
-        <div
+        <ul
           ref={dropdownRef}
-          className="mt-2 w-[100px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 h-[300px] overflow-auto bg-[#222] absolute"
-          style={{ zIndex: 9999 }}
+          className="absolute z-50 mt-1 w-full bg-[#222] border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto"
         >
-          <div className="py-1">
-            {filteredTimes.map((time, index) => (
-              <button
-                key={index}
-                onClick={() => handleTimeSelect(time)}
-                className={`block px-4 py-2 text-sm text-emphasis hover:bg-gray-400 hover:bg-opacity-30 w-full text-left ${
-                  time === defaultTime ? 'bg-gray-400' : ''
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
-        </div>
+          {filteredTimes.length > 0 ? (
+            filteredTimes.map((time, index) => (
+              <li key={index}>
+                <button
+                  onClick={() => handleTimeSelect(time)}
+                  className={`w-full px-4 py-2 text-left text-sm ${
+                    time === selectedTime ? 'bg-gray-500 text-emphasis'  : 'bg-[#222]'
+                  } hover:bg-gray-300 hover:text-gray-700`}
+                >
+                  {time}
+                </button>
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-2 text-sm text-gray-500">No matches</li>
+          )}
+        </ul>
       )}
     </div>
   );
