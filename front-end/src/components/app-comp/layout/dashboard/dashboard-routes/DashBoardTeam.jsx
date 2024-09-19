@@ -1,74 +1,87 @@
 import React from 'react';
 
 function DashBoardTeam() {
+  const managerName = "Manager A";
   const teamMembers = [
     { id: 1, name: 'Alice', role: 'Waiter', status: 'Active' },
     { id: 2, name: 'Bob', role: 'Chef', status: 'Off Duty' },
     { id: 3, name: 'Charlie', role: 'Security', status: 'Active' },
   ];
 
-  const recentActivities = [
-    { id: 1, activity: 'Bob requested time off', date: 'Sep 10, 2024' },
-    { id: 2, activity: 'Charlie swapped shifts with Alice', date: 'Sep 9, 2024' },
-    { id: 3, activity: 'New schedule created', date: 'Sep 8, 2024' },
-  ];
+  const roleBreakdown = {
+    Waiter: 1,
+    Chef: 1,
+    Security: 1,
+    Cleaner: 0,
+  };
 
   return (
     <div className="p-6">
       {/* Team Overview Section */}
       <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Team Overview</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-gray-800 text-white p-4 rounded-lg">
+        <h2 className="text-2xl font-semibold mb-2 text-emphasis">Team Overview</h2>
+        <div className="flex md:grid-cols-4 gap-4">
+          <div className='bg-inherit border border-gray-700 p-4 text-emphasis rounded-lg min-w-56'>
+            <h3 className="text-lg font-semibold">Manager</h3>
+            <p className="text-3xl mt-2">{managerName}</p>
+          </div>
+          <div className="bg-inherit border border-gray-700 text-emphasis p-4 rounded-lg min-w-5">
             <h3 className="text-lg font-semibold">Total Members</h3>
             <p className="text-3xl mt-2">{teamMembers.length}</p>
           </div>
-          <div className="bg-gray-800 text-white p-4 rounded-lg">
-            <h3 className="text-lg font-semibold">Active Members</h3>
+          <div className="bg-inherit border border-gray-700 text-emphasis p-4 rounded-lg min-w-5">
+            <h3 className="text-lg font-semibold">On-shift</h3>
             <p className="text-3xl mt-2">{teamMembers.filter(member => member.status === 'Active').length}</p>
           </div>
-          <div className="bg-gray-800 text-white p-4 rounded-lg">
+          <div className="bg-inherit border border-gray-700 text-emphasis p-4 rounded-lg min-w-5">
             <h3 className="text-lg font-semibold">Upcoming Meetings</h3>
-            <p className="text-3xl mt-2">3</p>
+            <p className="text-3xl mt-2">0</p>
           </div>
-          <div className="bg-gray-800 text-white p-4 rounded-lg">
+          <div className="bg-inherit border border-gray-700 text-emphasis p-4 rounded-lg min-w-5">
             <h3 className="text-lg font-semibold">Pending Requests</h3>
-            <p className="text-3xl mt-2">1</p>
+            <p className="text-3xl mt-2">2</p>
           </div>
         </div>
       </section>
 
-      {/* Active Team Members Section */}
+      {/* Team Role Breakdown Section */}
       <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Active Team Members</h2>
-        <ul className="space-y-3">
-          {teamMembers
-            .filter(member => member.status === 'Active')
-            .map(member => (
-              <li key={member.id} className="flex justify-between items-center bg-gray-700 text-white p-4 rounded-lg">
-                <div>
-                  <h3 className="text-lg font-semibold">{member.name}</h3>
-                  <p>{member.role}</p>
-                </div>
-                <span className="px-2 py-1 bg-green-600 rounded-lg text-sm">Active</span>
-              </li>
-            ))}
-        </ul>
+        <h2 className="text-2xl font-semibold mb-2 text-emphasis">Team Role Breakdown</h2>
+        <div className="flex gap-4">
+          {Object.keys(roleBreakdown).map(role => (
+            <div key={role} className=" text-emphasis p-4 rounded-lg bg-inherit border border-gray-700 min-w-28">
+              <h3 className="text-lg font-semibold">{role}</h3>
+              <p className="text-3xl mt-2">{roleBreakdown[role]}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* Recent Activity Section */}
+      {/* Onshift members */}
       <section>
-        <h2 className="text-2xl font-semibold mb-2">Recent Activity</h2>
-        <ul className="space-y-3">
-          {recentActivities.map(activity => (
-            <li key={activity.id} className="bg-gray-700 text-white p-4 rounded-lg">
-              <div className="flex justify-between">
-                <p>{activity.activity}</p>
-                <span className="text-sm text-gray-400">{activity.date}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <h2 className="text-2xl font-semibold mb-2 text-emphasis">On-shift Team Members</h2>
+        <table className="min-w-full  text-emphasis">
+          <thead>
+            <tr className='border border-gray-500'>
+              <th className="py-2 px-4 bg-gray-700 text-center">#</th>
+              <th className="py-2 px-4 bg-gray-700 text-left">Name</th>
+              <th className="py-2 px-4 bg-gray-700 text-left">Role</th>
+              <th className="py-2 px-4 bg-gray-700 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teamMembers.map((member, index) => (
+              <tr key={member.id} className="border-b border-gray-600">
+                <td className="py-2 px-4 text-center border border-gray-500 rounded-xl">{index + 1}</td>
+                <td className="py-2 px-4 text-left border border-gray-500 rounded-xl">{member.name}</td>
+                <td className="py-2 px-4 text-left border border-gray-500 rounded-xl">{member.role}</td>
+                <td className={`py-2 px-4 text-left border border-gray-500 rounded-xl ${member.status === 'Active' ? 'text-green-500 font-bold' : 'text-red-500 font-bold'}`}>
+                  {member.status}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </div>
   );

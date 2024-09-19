@@ -17,10 +17,15 @@ function DashBoard() {
           </div>
         </header>
       </div>
+      <div className='divider'></div>
 
-      <div className="calendar-section">
+
+      <div className="">
         <DashBoardNav />
-        <DashBoardContent />
+
+        <div className='border border-gray-500 rounded-md w-full animate-grow'>
+          <DashBoardContent />
+        </div>
       </div>
     </div>
   );

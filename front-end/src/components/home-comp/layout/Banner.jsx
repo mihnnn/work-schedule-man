@@ -14,8 +14,10 @@ function Banner() {
     getStartedLink = "/login";
   } else if (currentUser && !currentUser.hasCompletedBoarding) {
     getStartedLink = "/onboarding";
-  } else {
+  } else if (currentUser.role === "Manager") {
     getStartedLink = "/app/dashboard";
+  } else {
+    getStartedLink = "/app/team-overview";
   }
 
   return (

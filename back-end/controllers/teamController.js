@@ -37,6 +37,7 @@ export const createTeam = async (req, res) => {
 
         manager.teamMemberships.push({
             team: newTeam._id,
+            teamCode: newTeam.teamCode,
             role: null,
         });
         await manager.save();
@@ -84,6 +85,13 @@ export const joinTeam = async (req, res) => {
 
             team.members.push({ user: userId, role: null });
             await team.save();
+
+            user.teamMemberships.push({
+                team: team.name,
+                teamCode: team.teamCode,
+                role: null,
+            });
+            await user.save();
 
             return res.status(200).json({
                 message: "User successfully enrolled in the team",

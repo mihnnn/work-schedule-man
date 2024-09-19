@@ -7,6 +7,7 @@ import { RiTeamLine } from "react-icons/ri";
 import { MdDashboard } from "react-icons/md";
 import { BsCalendarCheck } from 'react-icons/bs';
 import { IoIosPaper } from 'react-icons/io';
+import { FaRegBell } from "react-icons/fa";
 
 
 
@@ -14,7 +15,6 @@ function EventRoutes() {
   const location = useLocation();
   const currentPath = location.pathname;
   const currentUserRole = useSelector(state => state.user.currentUser.role);
-
 
   return (
     <div className='py-2 flex flex-col text-lg h-10'>
@@ -67,7 +67,7 @@ function EventRoutes() {
           <WsmItem
             route="/app/requests"
             routeName="Requests"
-            icon={FaRegClock}
+            icon={FaRegBell}
             isActive={currentPath.startsWith("/app/requests")}
           />
         </>
@@ -76,10 +76,10 @@ function EventRoutes() {
       {currentUserRole === "Employee" && (
         <>
           <WsmItem
-            route="/app/dashboard"
-            routeName="Dashboard"
+            route="/app/team-overview"
+            routeName="Team Overview"
             icon={MdDashboard}
-            isActive={currentPath.startsWith("/app/dashboard")}
+            isActive={currentPath.startsWith("/app/team-overview")}
           />
           <WsmItem
             route="/app/schedules"
