@@ -1,24 +1,122 @@
-import React, { useState } from 'react';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa'; // Icons for buttons
+import React, { useState, useRef, useEffect } from 'react';
+import { FaPlus, FaEdit, FaTrash, FaEllipsisV } from 'react-icons/fa';
+import { MdPreview } from 'react-icons/md';
+import ScheduleCreationModal from './ScheduleCreationModal';
+import ScheduleEditModal from './ScheduleEditModal';
 
 function Schedules() {
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  console.log("selectedSchedule: ", selectedSchedule);
+
   const [schedules, setSchedules] = useState([
-    { id: 1, member: 'Alice', date: '2024-09-20', time: '09:00 AM - 05:00 PM', shift: 'Morning' },
-    { id: 2, member: 'Bob', date: '2024-09-20', time: '01:00 PM - 09:00 PM', shift: 'Afternoon' },
-    { id: 3, member: 'Eve', date: '2024-09-21', time: '09:00 AM - 05:00 PM', shift: 'Morning' },
+    {
+      id: 1,
+      title: 'Breakfast Shift',
+      description: 'Prepare and serve breakfast',
+      time: '08:00 - 12:00',
+      assignedDays: {
+        mon: true,
+        tue: true,
+        wed: false,
+        thu: false,
+        fri: false,
+      },
+      assignedEmployees: [
+        { id: 1, name: 'Alice', role: 'Chef' },
+        { id: 2, name: 'Bob', role: 'Waiter' },
+      ],
+    },
+    {
+      id: 2,
+      title: 'Lunch Shift',
+      description: 'Prepare and serve lunch',
+      time: '12:00 - 16:00',
+      assignedDays: {
+        mon: false,
+        tue: false,
+        wed: true,
+        thu: true,
+        fri: true,
+      },
+      assignedEmployees: [
+        { id: 1, name: 'Alice', role: 'Chef' },
+        { id: 3, name: 'Eve', role: 'Cleaner' },
+        { id: 5, name: 'Frank', role: 'Chef' },
+      ],
+    },
+    {
+      id: 3,
+      title: 'Dinner Shift',
+      description: 'Prepare and serve dinner',
+      time: '16:00 - 20:00',
+      assignedDays: {
+        mon: true,
+        tue: true,
+        wed: true,
+        thu: true,
+        fri: true,
+      },
+      assignedEmployees: [],
+    },
   ]);
-  const [newSchedule, setNewSchedule] = useState({ member: '', date: '', time: '', shift: '' });
+
+  const [employees, setEmployees] = useState([
+    { id: 1, name: 'Alice', role: 'Chef' },
+    { id: 2, name: 'Bob', role: 'Waiter' },
+    { id: 3, name: 'Eve', role: 'Cleaner' },
+    { id: 4, name: 'David', role: 'Waiter' },
+    { id: 5, name: 'Frank', role: 'Chef' },
+    { id: 6, name: 'Grace', role: 'Waiter' },
+  ]);
+
+  // const [newSchedule, setNewSchedule] = useState({ member: '', date: '', time: '', title: '', assignedDays: { mon: false, tue: false, wed: false, thu: false, fri: false } });
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const dropdownRef = useRef(null);
 
   const handleAddSchedule = () => {
     const newId = schedules.length + 1;
     setSchedules([...schedules, { id: newId, ...newSchedule }]);
-    setNewSchedule({ member: '', date: '', time: '', shift: '' }); // Reset form
+    setNewSchedule({ member: '', date: '', time: '', title: '', assignedDays: { mon: false, tue: false, wed: false, thu: false, fri: false } });
+  };
+
+  useEffect(() => {
+    if (selectedSchedule) {
+      const modal = document.getElementById('edit_modal');
+      if (modal) {
+        modal.showModal();
+      }
+    }
+  }, [selectedSchedule]);
+
+  const handleModalClose = () => {
+    setSelectedSchedule(null);
+  };
+
+  const handleModalOpen = (schedule) => {
+    setSelectedSchedule(schedule);
   };
 
   const handleDeleteSchedule = (id) => {
     const updatedSchedules = schedules.filter(schedule => schedule.id !== id);
     setSchedules(updatedSchedules);
   };
+
+  const handleDropdownToggle = (scheduleId) => {
+    setOpenDropdown(openDropdown === scheduleId ? null : scheduleId);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenDropdown(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="max-w-full px-2 py-4 lg:px-6">
@@ -34,123 +132,111 @@ function Schedules() {
             </p>
           </div>
         </div>
+
+        <div className="fixed bottom-20 z-40 ltr:right-4 rtl:left-4 md:z-auto md:ltr:right-0 md:rtl:left-0 flex-shrink-0 [-webkit-app-region:no-drag] md:relative md:bottom-auto md:right-auto">
+          <button
+            className="btn btn-outline bg-white text-black"
+            onClick={() => document.querySelector('#my_modal_3').showModal()}
+          >
+            + New
+          </button>
+          <ScheduleCreationModal />
+        </div>
       </header>
 
       <div className="divider"></div>
 
-      {/* Filter Section */}
-      <section className="mb-6">
-        <h4 className="text-lg font-semibold mb-2 text-emphasis">Filter Schedules</h4>
-        <div className="flex gap-x-4">
-          <input type="date" className="input input-bordered w-40" placeholder="Select date" />
-          <select className="select select-bordered w-40">
-            <option>All Members</option>
-            <option>Alice</option>
-            <option>Bob</option>
-            <option>Eve</option>
-          </select>
-          <select className="select select-bordered w-40">
-            <option>All Shifts</option>
-            <option>Morning</option>
-            <option>Afternoon</option>
-            <option>Night</option>
-          </select>
-          <button className="btn btn-primary">Filter</button>
-        </div>
-      </section>
+      <h4 className="text-lg font-semibold mb-2 text-emphasis">Schedules</h4>
+      {/* Schedules List */}
+      <div className="flex w-full max-w-none items-center justify-between">
+        <div className="flex flex-col border-gray-500 mb-16 rounded-md border w-full animate-grow">
+          <ul className="!static w-full divide-[#888] divide-y">
+            {schedules.map((schedule) => (
+              <li key={schedule.id} className="relative">
+                <div className="flex w-full items-start justify-between transition hover:bg-gray-600 hover:bg-opacity-10 cursor-pointer">
+                  {/* Schedule Info */}
+                  <div className="group flex flex-row w-full max-w-full justify-between px-4 py-4 sm:px-6">
+                    <div className='flex flex-row justify-start w-[500px]'>
+                      <div className="flex-1 text-sm">
+                        <span className="text-emphasis font-semibold text-base">{schedule.title}</span>
+                        <p className="py-1">{schedule.description}</p>
+                        <p className='pb-1'> {schedule.time} </p>
+                      </div>
 
-      {/* Schedules Table */}
-      <section className="mb-6">
-        <h4 className="text-lg font-semibold mb-2 text-emphasis">Schedules</h4>
-        <table className="table-auto w-full border border-gray-500">
-          <thead>
-            <tr className="text-emphasis font-bold">
-              <th className="px-4 py-2 border">#</th>
-              <th className="px-4 py-2 border">Team Member</th>
-              <th className="px-4 py-2 border">Date</th>
-              <th className="px-4 py-2 border">Time</th>
-              <th className="px-4 py-2 border">Shift</th>
-              <th className="px-4 py-2 border">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {schedules.map((schedule, index) => (
-              <tr key={schedule.id}>
-                <td className="px-4 py-2 border">{index + 1}</td>
-                <td className="px-4 py-2 border">{schedule.member}</td>
-                <td className="px-4 py-2 border">{schedule.date}</td>
-                <td className="px-4 py-2 border">{schedule.time}</td>
-                <td className="px-4 py-2 border">{schedule.shift}</td>
-                <td className="px-4 py-2 border">
-                  <button className="btn btn-ghost text-blue-500 mr-2">
-                    <FaEdit />
-                  </button>
-                  <button className="btn btn-ghost text-red-500" onClick={() => handleDeleteSchedule(schedule.id)}>
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
+                      <div className="flex border border-r-0 border-gray-400 mx-4"></div>
+
+                      {/* Assigned Employees */}
+                      <div className="text-sm flex flex-col w-[200px]">
+                        <h5 className="flex flex-col justify-start text-emphasis text-base font-semibold items-center">Assigned Employees</h5>
+                        {schedule.assignedEmployees.length > 0 ? (
+                          schedule.assignedEmployees.map(employee => (
+                            <p key={employee.id}>
+                              <strong>{employee.role}:</strong> {employee.name}
+                            </p>
+                          ))
+                        ) : (
+                          <p>No employees assigned</p>
+                        )}
+                      </div>
+
+
+                      <div className="flex border border-r-0 border-gray-400 mx-4"></div>
+
+                      {/* Assigned Days */}
+                      <div className="text-sm flex flex-col">
+                        <h5 className="flex flex-col justify-start text-emphasis text-base font-semibold items-center">Assigned Days</h5>
+                        {Object.entries(schedule.assignedDays).map(([day, assigned]) => (
+                          assigned ? <p key={day}>{day.charAt(0).toUpperCase() + day.slice(1)}</p> : null
+                        ))}
+                      </div>
+                    </div>
+                    <div className="hidden sm:mt-0 sm:flex items-center">
+                      <button
+                        className="p-2 hover:bg-gray-200 hover:opacity-30 hover:text-gray-700 rounded-full"
+                        onClick={() => handleDropdownToggle(schedule.id)}
+                      >
+                        <FaEllipsisV />
+                      </button>
+
+                      {/* Action Dropdown */}
+                      {openDropdown === schedule.id && (
+                        <div
+                          ref={dropdownRef}
+                          className="absolute right-5 top-16 shadow-2xl mt-2 w-48 bg-gray-900 border border-gray-500 rounded-md z-50"
+                        >
+                          <ul>
+                            <li
+                              className=" flex px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer"
+                              onClick={() => handleModalOpen(schedule)}
+                            >
+                              <MdPreview className="mr-2 my-auto" />
+                              <span>Edit / Assign</span>
+                            </li>
+                            <li
+                              className=" flex px-4 py-2 hover:bg-red-600 hover:bg-opacity-30 text-red-500 cursor-pointer"
+                              onClick={() => handleDeleteSchedule(schedule.id)}
+                            >
+                              <FaTrash className="my-auto inline-block mr-2" /> Delete
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </li>
             ))}
-          </tbody>
-        </table>
-      </section>
-
-      {/* Add New Schedule */}
-      <section className="mb-6">
-        <h4 className="text-lg font-semibold mb-2 text-emphasis">Add New Schedule</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <select
-            className="select select-bordered w-full"
-            value={newSchedule.member}
-            onChange={(e) => setNewSchedule({ ...newSchedule, member: e.target.value })}
-          >
-            <option value="">Select Member</option>
-            <option value="Alice">Alice</option>
-            <option value="Bob">Bob</option>
-            <option value="Eve">Eve</option>
-          </select>
-          <input
-            type="date"
-            className="input input-bordered w-full"
-            value={newSchedule.date}
-            onChange={(e) => setNewSchedule({ ...newSchedule, date: e.target.value })}
-          />
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Time (e.g. 09:00 AM - 05:00 PM)"
-            value={newSchedule.time}
-            onChange={(e) => setNewSchedule({ ...newSchedule, time: e.target.value })}
-          />
-          <select
-            className="select select-bordered w-full"
-            value={newSchedule.shift}
-            onChange={(e) => setNewSchedule({ ...newSchedule, shift: e.target.value })}
-          >
-            <option value="">Select Shift</option>
-            <option value="Morning">Morning</option>
-            <option value="Afternoon">Afternoon</option>
-            <option value="Night">Night</option>
-          </select>
+          </ul>
         </div>
-        <button className="btn btn-primary mt-4" onClick={handleAddSchedule}>
-          <FaPlus className="mr-2" /> Add Schedule
-        </button>
-      </section>
+      </div>
 
-      {/* Upcoming Schedules */}
-      <section>
-        <h4 className="text-lg font-semibold mb-2 text-emphasis">Upcoming Schedules</h4>
-        <div className="space-y-4">
-          {schedules.slice(0, 3).map(schedule => (
-            <div key={schedule.id} className="p-4 bg-gray-800 rounded-lg">
-              <h5 className="text-emphasis font-semibold">{schedule.member}</h5>
-              <p className="text-gray-400">{schedule.date} | {schedule.time}</p>
-              <p className="text-gray-400">Shift: {schedule.shift}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Edit Schedule Modal */}
+      <ScheduleEditModal
+        schedule={selectedSchedule}
+        onModalClose={handleModalClose}
+        onModalOpen={handleModalOpen}
+        employees={employees}
+      />
     </div>
   );
 }
