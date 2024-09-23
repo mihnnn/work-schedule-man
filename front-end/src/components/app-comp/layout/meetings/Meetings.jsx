@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MeetingCreationModal from './MeetingCreationModal';
-import MeetingNav from './MeetingNav';
-import MeetingPage from './MeetingPage';
+import MeetingsNav from './MeetingsNav';
+import MeetingsPage from './MeetingsPage';
 
 function Meetings() {
   // const [selectedMeeting, setSelectedMeeting] = useState(null);
@@ -56,9 +56,9 @@ function Meetings() {
       </div>
       <div className='divider'></div>
 
-      <MeetingNav />
+      <MeetingsNav />
       
-      <MeetingPage />
+      <MeetingsPage />
       
     </div>
   );

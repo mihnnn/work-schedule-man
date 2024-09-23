@@ -23,7 +23,7 @@ function AppContent() {
         <Route path="team-management" element={<TeamManagement />} />
         <Route path="schedules" element={<Schedules />}/>
         <Route path="meetings/*" element={<Meetings />} />
-        <Route path="requests" element={<Requests />} />
+        <Route path="requests/*" element={<Requests />} />
 
     
         {/* Employee UI */}

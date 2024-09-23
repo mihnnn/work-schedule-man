@@ -6,7 +6,7 @@ import CanceledMeetings from './meeting-routes/CanceledMeetings'
 
 
 
-function MeetingPage() {
+function MeetingsPage() {
   return (
     <div>
       <Routes>
@@ -19,4 +19,4 @@ function MeetingPage() {
   )
 }
 
-export default MeetingPage
+export default MeetingsPage

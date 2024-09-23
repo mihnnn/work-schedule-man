@@ -33,7 +33,7 @@ const mockMeetings = [
   },
 ];
 
-function UpcomingBookings() {
+function UpcomingMeetings() {
   return (
     <main className='w-full'>
       <div className='flex w-full flex-col' style={{ position: 'relative' }}>
@@ -90,4 +90,4 @@ function UpcomingBookings() {
   );
 }
 
-export default UpcomingBookings;
+export default UpcomingMeetings;

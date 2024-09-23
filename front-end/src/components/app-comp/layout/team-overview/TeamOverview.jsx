@@ -8,6 +8,8 @@ function TeamOverview() {
 
   return (
     <div className="p-8">
+      {/* Team Overview */}
+
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Team Overview</h1>
       <div className="bg-white shadow-md rounded-lg overflow-x-auto">
         <table className="min-w-full bg-white">
@@ -19,7 +21,7 @@ function TeamOverview() {
             </tr>
           </thead>
           <tbody>
-            {team.length > 0 ? (
+            {team && team.length > 0 ? (
               team.map((member, index) => (
                 <tr key={index} className="hover:bg-gray-100">
                   <td className="py-4 px-6 border-b border-gray-200 text-gray-800">{member.name}</td>

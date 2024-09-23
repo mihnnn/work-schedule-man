@@ -28,7 +28,7 @@ function FinishText({ previousStep, currentUser }) {
                 if (currentUser.role === 'Manager') {
                     navigate('/app/dashboard');  
                 } else if (currentUser.role === 'Employee') {
-                    navigate('/app/dashboard');  
+                    navigate('/app/team-overview');  
                 }
                 toast.success("Onboarding completed successfully");
             }
