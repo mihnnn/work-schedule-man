@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import TimeDropdown from '../availability/sub-avail-pages/TimeDropdown';
+import { useSelector } from 'react-redux';
+import useOnboardAvail from '../../../../hooks/availability-hooks/useOnboardAvail';
 
 const SetAvailability = ({ nextStep, previousStep }) => {
-  const defaultStartTime = '9:00am';
-  const defaultEndTime = '5:00pm';
+  // get current user
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const { createAvail, loading } = useOnboardAvail();
+
+  const defaultStartTime = '09:00';
+  const defaultEndTime = '17:00';
 
   const [availability, setAvailability] = useState({
     monday: { allDay: false, startTime: defaultStartTime, endTime: defaultEndTime, available: true },
@@ -15,7 +21,7 @@ const SetAvailability = ({ nextStep, previousStep }) => {
     sunday: { allDay: false, startTime: '', endTime: '', available: false },
   });
 
-  const [timezone, setTimezone] = useState('Asia/Ho_Chi_Minh'); 
+  const [timezone, setTimezone] = useState('Asia/Ho_Chi_Minh');
 
   const timezones = [
     'UTC',
@@ -29,7 +35,6 @@ const SetAvailability = ({ nextStep, previousStep }) => {
 
   const handleDayChange = (day) => {
     setAvailability((prev) => (
-      console.log("prev in handleDayChange:", prev),
       {
         ...prev,
         [day]: {
@@ -60,10 +65,19 @@ const SetAvailability = ({ nextStep, previousStep }) => {
     setTimezone(e.target.value);
   };
 
-  const handleSubmit = () => {
-    console.log('User Availability:', availability);
-    console.log('User Timezone:', timezone);
+  const handleSkip = () => {
     nextStep();
+  }
+  const handleSubmit = async () => {
+    const title = "Working hours";
+
+    try {
+      const userId = currentUser._id;
+      await createAvail({ title, userId, days: availability, timezone })
+      nextStep();
+    } catch (error) {
+      console.error('Failed to create availability: ', error);
+    }
   };
 
   return (
@@ -141,9 +155,14 @@ const SetAvailability = ({ nextStep, previousStep }) => {
           <button type="button" className="btn" onClick={previousStep}>
             Back
           </button>
-          <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-            Submit
-          </button>
+          <div>
+            <button type="button" className="btn bg-gray-200 text-black hover:opacity-70 hover:bg-gray-200" onClick={handleSkip}>
+              Skip
+            </button>
+            <button type="button" className="btn bg-gray-200 text-black hover:opacity-70 hover:bg-gray-200" onClick={handleSubmit}>
+              Submit
+            </button>
+          </div>
         </div>
       </form>
     </div>

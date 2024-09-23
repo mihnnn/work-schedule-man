@@ -10,7 +10,7 @@ function Availability() {
   const [dropdowns, setDropdowns] = useState({});
   const [newAvailId, setNewAvailId] = useState(null);
   const [shrinkIds, setShrinkIds] = useState([]);
-  const [localAvails, setLocalAvails] = useState([]); //store the avails fetch from backend
+  const [localAvails, setLocalAvails] = useState([]);
 
   const { loading: loadingGet, avails } = useGetAvail();
   const { deleteAvail } = useDeleteAvail();
@@ -94,7 +94,7 @@ function Availability() {
             { loadingGet ? (
               <li className='p-5'> Loading ......</li>
             ) : localAvails.length === 0 ? (
-              <li className='text-white text-xl'> 
+              <li className='text-white text-xl p-5'> 
                 <h1 className='text-5xl'> No Availability set up yet!</h1>
                 <p>Click "+NEW" button to create your schedules</p>
               </li>

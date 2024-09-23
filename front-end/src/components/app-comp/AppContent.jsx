@@ -22,7 +22,7 @@ function AppContent() {
         <Route path="dashboard/*" element={<DashBoard />} />
         <Route path="team-management" element={<TeamManagement />} />
         <Route path="schedules" element={<Schedules />}/>
-        <Route path="meetings" element={<Meetings />} />
+        <Route path="meetings/*" element={<Meetings />} />
         <Route path="requests" element={<Requests />} />
 
     

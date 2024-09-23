@@ -29,35 +29,66 @@ export const createAvailability = async (req, res) => {
     console.log("createAvailability called");
 
     try {
-        const { title, timezone, user } = req.body; 
+        const { title, timezone, user } = req.body;
+
         if (!title) {
             return res.status(400).json({ error: "Title is required" });
         }
-         
 
         const defaultDays = {
-            1: {startTime: '9:00am', endTime: '5:00pm'}, // Monday
-            2: {startTime: '9:00am', endTime: '5:00pm'}, // Tuesday
-            3: {startTime: '9:00am', endTime: '5:00pm'}, // Wednesday
-            4: {startTime: '9:00am', endTime: '5:00pm'}, // Thursday
-            5: {startTime: '9:00am', endTime: '5:00pm'}, // Friday
+            monday: { allDay: false, startTime: '09:00', endTime: '17:00', available: true },
+            tuesday: { allDay: false, startTime: '09:00', endTime: '17:00', available: true },
+            wednesday: { allDay: false, startTime: '09:00', endTime: '17:00', available: true },
+            thursday: { allDay: false, startTime: '09:00', endTime: '17:00', available: true },
+            friday: { allDay: false, startTime: '09:00', endTime: '17:00', available: true },
+            saturday: { allDay: false, startTime: '', endTime: '', available: false }, 
+            sunday: { allDay: false, startTime: '', endTime: '', available: false },
         };
-
         const newAvailability = new Availability({
             title,
             user: req.user.id,
             days: defaultDays,
-            timezone: 'Asia/Ho_Chi_Minh',
+            timezone: timezone || 'Asia/Ho_Chi_Minh' 
         });
-        
+
         const savedAvailability = await newAvailability.save();
         res.status(201).json({ availability: savedAvailability });
     } catch (err) {
         console.error("Error in createAvailability:", err);
         res.status(500).send("Internal server error");
-        
     }
-}
+};
+
+export const onboardAvailability = async (req, res) => {
+    console.log("onboardAvailability called");
+
+    try {
+        const { title, userId, days, timezone } = req.body;
+        console.log("title:", title);
+        console.log("userId:", userId);
+        console.log("days:", days);
+        console.log("timezone:", timezone);
+
+        const newAvailability = new Availability({
+            title,
+            user: userId,
+            days,
+            timezone
+        });
+
+        console.log("newAvailability:", newAvailability);
+
+        const savedAvailability = await newAvailability.save();
+
+        res.status(201).json({
+            message: "Availability created successfully",
+            availability: savedAvailability,
+        });
+    } catch (error) {
+        console.error("Error in onboardAvailability:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
 
 export const updateAvailability = async (req, res) => {
     console.log("updateAvailability called");

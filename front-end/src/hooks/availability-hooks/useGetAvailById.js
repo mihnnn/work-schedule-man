@@ -11,6 +11,7 @@ function useGetAvailById() {
         try {
             const res = await(fetch(`/api/availability/${availId}`));
             const data = await res.json();
+            console.log(data)
             if (data.error) {
                 toast.error(data.error);
                 throw new Error(data.error);
@@ -22,7 +23,6 @@ function useGetAvailById() {
             toast.error("An error occurred: " + error.message);
         } finally {
             setLoading(false);
-
         }
     }
     return {loading, availData, getAvailById};

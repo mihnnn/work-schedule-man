@@ -70,7 +70,7 @@ function ScheduleCreationModal() {
 
         <div className="flex flex-col mt-4 gap-2">
           <div>
-            <label className="block text-sm">Title</label>
+            <label className="  block text-sm">Title</label>
             <input
               type="text"
               className="input input-bordered w-full mt-2"

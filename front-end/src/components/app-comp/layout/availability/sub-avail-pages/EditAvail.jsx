@@ -6,13 +6,13 @@ import TimeZoneDropdown from './TimeZoneDropdown';
 import TimeDropdown from './TimeDropdown';
 
 const dayMapping = {
-  0: 'Sunday',
-  1: 'Monday',
-  2: 'Tuesday',
-  3: 'Wednesday',
-  4: 'Thursday',
-  5: 'Friday',
-  6: 'Saturday'
+  sunday: 'Sunday',
+  monday: 'Monday',
+  tuesday: 'Tuesday',
+  wednesday: 'Wednesday',
+  thursday: 'Thursday',
+  friday: 'Friday',
+  saturday: 'Saturday'
 };
 
 function EditAvail() {
@@ -35,23 +35,31 @@ function EditAvail() {
   const [days, setDays] = useState({});
   const [timezone, setTimezone] = useState('');
 
-
   useEffect(() => {
     if (availData) {
-      console.log(availData.availability)
+      console.log(availData.availability);
       setTitle(availData.availability.title);
       setDays(availData.availability.days);
       setTimezone(availData.availability.timezone);
+  
       const updatedToggledDays = { ...toggledDays };
+  
       for (const dayKey in availData.availability.days) {
+        const dayData = availData.availability.days[dayKey];
         const dayName = dayMapping[dayKey];
-        if (dayName) {
+  
+        if (dayName && dayData.available) {
+          // If the day is marked as available, toggle it on
           updatedToggledDays[dayName] = true;
+        } else {
+          updatedToggledDays[dayName] = false;
         }
       }
+  
       setToggledDays(updatedToggledDays);
     }
   }, [availData]);
+  
 
   useEffect(() => {
     if (availId) {
@@ -78,7 +86,6 @@ function EditAvail() {
   const handleTimezoneChange = (newTimezone) => {
     setTimezone(newTimezone);
   };
-  console.log(timezone)
 
   return (
     <div className="max-w-full px-2 py-4 lg:px-6">
@@ -95,22 +102,6 @@ function EditAvail() {
           </h3>
         </div>
         <div className="flex justify-end items-center">
-          <div className="lg:flex flex-col items-center">
-            <input type="checkbox" id="toggleAll" className="toggle toggle-sm" />
-          </div>
-          <svg className="mx-3 hidden lg:block" width="2" height="16" viewBox="0 0 2 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="2" height="16" fill="currentColor" />
-          </svg>
-          <div className="rounded-lg flex">
-            <button className="rounded-md items-center transition flex justify-center border border-gray-400 h-9 px-4 py-2.5 min-h-[36px] min-w-[36px] !p-2 hover"
-              aria-label="Delete"
-            >
-              <FaRegTrashCan className="w-5 h-5" />
-            </button>
-          </div>
-          <svg className="mx-3 hidden lg:block" width="2" height="16" viewBox="0 0 2 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="2" height="16" fill="currentColor" />
-          </svg>
           <button
             className="overflow-hidden text-sm font-semibold border border-gray-400 py-1.5 px-3 rounded-md btn-outline bg-gray-50 text-gray-800 hover:bg-opacity-95"
             onClick={handleSave}
@@ -128,36 +119,33 @@ function EditAvail() {
           <div className="flex-1 xl:mr-0">
             <div className="border-subtle mb-6 rounded-md border">
               <div className="p-2 sm:p-4">
-                {Object.keys(dayMapping).map(key => {
-                  const day = dayMapping[key];
-                  return (
-                    <div key={key} className="flex gap-4 mb-4">
-                      <div className='flex min-h-[38px] items-center justify-between'>
-                        <div>
-                          <label className='flex flex-row items-center space-x-2'>
-                            <input
-                              type="checkbox"
-                              id={day}
-                              className="toggle toggle-sm"
-                              onChange={() => handleToggleChange(day)}
-                              checked={toggledDays[day]}
-                            />
-                            <span className="inline-block min-w-[88px] text-sm capitalize text-emphasis">{day}</span>
-                          </label>
+                {Object.entries(dayMapping).map(([key, day]) => (
+                  <div key={key} className="flex gap-4 mb-4">
+                    <div className='flex min-h-[38px] items-center justify-between'>
+                      <div>
+                        <label className='flex flex-row items-center space-x-2'>
+                          <input
+                            type="checkbox"
+                            id={day}
+                            className="toggle toggle-sm"
+                            onChange={() => handleToggleChange(day)}
+                            checked={toggledDays[day]}
+                          />
+                          <span className="inline-block min-w-[88px] text-sm capitalize text-emphasis">{day}</span>
+                        </label>
+                      </div>
+                    </div>
+                    {toggledDays[day] && days[key] && (
+                      <div className='flex sm:gap-2'>
+                        <div className='flex flex-row gap-2 scrollbar-thin scrollbar-track-transparent'>
+                          <TimeDropdown defaultTime={days[key].startTime} />
+                          <span className="w-2 self-center"> - </span>
+                          <TimeDropdown defaultTime={days[key].endTime} />
                         </div>
                       </div>
-                      {toggledDays[day] && days[key] && (
-                        <div className='flex sm:gap-2'>
-                          <div className='flex flex-row gap-2 scrollbar-thin scrollbar-track-transparent'>
-                            <TimeDropdown defaultTime={days[key].startTime} />
-                            <span className="w-2 self-center"> - </span>
-                            <TimeDropdown defaultTime={days[key].endTime} />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

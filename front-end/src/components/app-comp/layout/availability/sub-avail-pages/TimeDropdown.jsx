@@ -5,9 +5,7 @@ const generateTimes = () => {
   const pad = (num) => (num < 10 ? '0' : '') + num;
   for (let h = 0; h < 24; h++) {
     for (let m = 0; m < 60; m += 15) {
-      const hour = h % 12 === 0 ? 12 : h % 12;
-      const ampm = h < 12 ? 'am' : 'pm';
-      times.push(`${hour}:${pad(m)}${ampm}`);
+      times.push(`${pad(h)}:${pad(m)}`); // 24-hour format
     }
   }
   return times;
@@ -33,7 +31,7 @@ const TimeDropdown = ({ defaultTime }) => {
     const value = e.target.value;
     setInputValue(value);
     setFilteredTimes(
-      times.filter((time) => time.toLowerCase().includes(value.toLowerCase()))
+      times.filter((time) => time.includes(value))
     );
   };
 

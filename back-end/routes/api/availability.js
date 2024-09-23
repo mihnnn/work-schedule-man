@@ -5,6 +5,7 @@ import {
   getAvailabilityById,
   updateAvailability,
   deleteAvailability,
+  onboardAvailability,
 } from "../../controllers/availabilityController.js";
 import { resolveIndexByAvailId } from "../../middleware/resolveIndexByAvailId.js";
 import { verifyToken } from "../../utils/protectedRoute.js";
@@ -15,6 +16,7 @@ const router = Router();
 // Availability routes
 router.get("/", verifyToken, getAvailability);
 router.post("/", verifyToken, createAvailability);
+router.post("/onboard", verifyToken, onboardAvailability);
 router.get(
   "/:id",
   verifyToken,

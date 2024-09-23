@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { updateOnBoardLoad, updateOnboardingStatus, updateOnboardingStatusFail } from '../../../../store/user/userSlice';
 import toast from 'react-hot-toast';
@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 function FinishText({ previousStep, currentUser }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
 
     const handleFinish = async () => {  
         try {
@@ -24,7 +25,11 @@ function FinishText({ previousStep, currentUser }) {
                 dispatch(updateOnboardingStatusFail("Failed to update onboarding status"));
             } else {
                 dispatch(updateOnboardingStatus(data.hasCompletedBoarding));
-                navigate('/app/dashboard');
+                if (currentUser.role === 'Manager') {
+                    navigate('/app/dashboard');  
+                } else if (currentUser.role === 'Employee') {
+                    navigate('/app/dashboard');  
+                }
                 toast.success("Onboarding completed successfully");
             }
         } catch (error) {

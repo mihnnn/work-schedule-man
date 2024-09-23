@@ -16,6 +16,8 @@ const availabilitySchema = new mongoose.Schema({
         of: {
             startTime: String,
             endTime: String,
+            allDay: Boolean,
+            available: Boolean, 
         },
         default: {}
     },
