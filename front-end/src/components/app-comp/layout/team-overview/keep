@@ -1,0 +1,157 @@
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RiTeamFill } from "react-icons/ri";
+import toast from 'react-hot-toast';
+import { updateTeamMemberships } from '../../../../store/user/userSlice';
+
+function TeamOverview() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+  const { teamMemberships } = currentUser; // assuming teamMemberships is an array
+
+  const [teamCode, setTeamCode] = useState('');
+  const [joinedTeam, setJoinedTeam] = useState(null); // holds team info once found
+  const [isJoining, setIsJoining] = useState(false); // manages loading state
+
+  // Mock data for team members if teamMemberships is not empty
+  const mockTeamMembers = [
+    { id: 1, name: 'John Doe', role: 'Manager', status: 'Active' },
+    { id: 2, name: 'Jane Smith', role: 'Waiter', status: 'Active' },
+    { id: 3, name: 'Bob Johnson', role: 'Chef', status: 'Inactive' },
+  ];
+
+  // Handle team code change
+  const handleTeamCodeChange = (e) => {
+    setTeamCode(e.target.value);
+  };
+
+  // Handle joining the team
+  const handleJoinTeam = async () => {
+    if (!teamCode) {
+      toast.error('Please enter a valid team code');
+      return;
+    }
+
+    setIsJoining(true); // Set loading state
+    try {
+      const res = await fetch('/api/teams/join-team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teamCode,
+          userId: currentUser._id,
+          action: 'join',
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error('Error joining team:', errorData.message);
+        toast.error(errorData.message);
+        setIsJoining(false); // Reset loading state
+        return;
+      }
+
+      const data = await res.json();
+      dispatch(updateTeamMemberships(data.team)); // Update memberships in Redux
+      toast.success(`You joined ${data.team.name} successfully!`);
+      setJoinedTeam(data.team); // Store joined team info
+    } catch (error) {
+      console.error('Error in handleJoinTeam:', error);
+      toast.error('Error joining the team');
+    } finally {
+      setIsJoining(false); // Reset loading state
+    }
+  };
+
+  return (
+    <div className="max-w-full px-2 py-4 lg:px-6">
+      <header className="flex items-center md:mb-6 md:mt-0 lg:mb-8 mb-0">
+        <div className="flex w-full max-w-full items-center truncate">
+          <div className="w-full truncate ltr:mr-4 rtl:ml-4 md:block">
+            <h3 className="text-emphasis sm:max-w-72 md:max-w-80 truncate font-semibold tracking-wide sm:text-xl md:block xl:max-w-full text-xl hidden">
+              Team Overview
+            </h3>
+            <p className="text-emphasis hidden text-sm md:block">
+              View your team members and their roles
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div className="divider"></div>
+
+      {/* Conditional rendering based on teamMemberships */}
+      {teamMemberships && teamMemberships.length > 0 ? (
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+          <table className="min-w-full text-emphasis">
+            <thead>
+              <tr className="border border-gray-500">
+                <th className="py-2 px-4 bg-gray-700 text-center text-white">#</th>
+                <th className="py-2 px-4 bg-gray-700 text-left text-white">Name</th>
+                <th className="py-2 px-4 bg-gray-700 text-left text-white">Role</th>
+                <th className="py-2 px-4 bg-gray-700 text-left text-white">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockTeamMembers.map((member, index) => (
+                <tr key={member.id} className="border-b border-gray-600">
+                  <td className="py-2 px-4 text-center border border-gray-500 rounded-xl">
+                    {index + 1}
+                  </td>
+                  <td className="py-2 px-4 text-left border border-gray-500 rounded-xl">
+                    {member.name}
+                  </td>
+                  <td className="py-2 px-4 text-left border border-gray-500 rounded-xl">
+                    {member.role}
+                  </td>
+                  <td
+                    className={`py-2 px-4 text-left border border-gray-500 rounded-xl ${member.status === 'Active'
+                        ? 'text-green-500 font-bold'
+                        : 'text-red-500 font-bold'
+                      }`}
+                  >
+                    {member.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center border-subtle rounded-xl p-5">
+          {/* Team icon */}
+          <p className="text-emphasis text-3xl font-bold">You haven't joined a team yet.</p>
+          <span className='m-4'>
+            <RiTeamFill className='w-20 h-20 text-emphasis bg-gray-500 rounded-full' />
+          </span>
+
+          {/* Team Code input */}
+          <div className="form-control w-full max-w-xs mb-4">
+            <label className="label">
+              <span className="label-text">Enter Team Code</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Team Code"
+              className="input input-bordered w-full"
+              value={teamCode}
+              onChange={handleTeamCodeChange}
+            />
+          </div>
+
+          {/* Join team button */}
+          <button
+            className={`btn btn-neutral ${isJoining ? 'loading' : ''}`}
+            onClick={handleJoinTeam}
+            disabled={isJoining}
+          >
+            {isJoining ? 'Joining...' : 'Join Team'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default TeamOverview;

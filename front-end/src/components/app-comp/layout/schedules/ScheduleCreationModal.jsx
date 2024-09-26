@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import 'flowbite';
 
 function ScheduleCreationModal() {
   const modalRef = useRef(null);

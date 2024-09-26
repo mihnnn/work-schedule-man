@@ -57,7 +57,6 @@ function Meetings() {
       <div className='divider'></div>
 
       <MeetingsNav />
-      
       <MeetingsPage />
       
     </div>

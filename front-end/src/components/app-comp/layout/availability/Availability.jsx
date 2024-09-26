@@ -72,7 +72,7 @@ function Availability() {
               Availability
             </h3>
             <p className='text-gray-100 hidden text-sm md:block'>
-              Configure times when you are available for bookings.
+              Configure times when you are available to work.
             </p>
           </div>
 

@@ -6,12 +6,14 @@ import { FaHourglassHalf, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 // - Time-Off
 // - Meeting
 // - Work Update
+// - Team Update
 
 // Request Status:
 // - Pending
 // - Approved
 // - Rejected
 // - Expired
+
 
 const initialRequests = [
   {

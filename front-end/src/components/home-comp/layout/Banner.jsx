@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 
 function Banner() {
   const { currentUser } = useSelector((state) => state.user);
-  console.log("currentUser: ",currentUser)
 
   let getStartedLink;
   if (!currentUser) {

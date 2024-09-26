@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the role schema
 const roleSchema = new mongoose.Schema(
   {
     name: {
@@ -14,7 +15,6 @@ const roleSchema = new mongoose.Schema(
   },
   { _id: true }
 );
-
 
 const teamSchema = new mongoose.Schema(
   {
@@ -46,6 +46,34 @@ const teamSchema = new mongoose.Schema(
         role: {
           type: mongoose.Schema.Types.ObjectId,
         },
+        status: {
+          type: String,
+          enum: ["Active", "Off Duty"],
+        },
+      },
+    ],
+    schedules: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Schedule",
+      },
+    ],
+    meetings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Meeting",
+      },
+    ],
+    requests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Request",
+      },
+    ],
+    activities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ActivityLog",
       },
     ],
   },

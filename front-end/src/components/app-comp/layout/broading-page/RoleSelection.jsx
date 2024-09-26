@@ -34,7 +34,7 @@ function RoleSelection({ nextStep, previousStep }) {
   };
   const handleCreateTeam = async () => {
     if (!teamName) {
-      console.error("Team name is required");
+      toast.error("Team name is required");
       return;
     }
     try {
@@ -121,9 +121,9 @@ function RoleSelection({ nextStep, previousStep }) {
       dispatch(updateTeamMemberships(data.team));
       console.log('Team joined successfully:', data);
       toast.success(`You joined ${data.team.name} successfully!`);
-      nextStep();
+
     } catch (error) {
-      console.error('Error in handleJoinTeam RoleSelection:', error);
+      toast.error('Error in handleJoinTeam RoleSelection:', error);
     }
   }
 
@@ -159,35 +159,6 @@ function RoleSelection({ nextStep, previousStep }) {
       nextStep();
     } catch (error) {
       console.error('Error in handleNextClick RoleSelection:', error);
-      toast.error('Error updating user role');
-    }
-  }
-
-  const handleSkipClick = async () => {
-    try {
-      const res = await fetch(`/api/users/user/${currentUser._id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          displayName: currentUser.displayName,
-          email: currentUser.email,
-          role: currentUser.role
-        }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error('Error updating user role:', errorData.message);
-        return;
-      }
-
-      const data = await res.json();
-      console.log('User role updated successfully:', data);
-      toast.success('User role updated successfully!');
-      nextStep();
-
-    } catch (error) {
-      console.error('Error in handleSkipClick RoleSelection:', error);
       toast.error('Error updating user role');
     }
   }
@@ -280,6 +251,7 @@ function RoleSelection({ nextStep, previousStep }) {
               value={teamCode}
               onChange={handleTeamCodeChange}
               placeholder="Enter your team's code"
+              disabled={joinedTeam}
             />
           </div>
           {/* If !joinedTeam then show button */}
@@ -307,8 +279,6 @@ function RoleSelection({ nextStep, previousStep }) {
       <div className="flex justify-between mt-8">
         <button className="btn" onClick={previousStep}>Back</button>
         <div className="flex gap-x-2">
-          {/* if there is a role choice going, skip button is disabled */}
-          <button className="btn bg-gray-200 text-black hover:opacity-70 hover:bg-gray-200" disabled={selectedRole} onClick={handleSkipClick}>Skip</button>
           <button className="btn bg-gray-200 text-black hover:opacity-70 hover:bg-gray-200" disabled={!selectedRole} onClick={handleNextClick}>Next</button>
         </div>
       </div>

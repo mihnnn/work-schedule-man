@@ -57,7 +57,10 @@ const userSlice = createSlice({
 
     updateTeamMemberships: (state, action) => {
       if (state.currentUser) {
-        state.currentUser.teamMemberships = action.payload;
+        state.currentUser.teamMemberships = [
+          ...state.currentUser.teamMemberships,
+          action.payload,
+        ];
       }
     },
   },

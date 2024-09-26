@@ -21,6 +21,8 @@ export const updateOnboardProfile = async (req, res) => {
             {new: true}
         ).select("-password");
 
+        console.log("findUser", findUser);
+
         if (!findUser) {
             return res.status(404).json({ error: "User not found (userController)" });
         }
@@ -49,3 +51,24 @@ export const finishBoarding = async (req, res) => {
         res.status(500).json({ error: "Internal server error (userController)" });
     }
 };
+
+export const getTeamMemberships = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select("teamMemberships");
+        if (!user) {
+            return res.status(404).json({ error: "User not found (userController)" });
+        }
+        res.status(200).json({ teams: user.teamMemberships });
+        // teamMemberships: [
+        //     {
+        //       team: _id,
+        //       teamName: name,
+        //       teamCode: teamCode,
+        //       role: null,
+        //     },
+        //   ],
+    } catch (err) {
+        console.log("Error in getUserTeams userController", err);
+        res.status(500).json({ error: "Internal server error (userController)" });
+    }
+}

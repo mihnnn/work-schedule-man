@@ -29,7 +29,7 @@ function AddRoleModal() {
   };
 
   return (
-    <dialog id='my_modal_3' className='modal text-white' ref={modalRef} onClick={handleCloseModal}>
+    <dialog id='my_modal_2' className='modal text-white' ref={modalRef} onClick={handleCloseModal}>
       <div className='modal-box overflow-hidden border-none'>
         <div className="flex flex-col">
           <h3 className="text-lg font-semibold">Add a new role</h3>

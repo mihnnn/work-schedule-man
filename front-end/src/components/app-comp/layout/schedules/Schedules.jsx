@@ -73,11 +73,6 @@ function Schedules() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
 
-  const handleAddSchedule = () => {
-    const newId = schedules.length + 1;
-    setSchedules([...schedules, { id: newId, ...newSchedule }]);
-    setNewSchedule({ member: '', date: '', time: '', title: '', assignedDays: { mon: false, tue: false, wed: false, thu: false, fri: false } });
-  };
 
   useEffect(() => {
     if (selectedSchedule) {

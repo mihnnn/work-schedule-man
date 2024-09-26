@@ -6,10 +6,12 @@ const mockMeetings = [
     description: "Discuss project goals and timelines",
     date: "2024-09-23",
     time: "13:00 - 13:15",
+    host: "ref to currentUser", //because only manager can host a meeting
     participants: [
       { id: 1, name: "First User", role: "Manager" },
       { id: 2, name: "Jeff", role: "Developer" }
     ],
+    state: "upcoming", //upcoming | past | canceled, default is upcoming. Will be updated by a helpers function in the future
   },
   {
     title: "Weekly Sync",
@@ -20,6 +22,7 @@ const mockMeetings = [
       { id: 1, name: "First User", role: "Manager" },
       { id: 3, name: "Alice", role: "Designer" }
     ],
+    state: "upcoming",
   },
   {
     title: "Client Update",
@@ -30,6 +33,7 @@ const mockMeetings = [
       { id: 1, name: "First User", role: "Manager" },
       { id: 4, name: "Bob", role: "Marketing" }
     ],
+    state: "upcoming",
   },
 ];
 

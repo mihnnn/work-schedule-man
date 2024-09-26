@@ -48,10 +48,19 @@ const userSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Team",
         },
+        teamName: {
+          type: String,
+        },
+        teamCode: {
+          type: String,
+        },
         role: {
           type: mongoose.Schema.Types.ObjectId,
           refPath: 'team.roles',
         },
+        isManager: {
+          type: Boolean,
+        }
       },
     ],
     hasCompletedBoarding: {
