@@ -31,6 +31,13 @@ function TeamOverview() {
   const handleSelectedTeam = (team) => {
     setSelectedTeam(team);
   };
+  const getRoleNameById = (roleId) => {
+    if (teamInfo) {
+      const role = teamInfo.roles.find((role) => role._id === roleId);
+      return role ? role.name : '';
+    }
+    return '';
+  };
 
   const handleFetchTeamInfo = async (teamId) => {
     try {
@@ -131,7 +138,7 @@ function TeamOverview() {
                         {member.id === currentUser._id && ' (you)'} {/* Add "(you)" next to the current user */}
                       </td>
                       <td className="px-4 py-2 border">{member.email}</td>
-                      <td className="px-4 py-2 border">{member.role}</td>
+                      <td className="px-4 py-2 border">{getRoleNameById(member.role)}</td>
                       <td className="px-4 py-2 border text-center">
                         {member.isManager ? 'x' : ''}
                       </td>

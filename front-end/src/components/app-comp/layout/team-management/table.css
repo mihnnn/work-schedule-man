@@ -1,3 +1,8 @@
 table tbody tr {
   height: 50px;
 }
+
+/* all talbe row has 50px */
+table tbody tr td {
+  height: 50px;
+}

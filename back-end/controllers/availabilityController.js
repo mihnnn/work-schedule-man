@@ -2,7 +2,6 @@ import { Availability } from '../db/schemas/availability.js'
 import User from '../db/schemas/user.js';
 
 export const getAvailability = async (req, res) => {
-    console.log("getAvailability called");
 
     try { 
         const userId = req.user.id;

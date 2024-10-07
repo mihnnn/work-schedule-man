@@ -3,10 +3,9 @@ import dotenv from "dotenv";
 import express from "express";
 import routes from "./routes/index.js"; //import routes from the index.js file
 import cookieParser from "cookie-parser";
-import session from "express-session";
-import passport from "passport";
+// import session from "express-session";
+// import passport from "passport";
 import connectDB from "./db/connectDB.js";
-
 
 
 dotenv.config();

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import './table.css';
 import AddRoleModal from './AddRoleModal';
 import { useSelector } from 'react-redux';
-import JoinTeamModal from '../team-overview/JoinTeamModal';
 import toast from 'react-hot-toast';
 
 function TeamManagement() {
@@ -15,14 +14,14 @@ function TeamManagement() {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teamInfo, setTeamInfo] = useState(null);
 
-  const [newRole, setNewRole] = useState('');
-  const navigate = useNavigate();
+  const [editingRoleIndex, setEditingRoleIndex] = useState(null);
+  const [editedRoleName, setEditedRoleName] = useState("");
 
   const [memberDropdownOpen, setMemberDropdownOpen] = useState(null);
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(null);
   const [roleSubMenuOpen, setRoleSubMenuOpen] = useState(null);
   const dropdownRef = useRef(null);
-  const availableRoles = selectedTeam?.roles || [];
+  const availableRoles = teamInfo?.roles || [];
 
   useEffect(() => {
     const fetchTeamMemberships = async () => {
@@ -88,10 +87,109 @@ function TeamManagement() {
     setRoleSubMenuOpen(roleSubMenuOpen === index ? null : index);
   };
 
+  const handleEditRole = (index) => {
+    setEditingRoleIndex(index);
+    console.log('Editing role: ', teamInfo.roles[index].name);
+    setEditedRoleName(teamInfo.roles[index].name);
+    handleOptionClick();
+  };
+
+
+  const handleSaveRole = async (index) => {
+    const updatedRoles = [...teamInfo.roles];
+
+    updatedRoles[index].name = editedRoleName;
+
+    try {
+      const requestBody = {
+        roles: updatedRoles,
+        // teamName: teamInfo.name if updating
+      };
+
+      const res = await fetch(`/api/teams/${teamInfo.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update team');
+      }
+
+      const data = await res.json();
+      console.log(data.message); // Handle success message if needed
+
+      setEditingRoleIndex(null);
+    } catch (error) {
+      console.error("Error updating role:", error);
+      // Handle error state, show error message to the user
+    }
+  };
+
+  const getRoleNameById = (roleId) => {
+    const role = availableRoles.find(role => role._id === roleId);
+    return role ? role.name : '';
+  };
+
   const handleOptionClick = () => {
     setMemberDropdownOpen(null);
     setRoleDropdownOpen(null);
   }
+
+  const handleAssignRole = async (userId, roleId) => {
+    try {
+      const response = await fetch(`/api/teams/${teamInfo.id}/assign-role`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, roleId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to assign role');
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+
+
+    } catch (error) {
+      console.error("Error assigning role:", error);
+      // Handle error, show error message to the user
+    }
+  };
+
+
+  // router.delete("/:id/roles/:roleId", verifyToken, deleteRole); 
+  const handleDeleteRole = async (index) => {
+    const roleId = teamInfo.roles[index]._id;
+    try {
+      const res = await fetch(`/api/teams/${teamInfo.id}/roles/${roleId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: currentUser._id,
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to delete role');
+      }
+
+      const data = await res.json();
+      console.log('Role deleted: ', data);
+
+      toast.success('Role deleted successfully');
+    } catch (error) {
+      console.error('Error deleting role:', error);
+      toast.error('Failed to delete role');
+    }
+  };
 
   const handleFetchTeamInfo = async (teamId) => {
     try {
@@ -105,6 +203,7 @@ function TeamManagement() {
       console.error('Error fetching team info', error);
     }
   };
+
 
   const handleOpenModal = (open) => {
     if (open) {
@@ -128,16 +227,6 @@ function TeamManagement() {
             </p>
           </div>
         </div>
-
-        {/* <div className="fixed bottom-20 z-40 ltr:right-4 rtl:left-4 md:z-auto md:ltr:right-0 md:rtl:left-0 flex-shrink-0 [-webkit-app-region:no-drag] md:relative md:bottom-auto md:right-auto">
-          <button
-            className="btn btn-outline bg-white text-black"
-            onClick={() => document.querySelector('#my_modal_3').showModal()}
-          >
-            Join Team
-          </button>
-          <JoinTeamModal />
-        </div> */}
       </header>
       <div className="divider"></div>
 
@@ -205,6 +294,7 @@ function TeamManagement() {
                     </thead>
                     <tbody>
                       {teamInfo.members.map((member, index) => (
+                        console.log('member', member),
                         <tr key={index} className='text-gray-300 relative'>
                           <td className='px-4 py-2 border'>{index + 1}</td>
                           <td className='px-4 py-2 border'>
@@ -212,7 +302,7 @@ function TeamManagement() {
                             {member.id === currentUser._id && ' (you)'}
                           </td>
                           <td className='px-4 py-2 border'>{member.email}</td>
-                          <td className='px-4 py-2 border'>{member.role}</td>
+                          <td className='px-4 py-2 border'>{getRoleNameById(member.role)}</td>
                           <td className='px-4 py-2 border text-center'>
                             {member.isManager ? 'x' : ''}
                           </td>
@@ -225,13 +315,14 @@ function TeamManagement() {
                               </button>
 
                               {/* dropdown menu */}
+                              {/* dropdown menu */}
                               {memberDropdownOpen === index && (
                                 <div
                                   ref={dropdownRef}
                                   className='absolute right-0 w-48 bg-gray-900 border-gray-500 rounded-md shadow-lg z-50'
                                 >
                                   <ul>
-                                    {/* menu options */}
+                                    {/* Assign Role Options */}
                                     <li
                                       className='px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer relative'
                                       onMouseEnter={() => handleRoleSubMenuToggle(index)}
@@ -241,7 +332,6 @@ function TeamManagement() {
                                         <span>Assign Role</span>
                                         <IoIosArrowForward className='ml-[55px] my-auto' />
                                       </div>
-                                      {/* submenu for assigning roles */}
                                       {roleSubMenuOpen === index && (
                                         <ul className='absolute left-full top-0 mt-0 w-48 bg-gray-900 rounded-lg shadow-lg z-50'>
                                           {availableRoles.length > 0 ? (
@@ -249,10 +339,13 @@ function TeamManagement() {
                                               <li
                                                 key={i}
                                                 className='px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer min-w-[80px]'
-                                                onClick={handleOptionClick}
+                                                onClick={() => {
+                                                  handleAssignRole(member.id.toString(), role._id);
+                                                  handleOptionClick();
+                                                }}
                                               >
                                                 <div className='flex'>
-                                                  {role}
+                                                  {role.name}
                                                 </div>
                                               </li>
                                             ))
@@ -263,11 +356,23 @@ function TeamManagement() {
                                               </li>
                                             </ul>
                                           )}
+
+                                          <li
+                                            className="px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer text-red-500"
+                                            onClick={() => {
+                                              handleAssignRole(member.id.toString(), null);
+                                              handleOptionClick();
+                                            }}
+                                          >
+                                            <div className='flex'>
+                                              <span>
+                                                Remove Role
+                                              </span>
+                                            </div>
+                                          </li>
                                         </ul>
                                       )}
                                     </li>
-
-                                    {/* Promote to Manager */}
                                     <li
                                       className="px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer"
                                       onClick={handleOptionClick}
@@ -293,9 +398,9 @@ function TeamManagement() {
                                   </ul>
                                 </div>
                               )}
+
                             </td>
                           )}
-
                         </tr>
                       ))}
                     </tbody>
@@ -316,60 +421,61 @@ function TeamManagement() {
                       </tr>
                     </thead>
                     <tbody>
-                      {teamInfo.roles.length === 0 ? (
-                        <tr>
-                          <td className="px-4 py-2 border" colSpan={isManager(selectedTeam) ? 3 : 2}>
-                            No roles available
-                          </td>
-                        </tr>
-                      ) : (
-                        teamInfo.roles.map((role, index) => (
-                          <tr key={index}>
-                            <td className="px-4 py-2 border">{index + 1}</td>
-                            <td className="px-4 py-2 border">{role}</td>
-                            {isManager(selectedTeam) && (
-                              <td className="px-4 py-2 border text-center relative">
-                                <button
-                                  className="p-2 hover:bg-gray-200 hover:opacity-30 hover:text-gray-700 rounded-full"
-                                  onClick={() => handleRoleDropdownToggle(index)}
-                                >
-                                  <FaEllipsisV />
-                                </button>
-
-                                {/* Dropdown Menu */}
-                                {roleDropdownOpen === index && (
-                                  <div
-                                    ref={dropdownRef}
-                                    className="absolute right-0 w-48 bg-gray-900 border border-gray-500 rounded-md shadow-lg z-50"
-                                  >
-                                    <ul>
-                                      {/* Edit Role */}
-                                      <li
-                                        className="px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer"
-                                        onClick={() => handleEditRole(index)}
-                                      >
-                                        <div className="flex">
-                                          <span>Edit</span>
-                                        </div>
-                                      </li>
-
-                                      {/* Delete Role */}
-                                      <li
-                                        className="px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer text-red-500"
-                                        onClick={() => handleDeleteRole(index)}
-                                      >
-                                        <div className="flex">
-                                          <span>Delete</span>
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                )}
-                              </td>
+                      {teamInfo.roles.map((role, index) => (
+                        <tr key={index}>
+                          <td className="px-4 py-2 border">{index + 1}</td>
+                          <td className="px-4 py-2 border">
+                            {editingRoleIndex === index ? (
+                              <input
+                                type="text"
+                                value={editedRoleName}
+                                onChange={(e) => setEditedRoleName(e.target.value)}
+                                onBlur={() => handleSaveRole(index)}
+                                className="border rounded p-1 w-full"
+                              />
+                            ) : (
+                              role.name
                             )}
-                          </tr>
-                        ))
-                      )}
+                          </td>
+                          {isManager(selectedTeam) && (
+                            <td className="px-4 py-2 border text-center relative">
+                              <button
+                                className="p-2 hover:bg-gray-200 hover:opacity-30 hover:text-gray-700 rounded-full"
+                                onClick={() => handleRoleDropdownToggle(index)}
+                              >
+                                <FaEllipsisV />
+                              </button>
+                              {/* Dropdown Menu */}
+                              {roleDropdownOpen === index && (
+                                <div
+                                  ref={dropdownRef}
+                                  className="absolute right-0 w-48 bg-gray-900 border border-gray-500 rounded-md shadow-lg z-50"
+                                >
+                                  <ul>
+                                    <li
+                                      className="px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer"
+                                      onClick={() => handleEditRole(index)}
+                                    >
+                                      <div className="flex">
+                                        <span>Edit</span>
+                                      </div>
+                                    </li>
+                                    <li
+                                      className="px-4 py-2 hover:bg-gray-600 hover:bg-opacity-30 cursor-pointer text-red-500"
+                                      onClick={() => { handleDeleteRole(index); handleOptionClick(); }}
+                                    >
+                                      <div className="flex">
+                                        <span>Delete</span>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </td>
+                          )}
+                        </tr>
+                      ))}
+
                     </tbody>
                   </table>
 
@@ -382,21 +488,18 @@ function TeamManagement() {
                       >
                         Add Role
                       </button>
-                      <AddRoleModal />
+                      <AddRoleModal currentTeam={teamInfo} currentUser={currentUser} />
                     </div>
                   )}
                 </div>
-
-
+                {/* end of role table */}
               </div>
-
-
             </div>
           )}
         </div>
       ) : (
         <div>
-          <p>No teams found. Consider joining a team.</p>
+          <p>No teams found. Consider joining or creating a team.</p>
         </div>
       )}
     </div>

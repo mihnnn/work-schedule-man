@@ -14,7 +14,6 @@ export const verifyToken = (req, res, next) => {
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
-        console.log("User object (protectedRoute):", user);
         req.user = user;
         next();
     });

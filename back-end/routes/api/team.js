@@ -1,15 +1,31 @@
- import { Router } from 'express';
-import { createTeam, getTeamInfo, joinTeam } from '../../controllers/teamController.js';
-import { verifyToken } from '../../utils/protectedRoute.js';
+import { Router } from "express";
+import {
+  assignRole,
+  createRole,
+  createTeam,
+  deleteRole,
+  deleteTeam,
+  getTeamInfo,
+  joinTeam,
+  updateManager,
+  updateTeam,
+} from "../../controllers/teamController.js";
+import { verifyToken } from "../../utils/protectedRoute.js";
 
 const router = Router();
 
 // /api/teams/*
-router.post('/create-team', verifyToken, createTeam);
-router.post('/join-team', verifyToken, joinTeam);
-router.get('/:id', verifyToken, getTeamInfo);
-// router.get('/get-members', verifyToken,)
+router.post("/create-team", verifyToken, createTeam);
+router.get("/:id", verifyToken, getTeamInfo);
+router.post("/join-team", verifyToken, joinTeam);
+router.patch("/:id", verifyToken, updateTeam);
+router.delete("/:id", verifyToken, deleteTeam);
+
+router.post("/:id/roles", verifyToken, createRole);
+router.delete("/:id/roles/:roleId", verifyToken, deleteRole);
+router.post("/:id/assign-role", verifyToken, assignRole);
 
 
+router.patch("/:id/managers", verifyToken, updateManager);
 
 export default router;

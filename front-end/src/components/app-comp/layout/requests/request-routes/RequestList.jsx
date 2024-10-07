@@ -196,23 +196,25 @@ function RequestList() {
                   {request.status}
                 </div>
               </td>
-              <td className="flex w-full justify-center text-center py-4 px-4 border border-gray-300">
-                <div className="flex gap-2">
-                  {request.status === "Pending" && (
-                    <>
-                      <button className="bg-inherit border-gray-400 dropdown btn rounded-md items-center transition flex justify-center border hover:bg-inherit hover:border-green-600 text-green-600"
-                        onClick={() => handleApprove(request.id)}
-                      >
-                        Approve
-                      </button>
-                      <button className="bg-inherit border-gray-400 btn rounded-md border hover:bg-inherit hover:border-red-600 text-red-600"
-                        onClick={() => handleReject(request.id)}>
-                        Reject
-                      </button>
-                    </>
-                  )}
-                </div>
+              <td className="my-auto text-center py-4 px-4 border border-gray-300">
+                {request.status === "Pending" ? (
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      className="bg-inherit border-gray-400 dropdown btn rounded-md items-center transition flex justify-center border hover:bg-inherit hover:border-green-600 text-green-600"
+                      onClick={() => handleApprove(request.id)}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="bg-inherit border-gray-400 btn rounded-md hover:bg-inherit transition flex justify-center border hover:border-red-600 text-red-600"
+                      onClick={() => handleReject(request.id)}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                ) : null}
               </td>
+
             </tr>
           ))}
         </tbody>

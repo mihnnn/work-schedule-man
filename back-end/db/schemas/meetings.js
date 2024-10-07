@@ -8,11 +8,11 @@ const participantSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
+
   },
   role: {
     type: String, // Can reference the user's role or be stored as a string
-    required: true,
+
   },
 });
 
