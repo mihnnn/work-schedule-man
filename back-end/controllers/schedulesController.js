@@ -20,15 +20,18 @@ export const createSchedule = async (req, res) => {
   }
 };
 
-// Get all schedules
+
 export const getAllSchedules = async (req, res) => {
   try {
-    const schedules = await Schedule.find().populate("team").populate("assignedEmployees.user");
+    const teamId = req.params.id;
+    const schedules = await Schedule.find({ team: teamId }).populate("team").populate("assignedEmployees.user");
     res.status(200).json(schedules);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving schedules", error });
   }
-};
+}
+
+
 
 // Get a single schedule by ID
 export const getScheduleById = async (req, res) => {
@@ -52,20 +55,27 @@ export const updateSchedule = async (req, res) => {
   const { id } = req.params;
   const { title, description, time, assignedDays, assignedEmployees, team } = req.body;
 
+  if (!title || !time || !assignedDays || !assignedEmployees || !team) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
   try {
     const updatedSchedule = await Schedule.findByIdAndUpdate(
       id,
       { title, description, time, assignedDays, assignedEmployees, team },
-      { new: true } // Returns the updated document
+      { new: true, runValidators: true }
     );
 
     if (!updatedSchedule) {
       return res.status(404).json({ message: "Schedule not found" });
     }
-
-    res.status(200).json(updatedSchedule);
+    res.status(200).json({
+      message: "Schedule updated successfully",
+      schedule: updatedSchedule,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error updating schedule", error });
+    console.error("Error updating schedule:", error);
+    res.status(500).json({ message: "Error updating schedule", error: error.message });
   }
 };
 

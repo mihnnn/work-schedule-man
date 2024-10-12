@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
-function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
+function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 	const [selectedEmployees, setSelectedEmployees] = useState([]);
 	const [scheduleTitle, setScheduleTitle] = useState('');
 	const [scheduleDescription, setScheduleDescription] = useState('');
@@ -14,41 +15,40 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 		fri: false,
 	});
 	const modalRef = useRef(null);
-	console.log("schedule", schedule);
-	console.log("title: ", scheduleTitle);
-	console.log("description: ", scheduleDescription);
-	console.log("start time: ", scheduleStartTime);
-	console.log("end time: ", scheduleEndTime);
+	// console.log("schedule", schedule);
+	// console.log("title: ", scheduleTitle);
+	// console.log("description: ", scheduleDescription);
+	// console.log("start time: ", scheduleStartTime);
+	// console.log("end time: ", scheduleEndTime);
 
 	const groupedEmployees = useMemo(() => {
-		return employees.reduce((acc, employee) => {
+		return members.reduce((acc, employee) => {
 			if (!acc[employee.role]) {
 				acc[employee.role] = [];
 			}
 			acc[employee.role].push(employee);
 			return acc;
 		}, {});
-	}, [employees]);
+	}, [members]);
 
-	console.log("schedule: ", schedule);
-	console.log("selectedEmployees: ", selectedEmployees);
+	// console.log("schedule: ", schedule);
+	// console.log("selectedEmployees: ", selectedEmployees);
 	useEffect(() => {
 		if (schedule) {
 			onModalOpen(schedule);
-
+	
 			// initialize schedule details
 			setScheduleTitle(schedule.title || '');
 			setScheduleDescription(schedule.description || '');
 			setScheduleStartTime(schedule.time?.split(' - ')[0] || '');
 			setScheduleEndTime(schedule.time?.split(' - ')[1] || '');
-
-			// Initialize selected employees 
-			const initialSelectedEmployees = employees.map((employee) => {
-				const isAssigned = schedule.assignedEmployees?.some(
-					(assignedEmp) => assignedEmp.id === employee.id
-				);
-
-
+	
+			const initialSelectedEmployees = members.map((employee) => {
+				const isAssigned = schedule.assignedEmployees?.some((assignedEmp) => {
+					console.log('Comparing:', assignedEmp.user._id, employee.id);
+					return assignedEmp.user._id === employee.id;
+				});
+	
 				return {
 					id: employee.id,
 					name: employee.name,
@@ -56,10 +56,10 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 					isSelected: isAssigned || false,
 				};
 			});
-
-			console.log('Initial Employees:', initialSelectedEmployees);
+	
+			// Set the selected employees state
 			setSelectedEmployees(initialSelectedEmployees);
-
+	
 			const initialDays = {
 				mon: schedule.assignedDays?.mon || false,
 				tue: schedule.assignedDays?.tue || false,
@@ -67,14 +67,19 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 				thu: schedule.assignedDays?.thu || false,
 				fri: schedule.assignedDays?.fri || false,
 			};
-			console.log('Initial Days:', initialDays);
 			setSelectedDays(initialDays);
 		}
-
+	
 		return () => {
 			onModalClose();
 		};
-	}, [schedule, employees, onModalOpen, onModalClose]);
+	}, [schedule, members, onModalOpen, onModalClose]);
+	
+	// New useEffect to log changes to selectedEmployees
+	useEffect(() => {
+		console.log("selectedEmployees updated:", selectedEmployees);
+	}, [selectedEmployees]);
+	
 
 	const handleCheckboxChange = (id) => {
 		setSelectedEmployees((prevEmployees) =>
@@ -83,7 +88,7 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 			)
 		);
 	};
-	
+
 
 	const handleDayChange = (day) => {
 		setSelectedDays((prevDays) => ({
@@ -92,15 +97,16 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 		}));
 	};
 
-	const handleSaveButtonClick = () => {
+	const handleSaveButtonClick = async () => {
 		const assignedEmployees = selectedEmployees
-			.filter((employee) => employee.isSelected) // Use isSelected instead of checked
+			.filter((employee) => employee.isSelected)
 			.map((employee) => ({
-				id: employee.id,
+				user: employee.id,
 				name: employee.name,
-				role: employees.find((emp) => emp.id === employee.id)?.role || '', // Get the role from the employees array
+				role: members.find((emp) => emp.id === employee.id)?.role || '', // Get the role from the employees array
 			}));
-	
+		console.log("assignedEmployees: ", assignedEmployees);
+
 		const assignedDays = {
 			mon: selectedDays.mon,
 			tue: selectedDays.tue,
@@ -108,19 +114,42 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 			thu: selectedDays.thu,
 			fri: selectedDays.fri,
 		};
-	
+
 		const updatedSchedule = {
-			...schedule,
 			title: scheduleTitle,
 			description: scheduleDescription,
 			time: `${scheduleStartTime} - ${scheduleEndTime}`,
 			assignedDays,
 			assignedEmployees,
+			team: schedule.team,
 		};
-	
-		console.log('Saving Schedule:', updatedSchedule);
+
+		console.log("Posting to backend: ", updatedSchedule);
+
+		try {
+			// Send PATCH request to update the schedule
+			const res = await fetch(`/api/schedules/${schedule._id}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(updatedSchedule),
+			});
+
+
+			if (!res.ok) {
+				throw new Error('Failed to update schedule');
+			}
+
+			const updatedScheduleData = await res.json();
+			console.log('Schedule updated successfully:', updatedScheduleData);
+			toast.success(`${updatedScheduleData.schedule.title} updated successfully`);
+
+		} catch (error) {
+			console.error('Error updating schedule:', error);
+			toast.error('Failed to update schedule');
+		}
 	};
-	
 
 	const handleCloseModal = (e) => {
 		if (e.target === modalRef.current) {
@@ -150,7 +179,7 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 					<h3 className="font-bold text-lg">Schedule Details</h3>
 					<div className="flex flex-col mt-4 gap-2">
 						<div>
-							<label className="block text-sm">Schedule Title</label>
+							<label className="block text-sm mb-2">Schedule Title</label>
 							<input
 								type="text"
 								placeholder="Title"
@@ -160,7 +189,7 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 							/>
 						</div>
 						<div>
-							<label className="block text-sm">Schedule Description</label>
+							<label className="block text-sm mb-2">Schedule Description</label>
 							<textarea
 								className="textarea textarea-bordered w-full"
 								placeholder="Description"
@@ -174,8 +203,6 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 								<input
 									type="time"
 									className="input input-bordered"
-									min="07:00"
-									max="18:00"
 									value={scheduleStartTime}
 									onChange={(e) => setScheduleStartTime(e.target.value)}
 								/>
@@ -183,8 +210,6 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 								<input
 									type="time"
 									className="input input-bordered"
-									min="07:00"
-									max="18:00"
 									value={scheduleEndTime}
 									onChange={(e) => setScheduleEndTime(e.target.value)}
 								/>
@@ -192,35 +217,36 @@ function ScheduleEditModal({ schedule, employees, onModalClose, onModalOpen }) {
 						</div>
 					</div>
 
-					<div className="flex flex-col mt-4 gap-2">
+					<div className="flex flex-col mt-4 gap-2 ">
 						<label className="block text-sm">Schedule Days</label>
 						<div className="flex mt-2 gap-x-2">
 							{['mon', 'tue', 'wed', 'thu', 'fri'].map((day) => (
-								<label key={day} className="flex items-center">
+								<label key={day} className="flex items-center gap-2">
 									<input
 										type="checkbox"
 										className="checkbox checkbox-bordered"
 										checked={selectedDays[day]}  // Use the object property for checked state
 										onChange={() => handleDayChange(day)}
 									/>
-									<span className="ml-2 capitalize">{day}</span>
+									<span className="capitalize">{day}</span>
 								</label>
 							))}
 						</div>
 					</div>
 
-					<h4 className="text-lg font-semibold mb-2 mt-4">Assign Employees</h4>
+					<h4 className="text-lg font-semibold mb-2 mt-4">Assign Members</h4>
 					{Object.keys(groupedEmployees).map((role) => (
 						<div key={role} className="mb-4">
 							<p className="text-md font-bold">{role}:</p>
 							<div className="flex flex-col">
 								{groupedEmployees[role].map((employee) => {
 									const selectedEmployee = selectedEmployees.find((e) => e.id === employee.id);
+									console.log('Selected Employee:', selectedEmployee);
 									return (
 										<label key={employee.id} className="flex items-center">
 											<input
 												type="checkbox"
-												className="checkbox checkbox-bordered"
+												className="checkbox checkbox-bordered "
 												// Check the `isSelected` property to determine if the checkbox should be checked
 												checked={selectedEmployee?.isSelected || false}
 												onChange={() => handleCheckboxChange(employee.id)}

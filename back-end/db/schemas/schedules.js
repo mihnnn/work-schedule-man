@@ -14,7 +14,7 @@ const assignedEmployeeSchema = new mongoose.Schema({
     type: String, // Could also reference the role schema if needed
     required: true,
   },
-});
+}, { _id: false });
 
 const assignedDaysSchema = new mongoose.Schema({
   mon: { type: Boolean, default: false },
@@ -24,7 +24,7 @@ const assignedDaysSchema = new mongoose.Schema({
   fri: { type: Boolean, default: false },
   sat: { type: Boolean, default: false },
   sun: { type: Boolean, default: false },
-});
+}, { _id: false });
 
 const scheduleSchema = new mongoose.Schema(
   {

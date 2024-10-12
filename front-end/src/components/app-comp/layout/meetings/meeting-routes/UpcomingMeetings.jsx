@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const mockMeetings = [
   {
@@ -37,10 +38,13 @@ const mockMeetings = [
   },
 ];
 
+
 function UpcomingMeetings() {
-  return (
-    <main className='w-full'>
-      <div className='flex w-full flex-col' style={{ position: 'relative' }}>
+  const { currentUser } = useSelector((state) => state.user);
+
+  const renderManagerView = () => {
+    return (
+      <>
         <div className='mb-6 pt-2 xl:pt-0'>
           <p className='mb-2 text-xs font-medium uppercase leading-4'>today</p>
           <div className='border-gray-400 overflow-hidden rounded-md border animate-grow'>
@@ -89,6 +93,15 @@ function UpcomingMeetings() {
             </table>
           </div>
         </div>
+      </>
+    )
+  }
+
+
+  return (
+    <main className='w-full'>
+      <div className='flex w-full flex-col' style={{ position: 'relative' }}>
+        {currentUser?.role === 'Manager' ? renderManagerView() : null}
       </div>
     </main>
   );

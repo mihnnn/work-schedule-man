@@ -1,7 +1,22 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+
+import { useSelector } from 'react-redux';
+
 
 function ScheduleCreationModal() {
   const modalRef = useRef(null);
+
+  const [teamId, setTeamId] = useState('');
+
+  const { currentUser } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (currentUser) {
+      setTeamId(currentUser.teamMemberships[0].team);
+    }
+  })
+
+  // console.log("team id:", teamId);
 
   const [scheduleTitle, setScheduleTitle] = useState('');
   const [scheduleDescription, setScheduleDescription] = useState('');
@@ -16,24 +31,66 @@ function ScheduleCreationModal() {
   });
 
   const handleSaveButtonClick = async () => {
-    console.log('creating schedule: ', {
-      scheduleTitle,
-      scheduleDescription,
-      scheduleStartTime,
-      scheduleEndTime,
-      scheduleDays,
-    });
-    setScheduleTitle('');
-    setScheduleDescription('');
-    setScheduleStartTime('');
-    setScheduleEndTime('');
-    setScheduleDays({
-      monday: false,
-      tuesday: false,
-      wednesday: false,
-      thursday: false,
-      friday: false,
-    });
+    if (teamId) {
+      const mapDaysToAbbrev = {
+        monday: 'mon',
+        tuesday: 'tue',
+        wednesday: 'wed',
+        thursday: 'thu',
+        friday: 'fri',
+      };
+
+      const formattedDays = Object.keys(scheduleDays).reduce((acc, day) => {
+        const abbr = mapDaysToAbbrev[day];
+        acc[abbr] = scheduleDays[day];
+        return acc;
+      }, {});
+      
+      const scheduleData = {
+        title: scheduleTitle,
+        description: scheduleDescription,
+        time: `${scheduleStartTime} - ${scheduleEndTime}`,
+        assignedDays: formattedDays,
+        assignedEmployees: [],
+        team: teamId,
+      }
+
+      try {
+        const res = await fetch('/api/schedules', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(scheduleData),
+        });
+        console.log("Submitted schedule data:", scheduleData);
+        if (!res.ok) {
+          throw new Error('Failed to create schedule');
+        }
+        const data = await res.json();
+        console.log('Schedule created successfully:', data);
+
+        // success toast
+        toast.success('Schedule created successfully');
+
+        setScheduleTitle('');
+        setScheduleDescription('');
+        setScheduleStartTime('');
+        setScheduleEndTime('');
+        setScheduleDays({
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false,
+          friday: false,
+        });
+      } catch (error) {
+        console.error('Error creating schedule:', error);
+        toast.error('Failed to create schedule');
+      }
+    } else {
+      console.error('Team ID is required to create a schedule');
+    }
   };
 
   const handleCloseModal = (e) => {
@@ -99,8 +156,6 @@ function ScheduleCreationModal() {
                 <input
                   type='time'
                   className='input input-bordered'
-                  min="07:00"
-                  max="18:00"
                   value={scheduleStartTime}
                   onChange={(e) => setScheduleStartTime(e.target.value)}
                 />
@@ -110,8 +165,6 @@ function ScheduleCreationModal() {
                 <input
                   type='time'
                   className='input input-bordered'
-                  min="07:00"
-                  max="18:00"
                   value={scheduleEndTime}
                   onChange={(e) => setScheduleEndTime(e.target.value)}
                 />

@@ -41,7 +41,6 @@ export const createTeam = async (req, res) => {
       ],
     });
 
-
     await newTeam.save();
 
     manager.teamMemberships.push({
@@ -69,11 +68,21 @@ export const createTeam = async (req, res) => {
   }
 };
 
-
 // /api/teams/:id
+
+// /api/teams/members
 export const getTeamInfo = async (req, res) => {
   try {
     const teamId = req.params.id;
+
+    if (!teamId) {
+      return res.status(400).json({ error: "Team ID is required" });
+    }
+
+    // Validate that teamId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(teamId)) {
+      return res.status(400).json({ error: "Invalid Team ID format" });
+    }
 
     const team = await Team.findById(teamId)
       .populate('managers', 'displayName email')
@@ -92,8 +101,6 @@ export const getTeamInfo = async (req, res) => {
       role: member.role,
       isManager: managerIds.has(member.user._id.toString()),
     }));
-    
-
 
     res.status(200).json({
       team: {
@@ -114,6 +121,50 @@ export const getTeamInfo = async (req, res) => {
     res.status(500).json({ error: "Internal server error (teamController)" });
   }
 };
+
+
+export const getTeamMembers = async (req, res) => {
+  try {
+    const teamId = req.params.id;
+
+    if (!teamId) {
+      return res.status(400).json({ error: "Team ID is required" });
+    }
+
+    const team = await Team.findById(teamId)
+      .populate("members.user", "displayName email") 
+      .populate("roles", "name")
+      .populate("managers", "_id"); 
+
+    if (!team) {
+      return res.status(404).json({ error: "Team not found" });
+    }
+
+    const managerIds = new Set(team.managers.map(manager => manager._id.toString()));
+
+    const members = team.members.map((member) => {
+      const roleInfo = member.role 
+        ? team.roles.find(role => role._id.toString() === member.role.toString()) 
+        : null;
+
+      return {
+        id: member.user._id,
+        name: member.user.displayName,
+        // email: member.user.email,
+        role: roleInfo ? roleInfo.name : "No Role Assigned",
+        // isManager: managerIds.has(member.user._id.toString()),
+      };
+    });
+
+    res.status(200).json({
+      members,
+    });
+  } catch (error) {
+    console.error("Error in getTeamMembers", error);
+    res.status(500).json({ error: "Internal server error (teamController)" });
+  }
+};
+
 
 // /api/teams/join-team
 export const joinTeam = async (req, res) => {
@@ -198,23 +249,19 @@ export const updateTeam = async (req, res) => {
     console.log("teamName", teamName);
     console.log("roles", roles);
 
-    // Find the team by ID
     const team = await Team.findById(teamId);
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
     }
 
-    // Update the team name if provided
     if (teamName) {
       team.name = teamName;
     }
 
-    // Update roles if provided
     if (roles && Array.isArray(roles)) {
       team.roles = roles;
     }
 
-    // Save updated team
     await team.save();
 
     res.status(200).json({ message: "Team updated successfully", team });
@@ -248,8 +295,6 @@ export const deleteTeam = async (req, res) => {
   }
 };
 
-
-
 // /api/teams/:id/create-role
 export const createRole = async (req, res) => {
   try {
@@ -262,11 +307,21 @@ export const createRole = async (req, res) => {
     }
     const isManager = team.managers.includes(userId);
     if (!isManager) {
-      return res.status(403).json({ message: "You are not authorized to create roles for this team" });
+      return res
+        .status(403)
+        .json({
+          message: "You are not authorized to create roles for this team",
+        });
     }
-    const existingRole = team.roles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
+    const existingRole = team.roles.find(
+      (role) => role.name.toLowerCase() === roleName.toLowerCase()
+    );
     if (existingRole) {
-      return res.status(400).json({ message: "Role with the same name already exists in this team" });
+      return res
+        .status(400)
+        .json({
+          message: "Role with the same name already exists in this team",
+        });
     }
     const newRole = {
       name: roleName,
@@ -274,34 +329,41 @@ export const createRole = async (req, res) => {
     };
     team.roles.push(newRole);
     await team.save();
-    return res.status(201).json({ message: "Role created successfully", role: newRole });
+    return res
+      .status(201)
+      .json({ message: "Role created successfully", role: newRole });
   } catch (error) {
     console.error("Error creating role:", error);
-    return res.status(500).json({ message: "Server error, could not create role" });
+    return res
+      .status(500)
+      .json({ message: "Server error, could not create role" });
   }
 };
-
 
 // /api/teams/id/delete-role
 export const deleteRole = async (req, res) => {
   try {
-
-    const teamId = req.params.id; 
+    const teamId = req.params.id;
     const roleId = req.params.roleId;
 
     const userId = req.body.userId;
-
 
     const team = await Team.findById(teamId);
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
     }
-    
+
     const isManager = team.managers.includes(userId);
     if (!isManager) {
-      return res.status(403).json({ message: "You are not authorized to delete roles for this team" });
+      return res
+        .status(403)
+        .json({
+          message: "You are not authorized to delete roles for this team",
+        });
     }
-    const roleIndex = team.roles.findIndex(role => role._id.toString() === roleId);
+    const roleIndex = team.roles.findIndex(
+      (role) => role._id.toString() === roleId
+    );
     if (roleIndex === -1) {
       return res.status(404).json({ message: "Role not found" });
     }
@@ -310,7 +372,9 @@ export const deleteRole = async (req, res) => {
     return res.status(200).json({ message: "Role deleted successfully" });
   } catch (error) {
     console.error("Error deleting role:", error);
-    return res.status(500).json({ message: "Server error, could not delete role" });
+    return res
+      .status(500)
+      .json({ message: "Server error, could not delete role" });
   }
 };
 
@@ -326,11 +390,13 @@ export const assignRole = async (req, res) => {
 
     const member = team.members.find((m) => m.user.toString() === userId);
     if (!member) {
-      return res.status(404).json({ message: "User is not a member of this team" });
+      return res
+        .status(404)
+        .json({ message: "User is not a member of this team" });
     }
 
     // Assign the role or remove the role
-    member.role = roleId === null ? null : roleId;  // Set to null if roleId is null
+    member.role = roleId === null ? null : roleId; // Set to null if roleId is null
     await team.save();
 
     const user = await User.findById(userId);
@@ -345,7 +411,8 @@ export const assignRole = async (req, res) => {
 
     if (teamMembershipIndex > -1) {
       // If the user is already a member, update their role
-      user.teamMemberships[teamMembershipIndex].role = roleId === null ? null : roleId;  // Set to null if roleId is null
+      user.teamMemberships[teamMembershipIndex].role =
+        roleId === null ? null : roleId; // Set to null if roleId is null
     }
 
     await user.save();
@@ -357,17 +424,20 @@ export const assignRole = async (req, res) => {
   }
 };
 
-
 // PATCH /api/teams/:teamId/managers
 export const updateManager = async (req, res) => {
   try {
     const { currentUserId, userId } = req.body;
     const { teamId } = req.params;
 
-
-    const isManager = await Team.findOne({ _id: teamId, managers: currentUserId });
+    const isManager = await Team.findOne({
+      _id: teamId,
+      managers: currentUserId,
+    });
     if (!isManager) {
-      return res.status(403).json({ message: "You are not authorized to update managers" });
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update managers" });
     }
 
     const team = await Team.findById(teamId);
@@ -375,29 +445,34 @@ export const updateManager = async (req, res) => {
       return res.status(404).json({ message: "Team not found" });
     }
 
-    const memberExists = team.members.some(member => member.user.toString() === userId);
+    const memberExists = team.members.some(
+      (member) => member.user.toString() === userId
+    );
     if (!memberExists) {
-      return res.status(404).json({ message: "User is not a member of the team" });
+      return res
+        .status(404)
+        .json({ message: "User is not a member of the team" });
     }
 
     const isAlreadyManager = team.managers.includes(userId);
 
     if (isAlreadyManager) {
-      team.managers = team.managers.filter(managerId => managerId.toString() !== userId);
+      team.managers = team.managers.filter(
+        (managerId) => managerId.toString() !== userId
+      );
       await team.save();
-      return res.status(200).json({ message: "User demoted from manager successfully" });
+      return res
+        .status(200)
+        .json({ message: "User demoted from manager successfully" });
     } else {
       team.managers.push(userId);
       await team.save();
-      return res.status(200).json({ message: "User promoted to manager successfully" });
+      return res
+        .status(200)
+        .json({ message: "User promoted to manager successfully" });
     }
-
   } catch (error) {
     console.error("Error updating manager status:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
-

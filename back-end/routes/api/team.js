@@ -6,6 +6,7 @@ import {
   deleteRole,
   deleteTeam,
   getTeamInfo,
+  getTeamMembers,
   joinTeam,
   updateManager,
   updateTeam,
@@ -25,6 +26,7 @@ router.post("/:id/roles", verifyToken, createRole);
 router.delete("/:id/roles/:roleId", verifyToken, deleteRole);
 router.post("/:id/assign-role", verifyToken, assignRole);
 
+router.get("/members/:id", verifyToken, getTeamMembers);
 
 router.patch("/:id/managers", verifyToken, updateManager);
 
