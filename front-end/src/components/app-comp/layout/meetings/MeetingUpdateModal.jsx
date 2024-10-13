@@ -1,5 +1,6 @@
 import { set } from 'mongoose';
 import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 function MeetingUpdateModal({ meeting, members, onModalClose, onModalOpen }) {
 
@@ -36,14 +37,14 @@ function MeetingUpdateModal({ meeting, members, onModalClose, onModalOpen }) {
 
 
 	const formatDateForInput = (isoDateString) => {
-    const date = new Date(isoDateString);
-    
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+		const date = new Date(isoDateString);
 
-    return `${year}-${month}-${day}`;
-};
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+
+		return `${year}-${month}-${day}`;
+	};
 
 	useEffect(() => {
 		if (meeting) {
@@ -59,7 +60,7 @@ function MeetingUpdateModal({ meeting, members, onModalClose, onModalOpen }) {
 					// console.log('Comparing:', participant.user._id, employee.id);
 					return participant.user._id === employee.id;
 				});
-		
+
 				return {
 					id: employee.id,
 					name: employee.name,
@@ -87,7 +88,7 @@ function MeetingUpdateModal({ meeting, members, onModalClose, onModalOpen }) {
 	}
 
 	const handleCheckboxChange = (id) => {
-		setParticipants((prev) => 
+		setParticipants((prev) =>
 			prev.map((participant) =>
 				participant.id === id ? { ...participant, isParticipant: !participant.isParticipant } : participant
 			)
@@ -95,20 +96,36 @@ function MeetingUpdateModal({ meeting, members, onModalClose, onModalOpen }) {
 	};
 
 	const handleSaveButtonClick = async () => {
-    const updatedMeeting = {
-        ...meeting, 
-        meetingTitle, 
-        meetingDescription, 
-        meetingDate, 
-        time: { start: meetingStartTime, end: meetingEndTime }, 
-        participants: participants.filter(participant => participant.isParticipant) // Only include checked participants
-    };
+		const updatedMeeting = {
+			meetingTitle,
+			meetingDescription,
+			meetingDate,
+			time: { start: meetingStartTime, end: meetingEndTime },
+			participants: participants.filter(participant => participant.isParticipant),
+		};
 
-		console.log('updatedMeeting: ', updatedMeeting);
-		//patch request
-};
+		console.log('posting to backend: ', updatedMeeting);
+		try {
+			const res = await fetch(`/api/meetings/${meeting._id}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(updatedMeeting),	
+			});
 
+			if (!res.ok) {
+				throw new Error('Failed to update meeting');
+			}
 
+			const updatedMeetingData = await res.json();
+			console.log('Meeting updated successfully:', updatedMeetingData);
+			toast.success(`${updatedMeetingData.meetingTitle} updated successfully`);
+		} catch (error) {
+			console.error('Error updating meeting:', error);
+			toast.error('Failed to update meeting');
+		}
+	};
 
 	return (
 		<dialog id='edit_modal' className='modal text-white' ref={modalRef} onClick={handleCloseModal}>
@@ -190,13 +207,13 @@ function MeetingUpdateModal({ meeting, members, onModalClose, onModalOpen }) {
 						<div className="mt-5 flex flex-row-reverse gap-2">
 							<button
 								className="btn btn-outline bg-gray-50 text-[#222] hover:bg-opacity-50"
-								onClick={() => {handleSaveButtonClick(); modalRef.current.close(); onModalClose();}}
+								onClick={() => { handleSaveButtonClick(); modalRef.current.close(); onModalClose(); }}
 							>
 								Save Changes
 							</button>
 							<button
 								className="btn btn-ghost"
-								onClick={() => {modalRef.current.close(); onModalClose();}}
+								onClick={() => { modalRef.current.close(); onModalClose(); }}
 							>
 								Close
 							</button>
