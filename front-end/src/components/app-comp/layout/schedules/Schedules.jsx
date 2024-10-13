@@ -38,7 +38,7 @@ function Schedules() {
       }
     }
   }
-  console.log("Team Schedules: ", teamSchedules);
+  // console.log("Team Schedules: ", teamSchedules);
   const fetchTeamMembers = async () => {
     if (teamId) {
       try {

@@ -6,14 +6,14 @@ import CanceledMeetings from './meeting-routes/CanceledMeetings'
 
 
 
-function MeetingsPage() {
+function MeetingsPage({meetings, teamInfo}) {
   return (
     <div>
       <Routes>
         <Route path="/" element={<Navigate to="upcoming" />} />
-        <Route path="upcoming" element={<UpcomingMeetings />} />
-        <Route path="past" element={<PastMeetings />} />
-        <Route path="canceled" element={<CanceledMeetings />} />
+        <Route path="upcoming" element={<UpcomingMeetings meetings={meetings} teamInfo={teamInfo}/>} />
+        <Route path="past" element={<PastMeetings meetings={meetings}/>} />
+        <Route path="canceled" element={<CanceledMeetings meetings={meetings}/>} />
       </Routes>
     </div>
   )

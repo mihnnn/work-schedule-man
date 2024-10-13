@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 // import session from "express-session";
 // import passport from "passport";
 import connectDB from "./db/connectDB.js";
+import { updateMeetingState } from "./middleware/meetingsMiddleware.js";
 
 
 dotenv.config();
@@ -19,6 +20,8 @@ app.use(routes);
 
 
 const PORT = process.env.PORT || 8888;
+
+updateMeetingState();
 
 app.get("/profile-pic", (req, res) => {
   res.send("Profile pic route");

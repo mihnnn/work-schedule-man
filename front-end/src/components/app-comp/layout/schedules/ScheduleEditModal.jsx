@@ -37,7 +37,6 @@ function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 		if (schedule) {
 			onModalOpen(schedule);
 	
-			// initialize schedule details
 			setScheduleTitle(schedule.title || '');
 			setScheduleDescription(schedule.description || '');
 			setScheduleStartTime(schedule.time?.split(' - ')[0] || '');
@@ -57,7 +56,6 @@ function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 				};
 			});
 	
-			// Set the selected employees state
 			setSelectedEmployees(initialSelectedEmployees);
 	
 			const initialDays = {
@@ -75,10 +73,9 @@ function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 		};
 	}, [schedule, members, onModalOpen, onModalClose]);
 	
-	// New useEffect to log changes to selectedEmployees
-	useEffect(() => {
-		console.log("selectedEmployees updated:", selectedEmployees);
-	}, [selectedEmployees]);
+	// useEffect(() => {
+	// 	console.log("selectedEmployees updated:", selectedEmployees);
+	// }, [selectedEmployees]);
 	
 
 	const handleCheckboxChange = (id) => {
@@ -103,7 +100,7 @@ function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 			.map((employee) => ({
 				user: employee.id,
 				name: employee.name,
-				role: members.find((emp) => emp.id === employee.id)?.role || '', // Get the role from the employees array
+				role: members.find((emp) => emp.id === employee.id)?.role || '',
 			}));
 		console.log("assignedEmployees: ", assignedEmployees);
 
@@ -225,7 +222,7 @@ function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 									<input
 										type="checkbox"
 										className="checkbox checkbox-bordered"
-										checked={selectedDays[day]}  // Use the object property for checked state
+										checked={selectedDays[day]}
 										onChange={() => handleDayChange(day)}
 									/>
 									<span className="capitalize">{day}</span>
@@ -247,7 +244,6 @@ function ScheduleEditModal({ schedule, members, onModalClose, onModalOpen }) {
 											<input
 												type="checkbox"
 												className="checkbox checkbox-bordered "
-												// Check the `isSelected` property to determine if the checkbox should be checked
 												checked={selectedEmployee?.isSelected || false}
 												onChange={() => handleCheckboxChange(employee.id)}
 											/>

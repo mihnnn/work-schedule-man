@@ -1,21 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MeetingCreationModal from './MeetingCreationModal';
 import MeetingsNav from './MeetingsNav';
 import MeetingsPage from './MeetingsPage';
 import { useSelector } from 'react-redux';
 
 function Meetings() {
-
-  const [employees, setEmployees] = useState([
-    { id: 1, name: 'Alice', role: 'Chef' },
-    { id: 2, name: 'Bob', role: 'Waiter' },
-    { id: 3, name: 'Eve', role: 'Cleaner' },
-    { id: 4, name: 'David', role: 'Waiter' },
-    { id: 5, name: 'Frank', role: 'Chef' },
-    { id: 6, name: 'Grace', role: 'Waiter' },
-  ]);
-
   const { currentUser } = useSelector((state) => state.user);
+  const [teamInfo, setTeamInfo] = useState([]);
+  const [teamId, setTeamId] = useState(null);
+  const [meetings, setMeetings] = useState([]);
+
+
+
+  useEffect(() => {
+    if (currentUser.teamMemberships) {
+      setTeamId(currentUser.teamMemberships[0].team);
+    }
+    // console.log('teamId: ', teamId);
+  }, [currentUser.teamMemberships[0].team]);
+
+  const fetchTeamMembers = async () => {
+    if (teamId) {
+      try {
+        const res = await fetch(`/api/teams/members/${teamId}`);
+        if (!res.ok) {
+          throw new Error('Error fetching team members');
+        }
+        const data = await res.json();
+        setTeamInfo(data.members);
+      } catch (error) {
+        console.log('Error fetching team members: ', error);
+      }
+    }
+  };
+
+  const fetchMeetings = async () => {
+    if (teamId) {
+      try {
+        const res = await fetch(`/api/meetings/${teamId}`);
+        if (!res.ok) {
+          throw new Error('Error fetching meetings');
+        }
+        const data = await res.json();
+        setMeetings(data);
+      } catch (error) {
+        console.log('Error fetching meetings: ', error);
+      }
+    }
+  }
+
+  // console.log('teamInfo: ', teamInfo);
+  // console.log('meetings: ', meetings);
+
+  useEffect(() => {
+    fetchTeamMembers();
+    fetchMeetings();
+  }, [teamId]);
+
 
   const renderManagerView = () => {
     return (
@@ -40,7 +81,7 @@ function Meetings() {
                 >
                   + New
                 </button>
-                <MeetingCreationModal employees={employees} />
+                <MeetingCreationModal teamInfo={teamInfo} />
               </div>
             </header>
           </div>
@@ -48,7 +89,7 @@ function Meetings() {
         <div className='divider'></div>
 
         <MeetingsNav />
-        <MeetingsPage />
+        <MeetingsPage teamInfo={teamInfo} meetings={meetings} />
       </>
     );
   }
@@ -68,7 +109,7 @@ function Meetings() {
         </header>
         <div className="divider"></div>
         <MeetingsNav />
-        <MeetingsPage />
+        <MeetingsPage meetings={meetings} />
       </>
     );
   }

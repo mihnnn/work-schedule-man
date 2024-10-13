@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-function MeetingCreationModal({ employees }) {
+function MeetingCreationModal({ teamInfo }) {
   const modalRef = useRef(null);
+  // console.log("teamInfo: ", teamInfo);
+  const { currentUser } = useSelector((state) => state.user);
+  // console.log('currentUser: ', currentUser);
 
   const [meetingTitle, setMeetingTitle] = useState('');
   const [meetingDescription, setMeetingDescription] = useState('');
@@ -10,43 +14,73 @@ function MeetingCreationModal({ employees }) {
   const [meetingDate, setMeetingDate] = useState('');
   const [participants, setParticipants] = useState([]);
 
-  // Initialize participants whenever employees change or modal opens
   useEffect(() => {
-    const initialParticipants = employees.map(employee => ({
+    const initialParticipants = teamInfo.map(employee => ({
       id: employee.id,
       name: employee.name,
       role: employee.role,
       isParticipant: false,
     }));
     setParticipants(initialParticipants);
-  }, [employees]); // Run effect whenever employees change
+  }, [teamInfo]);
 
   const handleSaveButtonClick = async () => {
-    console.log('creating meeting: ', {
-      meetingTitle,
-      meetingDescription,
-      meetingStartTime,
-      meetingEndTime,
-      meetingDate,
-      participants: participants.filter(participant => participant.isParticipant).map(participant => ({
-        id: participant.id,
-        name: participant.name,
-        role: participant.role,
-      })),
-    });
+    if (teamInfo) {
+      const meetingData = {
+        meetingTitle,
+        meetingDescription,
+        meetingDate,
+        time: {
+          start: meetingStartTime,
+          end: meetingEndTime
+        },
+        host: currentUser?._id,
+        participants: participants
+          .filter(participant => participant.isParticipant)
+          .map(participant => ({
+            user: participant.id,
+            name: participant.name,
+            role: participant.role,
+          })),
+        team: currentUser?.teamMemberships[0].team,
+      };
 
-    // Clear form fields and participants
-    setMeetingTitle('');
-    setMeetingDescription('');
-    setMeetingStartTime('');
-    setMeetingEndTime('');
-    setMeetingDate('');
-    setParticipants(employees.map(employee => ({
-      id: employee.id,
-      name: employee.name,
-      role: employee.role,
-      isParticipant: false,
-    }))); // Reset participants
+      // Send the POST request to the backend
+      try {
+        const response = await fetch('/api/meetings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(meetingData),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create meeting: ' + response.statusText);
+        }
+
+        const result = await response.json();
+        console.log('Meeting created successfully:', result);
+
+        // Clear form fields after successful creation
+        setMeetingTitle('');
+        setMeetingDescription('');
+        setMeetingStartTime('');
+        setMeetingEndTime('');
+        setMeetingDate('');
+        setParticipants(teamInfo.map(employee => ({
+          id: employee.id,
+          name: employee.name,
+          role: employee.role,
+          isParticipant: false,
+        })));
+
+        modalRef.current.close(); // Close the modal
+
+      } catch (error) {
+        console.error('Error creating meeting:', error);
+      }
+    }
   };
 
   const handleCloseModal = (e) => {
@@ -91,7 +125,6 @@ function MeetingCreationModal({ employees }) {
           <div>
             <label className="block text-sm">Description</label>
             <textarea
-              type="text"
               className="textarea textarea-bordered w-full mt-2"
               placeholder="About this meeting"
               value={meetingDescription}
@@ -155,7 +188,7 @@ function MeetingCreationModal({ employees }) {
             <div className="mt-5 flex flex-row-reverse gap-2">
               <button
                 className="btn btn-outline bg-gray-50 text-[#222] hover:bg-opacity-50"
-                onClick={() => { modalRef.current.close(); handleSaveButtonClick(); }}
+                onClick={handleSaveButtonClick}
               >
                 Continue
               </button>
