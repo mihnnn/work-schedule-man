@@ -13,6 +13,7 @@ function Schedules() {
   const [teamInfo, setTeamInfo] = useState([]);
 
   const [teamId, setTeamId] = useState(null);
+  console.log("Team ID: ", teamId);
 
   useEffect(() => {
     if (currentUser?.teamMemberships) {
@@ -57,9 +58,6 @@ function Schedules() {
 
   useEffect(() => {
     fetchTeamSchedules();
-  }, [teamId]);
-
-  useEffect(() => {
     fetchTeamMembers();
   }, [teamId]);
 
